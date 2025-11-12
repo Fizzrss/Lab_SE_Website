@@ -76,7 +76,7 @@
                         <a class="nav-link nav-pill dropdown-toggle" href="#" data-bs-toggle="dropdown">Requirement</a>
                         <ul class="dropdown-menu dropdown-glass">
                             <li><a class="dropdown-item" href="#">Daftar Mahasiswa</a></li>
-                            <li><a class="dropdown-item" href="#">Form Pendaftaran</a></li>
+                            <li><a class="dropdown-item" href="<?= BASE_URL ?>pages/recruitment_form.php">Form Pendaftaran</a></li>
                         </ul>
                     </li>
 
