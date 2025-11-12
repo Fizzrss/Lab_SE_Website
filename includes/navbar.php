@@ -51,9 +51,9 @@
 
                     <!-- Dropdown Profil -->
                     <li class="nav-item dropdown">
-                        <a class="nav-link nav-pill dropdown-toggle" href="#" data-bs-toggle="dropdown">Profil</a>
+                        <a class="nav-link nav-pill dropdown-toggle" href="<?= BASE_URL ?>pages/profil.php" data-bs-toggle="dropdown">Profil</a>
                         <ul class="dropdown-menu dropdown-glass">
-                            <li><a class="dropdown-item" href="<?= BASE_URL ?>pages/profil.php">Tentang LAB SE</a></li>
+                            <li><a class="dropdown-item" href="<?= BASE_URL ?>pages/tentang.php">Tentang LAB SE</a></li>
                             <li><a class="dropdown-item" href="<?= BASE_URL ?>pages/visi_misi.php">Visi & Misi</a></li>
                             <li><a class="dropdown-item" href="<?= BASE_URL ?>pages/roadmap.php">Roadmap</a></li>
                             <li><a class="dropdown-item" href="<?= BASE_URL ?>pages/focus_scope.php">Focus & Scope</a></li>
@@ -75,7 +75,7 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link nav-pill dropdown-toggle" href="#" data-bs-toggle="dropdown">Requirement</a>
                         <ul class="dropdown-menu dropdown-glass">
-                            <li><a class="dropdown-item" href="#">Daftar Mahasiswa</a></li>
+                            <li><a class="dropdown-item" href="<?= BASE_URL ?>pages/mahasiswa_list.php">Daftar Mahasiswa</a></li>
                             <li><a class="dropdown-item" href="#">Form Pendaftaran</a></li>
                         </ul>
                     </li>
