@@ -9,6 +9,7 @@ $meta_keywords = 'lab se, software engineering, universitas, teknologi';
 define('BASE_URL', 'http://localhost/Lab_SE_Website/');
 
 // Panggil navbar
+require_once __DIR__ . '/includes/header.php';
 require_once __DIR__ . '/includes/navbar.php';
 ?>
 

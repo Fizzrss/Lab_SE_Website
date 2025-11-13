@@ -16,7 +16,12 @@ error_reporting(E_ALL);
 
 // 1. TENTUKAN BASE_URL (PENTING!)
 // Pastikan path ini adalah folder root proyekmu di htdocs
-define('BASE_URL', 'http://localhost/Lab_SE_Website/');
+
+
+//penambahan fungsi untuk cek apakah BASE_URL sudah terdefinisi (kevin)
+if (!defined('BASE_URL')) {
+    define('BASE_URL', 'http://localhost/Lab_SE_Website/');
+}
 
 
 // 2. NONAKTIFKAN KONEKSI DATABASE
