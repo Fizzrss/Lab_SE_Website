@@ -13,39 +13,25 @@ require_once __DIR__ . '/includes/header.php';
 require_once __DIR__ . '/includes/navbar.php';
 ?>
 
-<!-- Hero Section -->
-<section id="hero" class="hero section dark-background">
-    <div id="hero-carousel" class="carousel slide carousel-fade" data-bs-ride="carousel" data-bs-interval="5000">
-        <img src="<?= BASE_URL ?>assets/img/bg_web.webp" class="d-block w-100" alt="Background LAB SE">
-        <div class="carousel-container text-center text-light">
-            <h2>Laboratorium Software Engineering</h2>
-            <h2>Politeknik Negeri Malang</h2>
-            <p>Mengembangkan inovasi teknologi untuk masa depan yang lebih cerdas.</p>
-            <a href="#profil" class="btn-get-started">Get Started</a>
+<body data-bs-spy="scroll" data-bs-target="#navbarNav" data-bs-offset="100">    
+<main data-bs-spy="scroll" data-bs-target="#navbarNav" data-bs-offset="100">
+    <!-- Hero Section -->
+    <section id="hero" class="hero section dark-background">
+        <div id="hero-carousel" class="carousel slide carousel-fade" data-bs-ride="carousel" data-bs-interval="5000">
+            <img src="<?= BASE_URL ?>assets/img/bg_web.webp" class="d-block w-100" alt="Background LAB SE">
+            <div class="carousel-container text-center text-light">
+                <h2>Laboratorium Software Engineering</h2>
+                <h2>Politeknik Negeri Malang</h2>
+                <p>Mengembangkan inovasi teknologi untuk masa depan yang lebih cerdas.</p>
+                <a href="#profil" class="btn-get-started">Get Started</a>
+            </div>
         </div>
-    </div>
-</section>
-
-<main>
-    <!-- Konten lainnya di sini -->
-    <div id="profil">
-        <div id="tentang">
-            <?php
-                require_once __DIR__ . '/pages/tentang.php';
-            ?>
-        </div>
-        <div id="visi_misi">
-            <?php
-                require_once __DIR__ . '/pages/visi_misi.php';
-            ?>
-        </div>
-        <div id="roadmap">
-            <?php
-                require_once __DIR__ . '/pages/roadmap.php';
-            ?>
-        </div>
-    </div>
+    </section>
+    <?php
+        require_once __DIR__ . '/pages/profil.php';
+    ?>
 </main>
 <?php
 require_once __DIR__ . '/includes/footer.php';
 ?>
+</body>
