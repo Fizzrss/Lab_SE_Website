@@ -147,7 +147,7 @@ $dummy_mahasiswa_list = [
                             bergabung di laboratorium Software Engineering, 
                             Silahkan klik tombol Daftar Sekarang!
                         </p>
-                        <a href="<?= BASE_URL ?>pages/recruitment.php" class="btn btn-lg mt-2 btn-custom-accent">
+                        <a href="<?= BASE_URL ?>pages/recruitment_form.php" class="btn btn-lg mt-2 btn-custom-accent">
                            Daftar Sekarang
                         </a>
                     </div>
