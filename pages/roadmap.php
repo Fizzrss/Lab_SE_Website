@@ -1,122 +1,13 @@
 <?php
-/*
-|--------------------------------------------------------------------------
-| File: pages/roadmap.php
-|--------------------------------------------------------------------------
-| Halaman Roadmap LAB Software Engineering
-| 1. Menggunakan include navbar & footer (otomatis rapi)
-| 2. Tidak perlu koneksi database
-| 3. Roadmap dibuat responsif dan animatif
-*/
+$page_title = 'Roadmap';
+$current_page = 'roadmap';
+$meta_description = 'Roadmap Pengembangan Laboratorium Software Engineering';
 
-require_once '../includes/config.php'; // pastikan BASE_URL sudah ada
-include '../includes/navbar.php';
+if (!defined('BASE_URL')) {
+    define('BASE_URL', 'http://localhost/pbl/');
+}
+$current_page = basename($_SERVER['PHP_SELF']);
 ?>
-
-<!-- ===== STYLE KHUSUS UNTUK ROADMAP ===== -->
-<style>
-.roadmap-section {
-  background: #f8f9fa;
-  padding: 100px 20px;
-  text-align: center;
-}
-
-.roadmap-title {
-  font-weight: 700;
-  color: #0d6efd;
-  margin-bottom: 50px;
-}
-
-.roadmap-timeline {
-  position: relative;
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 20px 0;
-}
-
-.roadmap-line {
-  position: absolute;
-  left: 50%;
-  top: 0;
-  transform: translateX(-50%);
-  width: 4px;
-  height: 100%;
-  background-color: #0d6efd;
-  z-index: 1;
-}
-
-.roadmap-item {
-  position: relative;
-  width: 50%;
-  padding: 30px 40px;
-  box-sizing: border-box;
-}
-
-.roadmap-item::before {
-  content: "";
-  position: absolute;
-  top: 40px;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background-color: #0d6efd;
-  z-index: 2;
-}
-
-.roadmap-item.left {
-  left: 0;
-  text-align: right;
-}
-
-.roadmap-item.left::before {
-  right: -10px;
-}
-
-.roadmap-item.right {
-  left: 50%;
-}
-
-.roadmap-item.right::before {
-  left: -10px;
-}
-
-.roadmap-box {
-  background: white;
-  border-radius: 8px;
-  padding: 20px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-  position: relative;
-  z-index: 3;
-  animation: fadeUp 0.7s ease forwards;
-  opacity: 0;
-}
-
-.roadmap-item:nth-child(1) .roadmap-box { animation-delay: 0.2s; }
-.roadmap-item:nth-child(2) .roadmap-box { animation-delay: 0.4s; }
-.roadmap-item:nth-child(3) .roadmap-box { animation-delay: 0.6s; }
-.roadmap-item:nth-child(4) .roadmap-box { animation-delay: 0.8s; }
-.roadmap-item:nth-child(5) .roadmap-box { animation-delay: 1s; }
-
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(30px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-/* Responsif Mobile */
-@media screen and (max-width: 768px) {
-  .roadmap-line {
-    left: 8px;
-  }
-  .roadmap-item {
-    width: 100%;
-    text-align: left;
-    padding-left: 40px;
-  }
-  .roadmap-item::before {
-    left: 0;
-  }
-}
-</style>
 
 <!-- ===== BAGIAN KONTEN ROADMAP ===== -->
 <section class="roadmap-section">
@@ -166,6 +57,4 @@ include '../includes/navbar.php';
 </section>
 
 <?php
-// Memanggil Footer
-include '../includes/footer.php';
 ?>

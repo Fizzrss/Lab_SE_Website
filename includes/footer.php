@@ -3,7 +3,7 @@
     <div class="footer-top">
       <div class="container">
         <div class="row gy-4">
-          <div class="col-lg-4 col-md-6 footer-about">
+          <div class="col-lg-8 col-md-8 footer-about">
             <a href="index.html" class="logo d-flex align-items-center">
               <span class="sitename">Laboratorium Software Engineering</span>
             </a>
@@ -15,7 +15,7 @@
             </div>
           </div>
 
-          <div class="col-lg-2 col-md-3 footer-links">
+          <div class="col-lg-2 col-md-2 footer-links">
             <h4>Useful Links</h4>
             <ul>
               <li><a href="#">Home</a></li>
@@ -26,7 +26,7 @@
             </ul>
           </div>
 
-          <div class="col-lg-2 col-md-3 footer-links">
+          <div class="col-lg-2 col-md-2 footer-links">
             <h4>Our Services</h4>
             <ul>
               <li><a href="#">Web Design</a></li>
@@ -37,7 +37,7 @@
             </ul>
           </div>
 
-          <div class="col-lg-2 col-md-3 footer-links">
+          <!-- <div class="col-lg-2 col-md-3 footer-links">
             <h4>Hic solutasetp</h4>
             <ul>
               <li><a href="#">Molestiae accusamus iure</a></li>
@@ -57,7 +57,7 @@
               <li><a href="#">Trodelas</a></li>
               <li><a href="#">Flexo</a></li>
             </ul>
-          </div>
+          </div> -->
 
         </div>
       </div>
@@ -70,13 +70,13 @@
           <div>
             © Copyright <strong><span>MyWebsite</span></strong>. All Rights Reserved
           </div>
-          <div class="credits">
+          <!-- <div class="credits"> -->
             <!-- All the links in the footer should remain intact. -->
             <!-- You can delete the links only if you purchased the pro version. -->
             <!-- Licensing information: https://bootstrapmade.com/license/ -->
             <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/herobiz-bootstrap-business-template/ -->
-            Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a> Distributed by <a href="https://themewagon.com">ThemeWagon</a>
-          </div>
+            <!-- Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a> Distributed by <a href="https://themewagon.com">ThemeWagon</a>
+          </div> -->
         </div>
 
         <div class="social-links order-first order-lg-last mb-3 mb-lg-0">
