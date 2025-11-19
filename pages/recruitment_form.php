@@ -122,20 +122,10 @@ $site_title = "Lab SE"; // Fallback jika $site_title tidak ada di config
             </div>
           </div>
 
-          <div class="row mb-3">
-            <label class="col-sm-2 col-form-label fw-semibold">Semester</label>
+           <div class="row mb-3">
+            <label class="col-sm-2 col-form-label fw-semibold">Tahun Masuk</label>
             <div class="col-sm-10">
-              <select name="semester" class="form-select" required>
-                <option value="">-- Pilih Semester --</option>
-                <option>1</option>
-                <option>2</option>
-                <option>3</option>
-                <option>4</option>
-                <option>5</option>
-                <option>6</option>
-                <option>7</option>
-                <option>8</option>
-              </select>
+              <input type="text" name="nim" class="form-control" placeholder="Masukkan tahun masuk" required>
             </div>
           </div>
 
