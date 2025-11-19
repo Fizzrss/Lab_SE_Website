@@ -1,39 +1,100 @@
 <?php
 // Definisikan BASE_URL jika belum ada
 if (!defined('BASE_URL')) {
-    define('BASE_URL', '../'); // Sesuaikan dengan struktur folder Anda
+    if (file_exists('../includes/config.php')) {
+        require_once '../includes/config.php';
+    } else {
+        define('BASE_URL', '../');
+    }
 }
+
+// Set judul halaman untuk <title>
+$page_title = "Form Pendaftaran";
+$site_title = "Lab SE"; // Fallback jika $site_title tidak ada di config
 ?>
-<!-- file: recruitment_form.php -->
 <!DOCTYPE html>
 <html lang="id">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Form Pendaftaran Mahasiswa Software Engineering Geeks</title>
+  
+  <title><?= htmlspecialchars($page_title ?? '') ?> - <?= htmlspecialchars($site_title ?? '') ?></title>
+  
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  
-  <!-- Bootstrap Icons -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
-  
-  <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   
-  <!-- Custom CSS -->
   <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/style.css">
+
+  <style>
+    /* 1. CSS Hero Banner */
+    .page-hero-banner {
+        background-color: var(--accent-color, #6096B4); 
+        color: var(--contrast-color, #ffffff);
+        padding: 3rem 1.5rem;
+        text-align: center;
+    }
+    .page-hero-banner h1 {
+        font-family: var(--heading-font);
+        color: var(--contrast-color, #ffffff);
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+    .page-hero-banner p {
+        color: var(--contrast-color, #ffffff);
+        opacity: 0.9;
+        font-size: 1.1rem;
+        margin-bottom: 0;
+    }
+
+    /* 2. CSS TOMBOL CTA (DIPERKUAT DENGAN !important) */
+    .btn-custom-accent {
+        background-color: var(--accent-color) !important; /* <-- PAKSA WARNA */
+        border-color: var(--accent-color) !important;     /* <-- PAKSA WARNA */
+        color: var(--contrast-color) !important;        /* <-- PAKSA WARNA */
+        
+        padding: 0.75rem 1.5rem;
+        font-weight: 500;
+        border-radius: 0.5rem;
+        transition: all 0.3s ease-in-out; 
+        text-decoration: none;
+    }
+
+    /* 3. CSS HOVER TOMBOL CTA (DIPERKUAT DENGAN !important) */
+    .btn-custom-accent:hover {
+        background-color: color-mix(in srgb, var(--accent-color), black 10%) !important; 
+        border-color: color-mix(in srgb, var(--accent-color), black 10%) !important;
+        color: var(--contrast-color) !important;
+        transform: translateY(-3px);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+  </style>
+
 </head>
 <body style="background-color: #f8f9fa;">
 
-  <?php include '../includes/navbar.php'; ?>
+  <?php
+    if (file_exists('../includes/navbar.php')) {
+        include '../includes/navbar.php';
+    }
+  ?>
+
+  <section class="page-hero-banner">
+      <div class="container">
+          <div class="row">
+              <div class="col-12">
+                  <h1>Formulir Pendaftaran</h1>
+                  <p>Bergabunglah dengan tim Laboratorium Software Engineering.</p>
+              </div>
+          </div>
+      </div>
+  </section>
 
   <main>
-    <!-- Form Container -->
     <div class="container mt-5 mb-5">
-      <h4 class="text-center fw-bold mb-4">
-        Form Pendaftaran Mahasiswa Software Engineering Geeks
-      </h4>
-
-      <div class="p-5 rounded-4" style="background-color: #e9ecef;">
+      
+      <div class="card card-floating p-4 p-md-5" style="border: none; box-shadow: 0 0.5rem 1.5rem rgba(0,0,0,0.08); border-radius: 1rem;">
         <form action="proses_recruitment.php" method="POST" enctype="multipart/form-data">
 
           <div class="row mb-3">
@@ -120,14 +181,22 @@ if (!defined('BASE_URL')) {
             </div>
           </div>
 
+          <hr class="my-4">
+
           <div class="text-center">
-            <button type="submit" class="btn btn-secondary px-5">Kirim</button>
+            <button type="submit" class="btn btn-custom-accent btn-lg">Kirim Pendaftaran</button>
           </div>
 
         </form>
       </div>
     </div>
   </main>
+
+  <?php
+    if (file_exists('../includes/footer.php')) {
+        include '../includes/footer.php';
+    }
+  ?>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>

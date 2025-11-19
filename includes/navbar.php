@@ -67,7 +67,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
                 ?>
                 <li class="nav-item dropdown">
                     <a class="nav-link nav-pill dropdown-toggle <?= $is_req_active ? 'active' : '' ?>" href="#">
-                        Requirement
+                        Recruitment
                     </a>
                     <ul class="dropdown-menu dropdown-glass">
                         <li><a class="dropdown-item <?= ($current_page === 'mahasiswa_list.php') ? 'active' : '' ?>" href="<?= BASE_URL ?>pages/mahasiswa_list.php">Daftar Mahasiswa</a></li>
