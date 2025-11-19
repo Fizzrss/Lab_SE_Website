@@ -1,63 +1,50 @@
-  <footer id="footer" class="footer dark-background">
+<footer id="footer" class="footer dark-background">
 
     <div class="footer-top">
       <div class="container">
         <div class="row gy-4">
-          <div class="col-lg-8 col-md-8 footer-about">
-            <a href="index.html" class="logo d-flex align-items-center">
+          <div class="col-lg-5 col-md-12 footer-about">
+            <a href="<?= BASE_URL ?>index.php" class="logo d-flex align-items-center">
               <span class="sitename">Laboratorium Software Engineering</span>
             </a>
             <div class="footer-contact pt-3">
               <p>Gedung Teknik Sipil dan Teknologi Informasi</p>
               <p>Politeknik Negeri Malang, Malang</p>
-              <p class="mt-3"><strong>Phone:</strong> <span>+1 5589 55488 55</span></p>
-              <p><strong>Email:</strong> <span>info@example.com</span></p>
+              <p class="mt-3"><strong>Phone:</strong> <span>+62 341 123456</span></p>
+              <p><strong>Email:</strong> <span>lab.se@polinema.ac.id</span></p>
             </div>
           </div>
 
-          <div class="col-lg-2 col-md-2 footer-links">
+          <div class="col-lg-2 col-6 footer-links">
             <h4>Useful Links</h4>
             <ul>
-              <li><a href="#">Home</a></li>
-              <li><a href="#">About us</a></li>
-              <li><a href="#">Services</a></li>
-              <li><a href="#">Terms of service</a></li>
-              <li><a href="#">Privacy policy</a></li>
+              <li><a href="<?= BASE_URL ?>index.php">Beranda</a></li>
+              <li><a href="<?= BASE_URL ?>pages/tentang.php">Tentang Kami</a></li>
+              <li><a href="<?= BASE_URL ?>pages/blog.php">Blog & Berita</a></li>
+              <li><a href="<?= BASE_URL ?>pages/recruitment_form.php">Join Us</a></li>
             </ul>
           </div>
 
-          <div class="col-lg-2 col-md-2 footer-links">
-            <h4>Our Services</h4>
+          <div class="col-lg-2 col-6 footer-links">
+            <h4>Layanan Lab</h4>
             <ul>
-              <li><a href="#">Web Design</a></li>
-              <li><a href="#">Web Development</a></li>
-              <li><a href="#">Product Management</a></li>
-              <li><a href="#">Marketing</a></li>
-              <li><a href="#">Graphic Design</a></li>
+              <li><a href="#">Riset & Pengembangan</a></li>
+              <li><a href="#">Workshop Teknologi</a></li>
+              <li><a href="#">Software Testing</a></li>
+              <li><a href="#">Konsultasi TI</a></li>
             </ul>
           </div>
 
-          <!-- <div class="col-lg-2 col-md-3 footer-links">
-            <h4>Hic solutasetp</h4>
-            <ul>
-              <li><a href="#">Molestiae accusamus iure</a></li>
-              <li><a href="#">Excepturi dignissimos</a></li>
-              <li><a href="#">Suscipit distinctio</a></li>
-              <li><a href="#">Dilecta</a></li>
-              <li><a href="#">Sit quas consectetur</a></li>
-            </ul>
+          <div class="col-lg-3 col-md-12 footer-contact text-center text-md-start">
+            <h4>Connect With Us</h4>
+            <p>Ikuti sosial media kami untuk update terbaru seputar kegiatan lab dan teknologi.</p>
+            <div class="social-links mt-3">
+                <a href="#" class="twitter"><i class="bi bi-twitter-x"></i></a>
+                <a href="#" class="facebook"><i class="bi bi-facebook"></i></a>
+                <a href="#" class="instagram"><i class="bi bi-instagram"></i></a>
+                <a href="#" class="linkedin"><i class="bi bi-linkedin"></i></a>
+            </div>
           </div>
-
-          <div class="col-lg-2 col-md-3 footer-links">
-            <h4>Nobis illum</h4>
-            <ul>
-              <li><a href="#">Ipsam</a></li>
-              <li><a href="#">Laudantium dolorum</a></li>
-              <li><a href="#">Dinera</a></li>
-              <li><a href="#">Trodelas</a></li>
-              <li><a href="#">Flexo</a></li>
-            </ul>
-          </div> -->
 
         </div>
       </div>
@@ -68,27 +55,30 @@
 
         <div class="d-flex flex-column align-items-center align-items-lg-start">
           <div>
-            © Copyright <strong><span>MyWebsite</span></strong>. All Rights Reserved
+            © Copyright <strong><span>Lab Software Engineering</span></strong>. All Rights Reserved
           </div>
-          <!-- <div class="credits"> -->
-            <!-- All the links in the footer should remain intact. -->
-            <!-- You can delete the links only if you purchased the pro version. -->
-            <!-- Licensing information: https://bootstrapmade.com/license/ -->
-            <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/herobiz-bootstrap-business-template/ -->
-            <!-- Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a> Distributed by <a href="https://themewagon.com">ThemeWagon</a>
-          </div> -->
-        </div>
-
-        <div class="social-links order-first order-lg-last mb-3 mb-lg-0">
-          <a href=""><i class="bi bi-twitter-x"></i></a>
-          <a href=""><i class="bi bi-facebook"></i></a>
-          <a href=""><i class="bi bi-instagram"></i></a>
-          <a href=""><i class="bi bi-linkedin"></i></a>
         </div>
 
       </div>
     </div>
 
   </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+  <script>
+    // Cek apakah library AOS sudah terload
+    if (typeof AOS !== 'undefined') {
+        AOS.init({
+            duration: 800,    // Durasi animasi (ms)
+            easing: 'ease-in-out', // Jenis transisi
+            once: true,       // Animasi hanya sekali saat scroll ke bawah
+            mirror: false     // Jangan animasi ulang saat scroll ke atas
+        });
+    }
+  </script>
+
 </body>
 </html>
