@@ -944,6 +944,11 @@ h6 {
   z-index: 1;
 }
 
+.stats.section {
+    padding-top: 80px; 
+    padding-bottom: 80px;
+}
+
 .stats .stats-item {
   background-color: var(--surface-color);
   margin-top: -27px;

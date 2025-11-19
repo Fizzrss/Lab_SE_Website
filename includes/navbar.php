@@ -76,7 +76,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
 
                     <!-- Contact -->
                     <li class="nav-item ms-lg-2">
-                        <a class="btn btn-primary-glass bi bi-graph-up" href="<?= BASE_URL ?>includes/index.php"> Statistik</a>
+                        <a class="btn btn-primary-glass bi bi-graph-up" href="<?= BASE_URL ?>pages/statistik.php"> Statistik</a>
                     </li>
                 </ul>
             </div>
