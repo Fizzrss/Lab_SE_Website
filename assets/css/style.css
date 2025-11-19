@@ -753,11 +753,16 @@ h6 {
   background: white;
   border-radius: 8px;
   padding: 20px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   position: relative;
   z-index: 3;
   animation: fadeUp 0.7s ease forwards;
   opacity: 0;
+}
+
+.roadmap-box:hover {
+    transform: translateY(-7px);
+    box-shadow: 0 7px 20px rgba(0, 0, 0, 0.15);
 }
 
 .roadmap-item:nth-child(1) .roadmap-box { animation-delay: 0.2s; }
