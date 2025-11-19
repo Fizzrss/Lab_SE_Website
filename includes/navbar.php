@@ -9,7 +9,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
         <div class="container">
             <a class="navbar-brand" href="<?= BASE_URL ?>index.php">
                 <div class="d-flex align-items-center">
-                    <div class="brand-icon">LAB</div>
+                    <div class="logo-icon"><img src="<?= BASE_URL ?>assets/img/logo_lab.png" alt="Logo LAB SE"></div>
                     <span class="ms-2 fw-bold">Software Engineering</span>
                 </div>
             </a>
@@ -49,15 +49,9 @@ $current_page = basename($_SERVER['PHP_SELF']);
                     $is_personil_active = in_array($current_page, $personil_pages);
                     ?>
                     <li class="nav-item dropdown">
-                        <a class="nav-link nav-pill dropdown-toggle <?= $is_personil_active ? 'active' : '' ?>" href="<?= BASE_URL ?>pages/personil.php">
+                        <a class="nav-link nav-pill <?= $is_personil_active ? 'active' : '' ?>" href="<?= BASE_URL ?>pages/personil.php">
                             Personil
                         </a>
-                        <ul class="dropdown-menu dropdown-glass">
-                            <li><a class="dropdown-item <?= ($current_page === 'dosen1.php') ? 'active' : '' ?>" href="<?= BASE_URL ?>pages/personil.php">Dosen 1</a></li>
-                            <li><a class="dropdown-item <?= ($current_page === 'dosen2.php') ? 'active' : '' ?>" href="<?= BASE_URL ?>pages/personil.php">Dosen 2</a></li>
-                            <li><a class="dropdown-item <?= ($current_page === 'dosen3.php') ? 'active' : '' ?>" href="<?= BASE_URL ?>pages/personil.php">Dosen 3</a></li>
-                            <li><a class="dropdown-item <?= ($current_page === 'dosen4.php') ? 'active' : '' ?>" href="<?= BASE_URL ?>pages/personil.php">Dosen 4</a></li>
-                        </ul>
                     </li>
 
                     <!-- Dropdown Requirement -->
@@ -67,7 +61,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
                     ?>
                     <li class="nav-item dropdown">
                         <a class="nav-link nav-pill dropdown-toggle <?= $is_req_active ? 'active' : '' ?>" href="#">
-                            Recruitment
+                            Daftar
                         </a>
                         <ul class="dropdown-menu dropdown-glass">
                             <li><a class="dropdown-item <?= ($current_page === 'mahasiswa_list.php') ? 'active' : '' ?>" href="<?= BASE_URL ?>pages/mahasiswa_list.php">Daftar Mahasiswa</a></li>
@@ -82,7 +76,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
 
                     <!-- Contact -->
                     <li class="nav-item ms-lg-2">
-                        <a class="btn btn-primary-glass" href="<?= BASE_URL ?>includes/footer.php">Contact</a>
+                        <a class="btn btn-primary-glass bi bi-graph-up" href="<?= BASE_URL ?>includes/index.php"> Statistik</a>
                     </li>
                 </ul>
             </div>

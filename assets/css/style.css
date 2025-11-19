@@ -111,19 +111,22 @@ h6 {
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
 }
 
-.brand-icon {
-    width: 45px;
-    height: 45px;
-    background: #6096B4;
-    border-radius: 12px;
+.logo-icon {
+    width: 60px;
+    height: 60px;
+    background: #fff;
+    border-radius: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #fff;
-    font-weight: 700;
-    font-size: 0.9rem;
     box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
 }
+
+.logo-icon img {
+    width: 100px;
+    height: 100px;
+}
+
 
 .navbar-glass .navbar-brand {
     color: #6096B4 !important;
