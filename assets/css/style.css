@@ -791,6 +791,49 @@ h6 {
   }
 }
 
+/* Responsif Mobile */
+@media screen and (max-width: 768px) {
+    /* 1. Atur Garis Timeline */
+    .roadmap-line {
+        left: 20px; /* Pindahkan garis ke kiri agar ada ruang */
+        transform: none; /* Hapus transform X agar stabil di posisi left: 20px */
+    }
+
+    /* 2. Atur Semua Item Roadmap */
+    .roadmap-item {
+        width: 100%; /* Selalu ambil lebar penuh */
+        padding: 30px 10px 30px 50px; /* Sesuaikan padding agar konten tidak nabrak tepi/garis */
+        left: 0; /* Pastikan item tidak ada yang didorong 50% ke kanan */
+        text-align: left; /* Teks selalu rata kiri di mobile */
+    }
+    
+    /* 3. Atur Posisi Lingkaran Penanda */
+    .roadmap-item::before {
+        left: 10px; /* Posisikan penanda di sebelah kiri garis (20px - 10px diameter/2) */
+        top: 40px; /* Pertahankan posisi vertikal */
+        right: auto; /* Pastikan properti 'right' tidak aktif */
+    }
+
+    /* 4. Reset Properti Item Kiri dan Kanan agar sama */
+    .roadmap-item.left,
+    .roadmap-item.right {
+        left: 0; /* Hapus properti left: 50% dari item.right */
+        text-align: left; /* Pastikan keduanya rata kiri */
+    }
+    
+    /* 5. Koreksi posisi penanda untuk item kiri */
+    .roadmap-item.left::before {
+        left: 10px; /* Gunakan posisi yang sama untuk penanda kiri/kanan */
+        right: auto;
+    }
+    
+    /* 6. Kotak konten di mobile */
+    .roadmap-box {
+        /* Opsional: Tambahkan sedikit margin agar tidak terlalu rapat */
+        margin-right: 10px;
+    }
+}
+
 /*
 |--------------------------------------------------------------------------
 | Resep Tambahan untuk Blog (Tempel di bawah style.css)
