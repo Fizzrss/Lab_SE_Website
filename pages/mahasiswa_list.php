@@ -1,159 +1,210 @@
 <?php
 /*
 |--------------------------------------------------------------------------
-| File: pages/mahasiswa_list.php (Header "Nama" rata kiri)
+| File: pages/mahasiswa_list.php (Clean Version)
 |--------------------------------------------------------------------------
-| 1. Header <th> "Nama" dikembalikan ke rata kiri.
-| 2. Header "Program Studi" & "Status" tetap di tengah.
-| 3. Tombol CTA dan Hero Banner tetap.
+| Tampilan List Modern & Interaktif.
+| CSS dipisah ke assets/css/style.css
 */
 
-// Bagian 1: Konfigurasi (Wajib paling atas)
+// 1. Konfigurasi
 require_once '../includes/config.php';
 
-// Bagian 2: SET JUDUL HALAMAN
 $page_title = "Daftar Mahasiswa"; 
 
-// Bagian 3: Cangkang Atas
 include '../includes/header.php'; 
 include '../includes/navbar.php'; 
 
-// Bagian 4: DATA DUMMY
+// 2. DATA DUMMY
 $dummy_mahasiswa_list = [
-    [ "nama" => "Ahmad Fauzi (Dummy)", "program_studi" => "D-IV SIB", "status" => "Aktif" ],
-    [ "nama" => "Siti Nurhaliza (Dummy)", "program_studi" => "D-IV SIB", "status" => "Aktif" ],
-    [ "nama" => "Budi Santoso (Dummy)", "program_studi" => "D-IV TI", "status" => "Aktif" ],
-    [ "nama" => "Dewi Lestari (Dummy)", "program_studi" => "D-IV SIB", "status" => "Alumni" ]
+    [ 
+        "nama" => "Ahmad Fauzi", 
+        "nim" => "2241720001",
+        "prodi" => "D-IV Sistem Informasi Bisnis", 
+        "status" => "Aktif",
+        "foto" => "https://images.unsplash.com/photo-1599566150163-29194dcaad36?auto=format&fit=crop&w=100&q=80"
+    ],
+    [ 
+        "nama" => "Siti Nurhaliza", 
+        "nim" => "2241720002",
+        "prodi" => "D-IV Sistem Informasi Bisnis", 
+        "status" => "Aktif",
+        "foto" => "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=100&q=80"
+    ],
+    [ 
+        "nama" => "Budi Santoso", 
+        "nim" => "2241720123",
+        "prodi" => "D-IV Teknik Informatika", 
+        "status" => "Cuti",
+        "foto" => "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=100&q=80"
+    ],
+    [ 
+        "nama" => "Dewi Lestari", 
+        "nim" => "2041720099",
+        "prodi" => "D-IV Sistem Informasi Bisnis", 
+        "status" => "Alumni",
+        "foto" => "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=100&q=80"
+    ],
+    [ 
+        "nama" => "Rian Hidayat", 
+        "nim" => "2341720011",
+        "prodi" => "D-IV Teknik Informatika", 
+        "status" => "Aktif",
+        "foto" => "https://images.unsplash.com/photo-1527980965255-d3b416303d12?auto=format&fit=crop&w=100&q=80"
+    ]
 ];
+
+// Helper Warna Status
+function getStatusColor($status) {
+    if ($status == 'Aktif') return 'success'; 
+    if ($status == 'Cuti') return 'warning';  
+    if ($status == 'Alumni') return 'secondary'; 
+    return 'primary';
+}
 ?>
-
-<style>
-    /* 1. CSS Hero Banner */
-    .page-hero-banner {
-        background-color: var(--accent-color, #6096B4); 
-        color: var(--contrast-color, #ffffff);
-        padding: 3rem 1.5rem;
-        text-align: center;
-    }
-    .page-hero-banner h1 {
-        font-family: var(--heading-font);
-        color: var(--contrast-color, #ffffff);
-        font-weight: 700;
-        margin-bottom: 0.5rem;
-        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    }
-    .page-hero-banner p {
-        color: var(--contrast-color, #ffffff);
-        opacity: 0.9;
-        font-size: 1.1rem;
-        margin-bottom: 0;
-    }
-
-    /* 2. CSS Penengah Isi Tabel */
-    td.cell-center {
-        text-align: center;
-    }
-
-    /* 3. CSS HEADER TABEL */
-    .thead-custom-accent {
-        background-color: var(--accent-color);
-        color: var(--contrast-color);
-    }
-
-    /* 4. CSS TOMBOL CTA */
-    .btn-custom-accent {
-        background-color: var(--accent-color);
-        border-color: var(--accent-color);
-        color: var(--contrast-color);
-        padding: 0.75rem 1.5rem;
-        font-weight: 500;
-        border-radius: 0.5rem;
-        transition: all 0.3s ease-in-out; 
-        text-decoration: none;
-    }
-
-    /* 5. CSS HOVER TOMBOL CTA */
-    .btn-custom-accent:hover {
-        background-color: color-mix(in srgb, var(--accent-color), black 10%); 
-        border-color: color-mix(in srgb, var(--accent-color), black 10%);
-        color: var(--contrast-color);
-        transform: translateY(-3px);
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    }
-</style>
-
 
 <section class="page-hero-banner">
     <div class="container">
         <div class="row">
             <div class="col-12">
                 <h1>Daftar Mahasiswa Lab SE</h1>
-                <p>Mahasiswa aktif yang tergabung dalam Laboratorium Software Engineering.</p>
+                <p class="opacity-75">Data mahasiswa aktif, cuti, dan alumni.</p>
             </div>
         </div>
     </div>
 </section>
 
-<main>
-    <div class="container my-5">
+<main class="main-content-container">
+    <div class="container">
 
-        <div class="row mb-5">
+        <div class="filter-card" data-aos="fade-up">
+            <div class="row g-3 align-items-center">
+                <div class="col-md-6">
+                    <div class="input-group">
+                        <span class="input-group-text bg-white border-end-0"><i class="bi bi-search text-muted"></i></span>
+                        <input type="text" id="searchInput" class="form-control border-start-0 ps-0" placeholder="Cari nama atau NIM...">
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <select id="prodiFilter" class="form-select">
+                        <option value="all">Semua Program Studi</option>
+                        <option value="D-IV Sistem Informasi Bisnis">D-IV Sistem Informasi Bisnis</option>
+                        <option value="D-IV Teknik Informatika">D-IV Teknik Informatika</option>
+                    </select>
+                </div>
+                <div class="col-md-2 text-end">
+                    <span class="text-muted small">Total: <strong id="totalCount"><?= count($dummy_mahasiswa_list) ?></strong></span>
+                </div>
+            </div>
+        </div>
+
+        <div id="studentList">
+            <?php 
+            $delay = 100;
+            foreach ($dummy_mahasiswa_list as $mhs) : 
+                $delay += 50;
+                $badgeColor = getStatusColor($mhs['status']);
+            ?>
+                <div class="student-row" 
+                     data-aos="fade-up" 
+                     data-aos-delay="<?= $delay ?>"
+                     data-name="<?= strtolower($mhs['nama']) ?>"
+                     data-nim="<?= $mhs['nim'] ?>"
+                     data-prodi="<?= $mhs['prodi'] ?>">
+                    
+                    <div class="student-avatar me-md-4 mb-3 mb-md-0">
+                        <img src="<?= $mhs['foto'] ?>" alt="<?= htmlspecialchars($mhs['nama']) ?>">
+                    </div>
+
+                    <div class="student-info flex-grow-1 text-md-start mb-2 mb-md-0">
+                        <h5 class="student-name"><?= htmlspecialchars($mhs['nama']) ?></h5>
+                        <span class="student-nim"><i class="bi bi-card-heading me-1"></i><?= htmlspecialchars($mhs['nim']) ?></span>
+                    </div>
+
+                    <div class="student-prodi col-md-3 text-md-start mb-2 mb-md-0">
+                        <i class="bi bi-mortarboard me-1 text-primary"></i> <?= htmlspecialchars($mhs['prodi']) ?>
+                    </div>
+
+                    <div class="student-status col-md-2 text-md-center mb-2 mb-md-0">
+                        <span class="badge bg-<?= $badgeColor ?> bg-opacity-10 text-<?= $badgeColor ?> status-badge border border-<?= $badgeColor ?>">
+                            <?= htmlspecialchars($mhs['status']) ?>
+                        </span>
+                    </div>
+
+                    <div class="ms-md-4">
+                        <a href="#" class="btn-action shadow-sm">
+                            <i class="bi bi-chevron-right"></i>
+                        </a>
+                    </div>
+
+                </div>
+            <?php endforeach; ?>
+        </div>
+
+        <div id="noResults" class="text-center py-5 d-none">
+            <i class="bi bi-emoji-frown display-1 text-muted opacity-25"></i>
+            <p class="text-muted mt-3">Data mahasiswa tidak ditemukan.</p>
+        </div>
+
+        <div class="row mt-5" data-aos="fade-up">
             <div class="col-12">
-                <div class="card card-floating">
-                    <div class="table-responsive">
-                        <table class="table table-striped table-hover mb-0">
-                            
-                            <thead class="thead-custom-accent">
-                                <tr>
-                                    <th scope="col" style="padding: 1.2rem;">Nama</th>
-                                    
-                                    <th scope="col" class="text-center" style="padding: 1.2rem;">Program Studi</th>
-                                    <th scope="col" class="text-center" style="padding: 1.2rem;">Status</th>
-                                </tr>
-                            </thead>
-                            
-                            <tbody>
-                                <?php
-                                if (empty($dummy_mahasiswa_list)) :
-                                ?>
-                                    <tr>
-                                        <td colspan="3" class="text-center p-3">
-                                            Data mahasiswa belum tersedia saat ini.
-                                        </td>
-                                    </tr>
-                                <?php
-                                else :
-                                    foreach ($dummy_mahasiswa_list as $mahasiswa) :
-                                    ?>
-                                        <tr style="vertical-align: middle;">
-                                            <td style="padding: 1.2rem;"><?php echo htmlspecialchars($mahasiswa['nama']); ?></td>
-                                            
-                                            <td class="cell-center" style="padding: 1.2rem;"><?php echo htmlspecialchars($mahasiswa['program_studi']); ?></td>
-                                            <td class="cell-center" style="padding: 1.2rem;"><?php echo htmlspecialchars($mahasiswa['status']); ?></td>
-                                        </tr>
-                                    <?php
-                                    endforeach;
-                                endif;
-                                ?>
-                            </tbody>
-                        </table>
-                    </div> </div> </div> </div> <div class="row">
-            <div class="col-12">
-                <div class="card card-floating bg-light p-4">
+                <div class="card card-floating bg-light p-4 text-center border-0 shadow-sm">
                     <div class="card-body">
-                        <h3 class="card-title" style="font-family: var(--heading-font);">Daftarkan Dirimu!</h3>
-                        <p class="card-text">
-                            Bagi kamu mahasiswa jurusan Teknologi Informasi yang ingin 
-                            bergabung di laboratorium Software Engineering, 
-                            Silahkan klik tombol Daftar Sekarang!
-                        </p>
-                        <a href="<?= BASE_URL ?>pages/recruitment_form.php" class="btn btn-lg mt-2 btn-custom-accent">
+                        <h4 class="fw-bold mb-3">Tertarik Bergabung?</h4>
+                        <p class="text-muted mb-4">Jadilah bagian dari inovasi teknologi bersama kami.</p>
+                        <a href="<?= BASE_URL ?>pages/recruitment_form.php" class="btn btn-custom-accent px-5 py-2 rounded-pill shadow">
                            Daftar Sekarang
                         </a>
                     </div>
                 </div>
-            </div> </div> </div> </main>
+            </div>
+        </div>
+
+    </div>
+</main>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('searchInput');
+    const prodiFilter = document.getElementById('prodiFilter');
+    const studentRows = document.querySelectorAll('.student-row');
+    const noResults = document.getElementById('noResults');
+    const totalCount = document.getElementById('totalCount');
+
+    function filterStudents() {
+        const searchTerm = searchInput.value.toLowerCase();
+        const selectedProdi = prodiFilter.value;
+        let visibleCount = 0;
+
+        studentRows.forEach(row => {
+            const name = row.getAttribute('data-name');
+            const nim = row.getAttribute('data-nim');
+            const prodi = row.getAttribute('data-prodi');
+
+            const matchesSearch = name.includes(searchTerm) || nim.includes(searchTerm);
+            const matchesProdi = selectedProdi === 'all' || prodi === selectedProdi;
+
+            if (matchesSearch && matchesProdi) {
+                row.style.display = 'flex'; 
+                visibleCount++;
+            } else {
+                row.style.display = 'none'; 
+            }
+        });
+
+        if (visibleCount === 0) {
+            noResults.classList.remove('d-none');
+        } else {
+            noResults.classList.add('d-none');
+        }
+        totalCount.textContent = visibleCount;
+    }
+
+    searchInput.addEventListener('keyup', filterStudents);
+    prodiFilter.addEventListener('change', filterStudents);
+});
+</script>
+
 <?php
-// Bagian 8: Memanggil Footer
 include '../includes/footer.php';
 ?>

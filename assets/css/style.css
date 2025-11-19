@@ -1091,3 +1091,196 @@ h6 {
     margin-top: 5px;
     border-radius: 2px;
 }
+/*
+|--------------------------------------------------------------------------
+| MODUL:mahasiswa_list sec
+|--------------------------------------------------------------------------
+*/
+
+/* Hero Banner khusus halaman ini (dengan efek overlap ke bawah) */
+.page-hero-banner {
+    background-color: var(--accent-color, #6096B4); 
+    color: var(--contrast-color, #ffffff);
+    padding: 4rem 1.5rem;
+    text-align: center;
+    margin-bottom: -3rem; /* EFEK KUNCI: Membuat konten di bawahnya naik menumpuk banner */
+    padding-bottom: 5rem;
+}
+
+.page-hero-banner h1 {
+    font-family: var(--heading-font);
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.page-hero-banner p {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+/* Container Utama yang 'Naik' ke atas menutupi sebagian banner */
+.main-content-container {
+    position: relative;
+    z-index: 2;
+}
+
+/* Kartu Filter & Pencarian */
+.filter-card {
+    border: none;
+    border-radius: 1rem;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    background: var(--surface-color, #ffffff);
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+/* --- Student Row Card (Pengganti Tabel) --- */
+.student-row {
+    background: var(--surface-color, #ffffff);
+    border-radius: 1rem;
+    padding: 1rem 1.5rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+    transition: all 0.3s ease;
+    border-left: 5px solid transparent; /* Garis indikator di kiri (default transparan) */
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.student-row:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    border-left-color: var(--accent-color); /* Garis muncul warna biru saat hover */
+}
+
+/* Avatar Mahasiswa */
+.student-avatar img {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #f8f9fa;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+/* Teks Informasi */
+.student-name {
+    font-weight: 700;
+    font-family: var(--heading-font);
+    color: var(--heading-color);
+    font-size: 1.1rem;
+    margin-bottom: 0;
+}
+
+.student-nim {
+    font-size: 0.85rem;
+    color: #6c757d;
+    display: block;
+}
+
+.student-prodi {
+    font-weight: 500;
+    color: var(--default-color);
+}
+
+/* Badge Status */
+.status-badge {
+    padding: 0.5rem 1rem;
+    border-radius: 50px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Tombol Panah (Action) */
+.btn-action {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #f8f9fa;
+    color: var(--accent-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s;
+    text-decoration: none;
+}
+
+.student-row:hover .btn-action {
+    background-color: var(--accent-color);
+    color: #ffffff;
+}
+
+/* Responsiveness untuk Layar Kecil (HP) */
+@media (max-width: 768px) {
+    .student-row { 
+        text-align: center; 
+        justify-content: center; 
+        padding: 1.5rem;
+    }
+    .student-avatar {
+        margin-bottom: 1rem;
+        margin-right: 0 !important;
+    }
+    .student-info, .student-prodi, .student-status { 
+        margin-bottom: 10px; 
+        width: 100%; 
+        text-align: center !important;
+    }
+    .btn-action { 
+        display: none; /* Sembunyikan panah di HP agar tidak sempit */
+    }
+}
+
+/*
+|--------------------------------------------------------------------------
+| GLOBAL COMPONENTS (Hero & Buttons)
+|--------------------------------------------------------------------------
+| Dipindahkan dari recruitment_form.php & mahasiswa_list.php
+*/
+
+/* 1. Page Hero Banner (Biru) */
+.page-hero-banner {
+    background-color: var(--accent-color, #6096B4); 
+    color: var(--contrast-color, #ffffff);
+    padding: 3rem 1.5rem;
+    text-align: center;
+}
+
+.page-hero-banner h1 {
+    font-family: var(--heading-font);
+    color: var(--contrast-color, #ffffff);
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.page-hero-banner p {
+    color: var(--contrast-color, #ffffff);
+    opacity: 0.9;
+    font-size: 1.1rem;
+    margin-bottom: 0;
+}
+
+/* 2. Tombol Aksen Kustom (Biru) */
+.btn-custom-accent {
+    background-color: var(--accent-color) !important; /* !important agar menang lawan Bootstrap */
+    border-color: var(--accent-color) !important;
+    color: var(--contrast-color) !important;
+    
+    padding: 0.75rem 1.5rem;
+    font-weight: 500;
+    border-radius: 0.5rem;
+    transition: all 0.3s ease-in-out; 
+    text-decoration: none;
+}
+
+.btn-custom-accent:hover {
+    background-color: color-mix(in srgb, var(--accent-color), black 10%) !important; 
+    border-color: color-mix(in srgb, var(--accent-color), black 10%) !important;
+    color: var(--contrast-color) !important;
+    transform: translateY(-3px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}

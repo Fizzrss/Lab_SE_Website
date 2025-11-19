@@ -8,9 +8,9 @@ if (!defined('BASE_URL')) {
     }
 }
 
-// Set judul halaman untuk <title>
+// Set judul halaman
 $page_title = "Form Pendaftaran";
-$site_title = "Lab SE"; // Fallback jika $site_title tidak ada di config
+$site_title = "Lab SE"; 
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -25,51 +25,6 @@ $site_title = "Lab SE"; // Fallback jika $site_title tidak ada di config
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   
   <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/style.css">
-
-  <style>
-    /* 1. CSS Hero Banner */
-    .page-hero-banner {
-        background-color: var(--accent-color, #6096B4); 
-        color: var(--contrast-color, #ffffff);
-        padding: 3rem 1.5rem;
-        text-align: center;
-    }
-    .page-hero-banner h1 {
-        font-family: var(--heading-font);
-        color: var(--contrast-color, #ffffff);
-        font-weight: 700;
-        margin-bottom: 0.5rem;
-        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    }
-    .page-hero-banner p {
-        color: var(--contrast-color, #ffffff);
-        opacity: 0.9;
-        font-size: 1.1rem;
-        margin-bottom: 0;
-    }
-
-    /* 2. CSS TOMBOL CTA (DIPERKUAT DENGAN !important) */
-    .btn-custom-accent {
-        background-color: var(--accent-color) !important; /* <-- PAKSA WARNA */
-        border-color: var(--accent-color) !important;     /* <-- PAKSA WARNA */
-        color: var(--contrast-color) !important;        /* <-- PAKSA WARNA */
-        
-        padding: 0.75rem 1.5rem;
-        font-weight: 500;
-        border-radius: 0.5rem;
-        transition: all 0.3s ease-in-out; 
-        text-decoration: none;
-    }
-
-    /* 3. CSS HOVER TOMBOL CTA (DIPERKUAT DENGAN !important) */
-    .btn-custom-accent:hover {
-        background-color: color-mix(in srgb, var(--accent-color), black 10%) !important; 
-        border-color: color-mix(in srgb, var(--accent-color), black 10%) !important;
-        color: var(--contrast-color) !important;
-        transform: translateY(-3px);
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    }
-  </style>
 
 </head>
 <body style="background-color: #f8f9fa;">
@@ -122,10 +77,27 @@ $site_title = "Lab SE"; // Fallback jika $site_title tidak ada di config
             </div>
           </div>
 
-           <div class="row mb-3">
+          <div class="row mb-3">
             <label class="col-sm-2 col-form-label fw-semibold">Tahun Masuk</label>
             <div class="col-sm-10">
-              <input type="text" name="nim" class="form-control" placeholder="Masukkan tahun masuk" required>
+              <input type="number" name="tahun_masuk" class="form-control" placeholder="Masukkan tahun masuk" required>
+            </div>
+          </div>
+
+          <div class="row mb-3">
+            <label class="col-sm-2 col-form-label fw-semibold">Semester</label>
+            <div class="col-sm-10">
+              <select name="semester" class="form-select" required>
+                <option value="">-- Pilih Semester --</option>
+                <option>1</option>
+                <option>2</option>
+                <option>3</option>
+                <option>4</option>
+                <option>5</option>
+                <option>6</option>
+                <option>7</option>
+                <option>8</option>
+              </select>
             </div>
           </div>
 
