@@ -1,6 +1,6 @@
 <?php
 if (!defined('BASE_URL')) {
-  define('BASE_URL', 'http://localhost/pbl/');
+  define('BASE_URL', 'http://localhost/Lab_SE_Website/');
 }
 $current_page = basename($_SERVER['PHP_SELF']);
 ?>
