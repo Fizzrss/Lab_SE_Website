@@ -1,77 +1,21 @@
 <?php
-// 1. SETUP PATH ABSOLUT (Agar file config pasti ketemu)
+// 1. SETUP PATH & CONFIG
 $root = $_SERVER['DOCUMENT_ROOT'] . '/Lab_SE_Website';
 
-// 2. PANGGIL CONFIG & DATABASE
 require_once $root . '/config/config.php';
+require_once $root . '/models/personil.php'; // <--- Panggil Modelnya
 
-// Inisialisasi Koneksi Database (PENTING: Ini yang kurang di kodemu sebelumnya)
+// 2. KONEKSI & AMBIL DATA
 $database = new Database();
 $db = $database->getConnection();
 
-// Judul Halaman
-$page_title = "Daftar Personil - Lab SE";
+$personilModel = new PersonilModel($db); // Inisialisasi Model
+$all_personnel = $personilModel->getAllPersonil(); // Ambil datanya (Simple kan?)
 
-// 3. PANGGIL HEADER & NAVBAR
+// 3. JUDUL & HEADER
+$page_title = "Daftar Personil - Lab SE";
 require_once $root . '/includes/header.php';
 require_once $root . '/includes/navbar.php';
-
-// 4. LOGIKA PENGAMBILAN DATA
-// =======================================================
-$all_personnel = [];
-
-if ($db) { // Cek apakah koneksi $db berhasil
-    try {
-        // QUERY: Gabungkan tabel personil dengan jabatan
-        // Catatan: Saya sesuaikan nama tabel jabatan jadi 'jabatan' (sesuai standar umum)
-        // Jika tabelmu namanya 'personil_jabatan', silakan ubah query di bawah.
-        $sql_personnel = "
-            SELECT 
-                p.id_personil, 
-                p.nama_personil, 
-                p.foto_personil,
-                j.nama_jabatan AS peran
-            FROM personil p
-            LEFT JOIN jabatan j ON p.id_jabatan = j.id_jabatan
-            ORDER BY p.id_jabatan ASC, p.nama_personil ASC
-        ";
-
-        $stmt = $db->query($sql_personnel);
-        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-        foreach ($results as $row) {
-            
-            // --- Query Spesialisasi (Ambil 1 saja buat preview) ---
-            $sql_spec = "
-                SELECT s.nama_spesialisasi 
-                FROM personil_spesialisasi ps
-                JOIN spesialisasi s ON ps.id_spesialisasi = s.id_spesialisasi
-                WHERE ps.id_personil = :id
-                LIMIT 1
-            ";
-            $stmt_spec = $db->prepare($sql_spec);
-            $stmt_spec->execute([':id' => $row['id_personil']]);
-            $spesialisasi = $stmt_spec->fetchColumn(); 
-
-            // Cek Foto (Jika kosong, pakai default)
-            $foto_path = !empty($row['foto_personil']) ? $row['foto_personil'] : 'default_avatar.png';
-
-            // Masukkan ke array data
-            $all_personnel[] = [
-                'id' => $row['id_personil'],
-                'nama' => $row['nama_personil'],
-                'peran' => $row['peran'] ?? 'Anggota', // Default jika jabatan null
-                'foto' => BASE_URL . 'assets/img/personil/' . $foto_path, // Pastikan folder personil ada
-                'spesialisasi' => $spesialisasi ?: 'Software Engineering' // Default jika kosong
-            ];
-        }
-
-    } catch (PDOException $e) {
-        echo "<div class='container mt-5'><div class='alert alert-danger'>Error Query: " . $e->getMessage() . "</div></div>";
-    }
-} else {
-    echo "<div class='container mt-5'><div class='alert alert-danger'>Gagal terhubung ke Database!</div></div>";
-}
 ?>
 
 <header class="header text-center py-5 text-white" style="background-color: #6096B4;">
