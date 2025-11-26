@@ -1284,3 +1284,59 @@ h6 {
     transform: translateY(-3px);
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
+
+
+/* CSS Tambahan untuk Tampilan Grid Kartu (Agar tampilan responsif) */
+.header {
+    background-color: #6096B4;
+}
+.header h1 {
+    color: #ffffff;
+}
+.header p {
+    color: #ffffff;
+}
+
+.team-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 30px; /* Jarak antar kartu */
+    padding: 20px 0;
+}
+.profile-card {
+    background-color: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    
+    /* Menentukan lebar maksimum untuk 3 kolom, mengurangi gap (30px * 2) / 3 */
+    width: calc(33.333% - 20px); 
+    min-width: 250px; /* Agar tetap terbaca di layar kecil */
+    
+    text-align: center;
+    padding: 20px;
+    transition: transform 0.5s;
+}
+
+/* ... CSS lainnya (hover, img) tetap sama ... */
+.profile-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+.profile-card img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover; 
+    margin-bottom: 15px;
+    /* Ubah warna border agar konsisten dengan tema header */
+    border: 3px solid #6096B4; 
+}
+
+/* OPSIONAL: Pengaturan Responsif untuk Mobile */
+@media (max-width: 768px) {
+    .profile-card {
+        width: 100%; /* Di layar kecil, tampilkan 1 kartu per baris */
+    }
+}

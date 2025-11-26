@@ -1,67 +1,78 @@
 <?php
 // Tentukan path relatif ke root proyek
-define('ROOT_PATH', __DIR__ . '/..');
+// PERBAIKAN: Menggunakan dirname(__DIR__) untuk memastikan path absolut yang aman.
+define('ROOT_PATH', dirname(__DIR__));
 
-// 1. Panggil file konfigurasi dan header/struktur HTML dasar
-require_once ROOT_PATH . '/includes/config.php';
-// CATATAN PENTING: Untuk file konten seperti ini, Anda perlu meng-include HEADER.php 
-// untuk tag <head> dan CSS, bukan hanya navbar.
-// Asumsi navbar.php sudah meng-include header.php, atau Anda perlu mengganti navbar.php dengan header.php
+// 1. Panggil file konfigurasi (HARUS ADA KONEKSI $pdo) dan header/struktur HTML dasar
+// PERBAIKAN: Menghapus '../' yang berlebihan.
+require_once ROOT_PATH . '/config/config.php'; 
 require_once ROOT_PATH . '/includes/header.php'; 
-// Jika navbar dipisahkan, include juga:
 require_once ROOT_PATH . '/includes/navbar.php';
 
 
-// 2. Data Anggota/Dosen
-// Pastikan file gambar ini (dosenX_profile.jpg) ada di folder:
-// [root_proyek]/assets/img/
-$all_personnel = [
-    'dosen1' => [
-        'id' => 'dosen1',
-        'nama' => 'Dr. Rahmat Hidayat, M.Kom.',
-        'peran' => 'Dosen Penanggung Jawab Lab SE',
-        // PENGATURAN PATH GAMBAR:
-        // BASE_URL adalah alamat dasar, disambung dengan folder assets/img/ dan nama file.
-        'foto' => BASE_URL . 'assets/img/dosen1_profile.jpg', 
-        'spesialisasi' => 'Software Testing & QA',
-    ],
-    'dosen2' => [
-        'id' => 'dosen2',
-        'nama' => 'Irfan Maulana, S.Kom., M.TI.',
-        'peran' => 'Asisten Koordinator Lab',
-        'foto' => BASE_URL . 'assets/img/dosen2_profile.jpg',
-        'spesialisasi' => 'DevOps & Web Development',
-    ],
-    'dosen3' => [
-        'id' => 'dosen3',
-        'nama' => 'Maya Sari, MT.',
-        'peran' => 'Dosen Pembimbing Riset',
-        'foto' => BASE_URL . 'assets/img/dosen3_profile.jpg',
-        'spesialisasi' => 'Requirements Engineering & UML',
-    ],
-    'dosen4' => [
-        'id' => 'dosen4',
-        'nama' => 'Bambang Sudarsono, M.Sc.',
-        'peran' => 'Pengajar Praktikum',
-        'foto' => BASE_URL . 'assets/img/dosen4_profile.jpg',
-        'spesialisasi' => 'Database & Software Architecture',
-    ],
+// 2. Logika Pengambilan Data dari Database
+// =======================================================
+// QUERY: Ambil semua dosen aktif beserta jabatannya dan spesialisasi utama
+// =======================================================
 
-    'dosen5' => [
-        'id' => 'dosen5',
-        'nama' => 'Rifqi Nurhakim, M.Sc.',
-        'peran' => 'Pengajar Praktikum',
-        'foto' => BASE_URL . 'assets/img/dosen5_profile.jpg',
-        'spesialisasi' => 'Database & Software Architecture',
-    ],
-    'dosen6' => [
-        'id' => 'dosen6',
-        'nama' => 'bambang nur, M.Sc.',
-        'peran' => 'Pengajar Praktikum',
-        'foto' => BASE_URL . 'assets/img/dosen6_profile.jpg',
-        'spesialisasi' => 'Database & Software Architecture',
-    ],
-];
+$all_personnel = [];
+// Tambahkan pemeriksaan koneksi $pdo untuk mencegah Fatal Error (jika config gagal)
+if (isset($pdo) && $pdo !== null) {
+    try {
+        // Query untuk mengambil data dasar personil dan jabatan
+        $sql_personnel = "
+            SELECT 
+                p.id_personil, 
+                p.nama_personil AS nama, 
+                pj.jabatan_dosen AS peran,
+                p.foto_personil AS foto_file
+            FROM personil p
+            JOIN personil_jabatan pj ON p.id_jabtan = pj.id_jabatan
+            ORDER BY p.id_personil ASC
+        ";
+
+        $stmt = $pdo->query($sql_personnel);
+        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        // Proses hasil untuk mengambil spesialisasi satu per satu
+        foreach ($results as $row) {
+            
+            // --- Query Tambahan: Ambil Spesialisasi Pertama Saja ---
+            $sql_spec_single = "
+                SELECT s.nama_spesialisasi 
+                FROM personil_spesialisasi ps
+                JOIN spesialisasi s ON ps.id_spesialisasi = s.id_spesialisasi
+                WHERE ps.id_personil = :id
+                LIMIT 1
+            ";
+            $stmt_spec = $pdo->prepare($sql_spec_single);
+            $stmt_spec->execute([':id' => $row['id_personil']]);
+            $spesialisasi = $stmt_spec->fetchColumn() ?: 'Belum Ada Spesialisasi';
+
+            // Format data untuk digunakan di HTML
+            $member_data = [
+                'id' => $row['id_personil'], // Gunakan ID numerik sebagai ID URL
+                // Kita hilangkan tag <b> yang statis, biarkan di CSS atau HTML
+                'nama' => $row['nama'],
+                'peran' => $row['peran'],
+                // Menggabungkan BASE_URL dengan nama file foto
+                'foto' => BASE_URL . 'assets/img/' . $row['foto_file'], 
+                'spesialisasi' => $spesialisasi,
+            ];
+
+            // Tambahkan ke array utama
+            $all_personnel[] = $member_data;
+        }
+
+    } catch (PDOException $e) {
+        // Tampilkan pesan error jika query gagal
+        echo "<div class='container mt-5'><div class='alert alert-danger'>Kesalahan Query: " . $e->getMessage() . "</div></div>";
+    }
+} else {
+    // Tampilkan pesan jika koneksi gagal (variabel $pdo tidak ada)
+    echo "<div class='container mt-5'><div class='alert alert-danger'>Koneksi Database Gagal. Cek config/config.php.</div></div>";
+}
+
 
 // Atur judul halaman
 $page_title = "Daftar Personil Dosen LAB SE";
@@ -70,7 +81,7 @@ $page_title = "Daftar Personil Dosen LAB SE";
 
 <header class="header text-center py-5 text-white">
     <div class="container">
-        <h1>Personil Dosen & Staf Lab SE</h1>
+        <h1><b> Dosen dan Staf Lab SE</b></h1>
         <p>Tim pengajar dan peneliti yang membimbing kegiatan laboratorium.</p>
     </div>
 </header>
@@ -110,6 +121,12 @@ require_once ROOT_PATH . '/includes/footer.php';
 .header {
     background-color: #6096B4;
 }
+.header h1 {
+    color: #ffffff;
+}
+.header p {
+    color: #ffffff;
+}
 
 .team-grid {
     display: flex;
@@ -124,14 +141,13 @@ require_once ROOT_PATH . '/includes/footer.php';
     border-radius: 10px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
     
-    /* PERUBAHAN UTAMA DI SINI */
     /* Menentukan lebar maksimum untuk 3 kolom, mengurangi gap (30px * 2) / 3 */
     width: calc(33.333% - 20px); 
     min-width: 250px; /* Agar tetap terbaca di layar kecil */
     
     text-align: center;
     padding: 20px;
-    transition: transform 0.3s;
+    transition: transform 0.5s;
 }
 
 /* ... CSS lainnya (hover, img) tetap sama ... */
@@ -140,12 +156,13 @@ require_once ROOT_PATH . '/includes/footer.php';
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
 }
 .profile-card img {
-    width: 120px;
-    height: 120px;
+    width: 150px;
+    height: 150px;
     border-radius: 50%;
     object-fit: cover; 
     margin-bottom: 15px;
-    border: 3px solid #007bff; 
+    /* Ubah warna border agar konsisten dengan tema header */
+    border: 3px solid #6096B4; 
 }
 
 /* OPSIONAL: Pengaturan Responsif untuk Mobile */
