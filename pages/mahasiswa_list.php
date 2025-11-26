@@ -8,11 +8,11 @@
 */
 
 // 1. Konfigurasi
-require_once '../includes/config.php';
+require_once '../config/config.php';
 
 $page_title = "Daftar Mahasiswa"; 
 
-include '../includes/header.php'; 
+include '../includes/header.php';   
 include '../includes/navbar.php'; 
 
 // 2. DATA DUMMY
