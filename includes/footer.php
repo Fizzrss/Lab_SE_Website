@@ -39,10 +39,10 @@
             <h4>Connect With Us</h4>
             <p>Ikuti sosial media kami untuk update terbaru seputar kegiatan lab dan teknologi.</p>
             <div class="social-links mt-3">
-                <a href="#" class="twitter"><i class="bi bi-twitter-x"></i></a>
-                <a href="#" class="facebook"><i class="bi bi-facebook"></i></a>
-                <a href="#" class="instagram"><i class="bi bi-instagram"></i></a>
-                <a href="#" class="linkedin"><i class="bi bi-linkedin"></i></a>
+                <a href="https://x.com/rippkhace/" target="blank" class="twitter"><i class="bi bi-twitter-x"></i></a>
+                <a href="https://www.facebook.com/p/BEM-Politeknik-Negeri-Malang-100069699428621/" target="blank" class="facebook"><i class="bi bi-facebook"></i></a>
+                <a href="https://instagram.com/rifqihilmim/" target="blank" class="instagram"><i class="bi bi-instagram"></i></a>
+                <a href="https://linkedin.com/in/desssyys/" target="blank" class="linkedin"><i class="bi bi-linkedin"></i></a>
             </div>
           </div>
 

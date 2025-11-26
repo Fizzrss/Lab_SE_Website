@@ -14,5 +14,8 @@ $current_page = basename($_SERVER['PHP_SELF']);
         <div id="roadmap">
             <?php require_once __DIR__ . '/roadmap.php'; ?>
         </div>
+         <div id="focus_scope">
+            <?php require_once __DIR__ . '/focus_scope.php'; ?>
+        </div>
     </div>
 </section>
