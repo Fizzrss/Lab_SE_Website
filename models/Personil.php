@@ -12,11 +12,15 @@ class PersonilModel {
         $sql_personnel = "
             SELECT 
                 p.id_personil, 
+                p.nip,           
                 p.nama_personil AS nama, 
-                pj.jabatan_dosen AS peran,  -- Pastikan nama kolom ini benar di DB
+                p.email,         
+                p.link_gscholar, 
+                p.linkedin,      
+                pj.jabatan_dosen AS peran, 
                 p.foto_personil AS foto_file
             FROM personil p
-            JOIN personil_jabatan pj ON p.id_jabatan = pj.id_jabatan -- PERBAIKAN TYPO DISINI
+            LEFT JOIN personil_jabatan pj ON p.id_jabatan = pj.id_jabatan
             ORDER BY p.id_personil ASC
         ";
 
@@ -25,7 +29,6 @@ class PersonilModel {
         $all_personnel = [];
 
         foreach ($results as $row) {
-            // Ambil Spesialisasi
             $sql_spec = "
                 SELECT s.nama_spesialisasi 
                 FROM personil_spesialisasi ps
@@ -35,12 +38,16 @@ class PersonilModel {
             ";
             $stmt_spec = $this->pdo->prepare($sql_spec);
             $stmt_spec->execute([':id' => $row['id_personil']]);
-            $spesialisasi = $stmt_spec->fetchColumn() ?: 'Belum Ada Spesialisasi';
+            $spesialisasi = $stmt_spec->fetchColumn() ?: '-';
 
             $all_personnel[] = [
                 'id' => $row['id_personil'],
+                'nip' => $row['nip'],               
                 'nama' => $row['nama'],
-                'peran' => $row['peran'],
+                'email' => $row['email'],           
+                'gscholar' => $row['link_gscholar'],
+                'linkedin' => $row['linkedin'],     
+                'peran' => $row['peran'] ?? 'Tidak Ada Jabatan',
                 'foto' => $row['foto_file'], 
                 'spesialisasi' => $spesialisasi,
             ];
@@ -48,7 +55,7 @@ class PersonilModel {
 
         return $all_personnel;
     }
-
+    
     // Fungsi untuk Halaman Detail (Detail Profil)
     public function getPersonilDetail($id) {
         // Ambil Data Diri
