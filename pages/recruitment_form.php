@@ -50,7 +50,7 @@ $site_title = "Lab SE";
     <div class="container mt-5 mb-5">
       
       <div class="card card-floating p-4 p-md-5" style="border: none; box-shadow: 0 0.5rem 1.5rem rgba(0,0,0,0.08); border-radius: 1rem;">
-        <form action="proses_recruitment.php" method="POST" enctype="multipart/form-data">
+        <form action="recruitment_proses.php" method="POST" enctype="multipart/form-data">
 
           <div class="row mb-3">
             <label class="col-sm-2 col-form-label fw-semibold">Nama</label>
@@ -85,23 +85,6 @@ $site_title = "Lab SE";
           </div>
 
           <div class="row mb-3">
-            <label class="col-sm-2 col-form-label fw-semibold">Semester</label>
-            <div class="col-sm-10">
-              <select name="semester" class="form-select" required>
-                <option value="">-- Pilih Semester --</option>
-                <option>1</option>
-                <option>2</option>
-                <option>3</option>
-                <option>4</option>
-                <option>5</option>
-                <option>6</option>
-                <option>7</option>
-                <option>8</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="row mb-3">
             <label class="col-sm-2 col-form-label fw-semibold">No. Telepon</label>
             <div class="col-sm-10">
               <input type="text" name="telepon" class="form-control" placeholder="Masukkan nomor telepon aktif" required>
@@ -126,6 +109,13 @@ $site_title = "Lab SE";
             <label class="col-sm-2 col-form-label fw-semibold">Riwayat Pengalaman</label>
             <div class="col-sm-10">
               <textarea name="pengalaman" class="form-control" rows="2" placeholder="Tuliskan pengalamanmu sebelumnya"></textarea>
+            </div>
+          </div>
+
+          <div class="row mb-3">
+            <label class="col-sm-2 col-form-label fw-semibold">Pas Foto 3×4</label>
+            <div class="col-sm-10">
+                <input type="file" name="foto" class="form-control" accept="image/*" required>
             </div>
           </div>
 
