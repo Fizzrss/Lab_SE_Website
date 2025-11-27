@@ -80,7 +80,7 @@ $site_title = "Lab SE";
           <div class="row mb-3">
             <label class="col-sm-2 col-form-label fw-semibold">Tahun Masuk</label>
             <div class="col-sm-10">
-              <input type="number" name="tahun_masuk" class="form-control" placeholder="Masukkan tahun masuk" required>
+              <input type="text" name="tahun_masuk" class="form-control" placeholder="Masukkan tahun masuk" required>
             </div>
           </div>
 
