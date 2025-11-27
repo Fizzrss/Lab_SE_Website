@@ -1,92 +1,95 @@
 <?php
-// Tentukan path absolut ke root proyek
-define('ROOT_PATH', dirname(__DIR__));
+$root = $_SERVER['DOCUMENT_ROOT'] . "/Lab_SE_Website";
 
-// 1. Panggil file konfigurasi, header, dan navbar
-require_once ROOT_PATH . '/config/config.php';
-require_once ROOT_PATH . '/includes/navbar.php'; 
-// WAJIB: Panggil Controller yang baru dibuat
-require_once ROOT_PATH . '/controllers/PersonilController.php'; 
+require_once $root . "/config/config.php";
+require_once $root . "/models/personil.php";
+require_once $root . "/controllers/PersonilController.php";
 
+// 1. Inisialisasi Database & Controller
+$db = new Database();
+$conn = $db->getConnection();
+$controller = new PersonilController($conn);
 
-// 2. Logika Pengambilan Data DARI CONTROLLER
-// Instansiasi Controller dan panggil metode detail() untuk mendapatkan data
-$controller = new PersonilController($pdo);
-$personnel_id = $_GET['id'] ?? null;
+// 2. Ambil ID
+$id = $_GET['id'] ?? null;
 
-$personnel = null;
-$error_message = null;
+// 3. Panggil Fungsi Controller 'detail'
+// Fungsi ini sudah mengembalikan array lengkap dengan URL gambar yang benar
+$data = $controller->detail($id);
 
-// Cek koneksi PDO sebelum melanjutkan ke Controller
-if (isset($pdo) && $pdo !== null) {
-    
-    // Panggil Controller untuk mendapatkan data detail
-    $data = $controller->detail($personnel_id);
-    $personnel = $data['personnel'];
-    $error_message = $data['error']; // Ambil pesan error dari Controller/Model
-    
-} else {
-    // Pesan jika koneksi gagal (PDO tidak terinisialisasi)
-    $error_message = "Koneksi Database Gagal. Pastikan PDO-PostgreSQL diaktifkan dan includes/config.php benar.";
-}
+$personnel = $data['personnel'];
+$error_message = $data['error'];
 
-// Atur judul halaman
-$page_title = $personnel ? "Profil Dosen | {$personnel['nama']}" : "Profil Dosen Tidak Ditemukan";
+$page_title = "Detail Personil - Lab SE";
+
+require_once $root . '/includes/header.php';
+require_once $root . '/includes/navbar.php';
 ?>
 
 <main class="container py-5">
+
     <?php if ($error_message): ?>
         <div class='alert alert-danger text-center'>
             <strong>Gagal Memuat Detail Profil:</strong> <?= $error_message ?>
+            <br>
+            <a href="<?= BASE_URL ?>pages/personil.php" class="btn btn-sm btn-outline-danger mt-2">Kembali ke Daftar</a>
         </div>
     <?php endif; ?>
 
     <?php if ($personnel): ?>
+
         <section id="personnel-detail" class="p-4 p-md-5 rounded shadow-lg bg-light">
-            
             <div class="row">
+
                 <div class="col-md-4 text-center mb-4 mb-md-0">
-                    <img src="<?= $personnel['foto'] ?>" alt="Foto Profil <?= $personnel['nama'] ?>"
-                        class="img-fluid rounded-circle shadow-sm" style="width: 200px; height: 200px; object-fit: cover;">
+                    <img src="<?= $personnel['foto'] ?>" 
+                         alt="<?= htmlspecialchars($personnel['nama']) ?>" 
+                        class="img-fluid rounded shadow-sm w-100"
+                        style="aspect-ratio: 1 / 1; object-fit: cover; object-position: top;">
                 </div>
 
                 <div class="col-md-8">
                     <h1 class="display-5 text-primary">
-                        <strong class="fw-bold"><?= $personnel['nama'] ?></strong>
+                        <strong class="fw-bold"><?= htmlspecialchars($personnel['nama']) ?></strong>
                     </h1>
-                    
-                    <p class="lead text-secondary"><?= $personnel['peran'] ?></p>
-                    <p><?= $personnel['bio'] ?></p>
+
+                    <p class="lead text-secondary"><?= htmlspecialchars($personnel['peran']) ?></p>
 
                     <hr>
 
-                    <h3 class="mt-4">Detail Kontak & Spesialisasi</h3>
-                    <ul class="list-unstyled">
-                        <li><i class="bi bi-person-badge me-2"></i> NIP: <?= $personnel['nip'] ?></li>
-                        <li><i class="bi bi-envelope me-2"></i> Email: <a href="mailto:<?= $personnel['email'] ?>"><?= $personnel['email'] ?></a></li>
-            
-                        <li>
-                            <!-- Google Scholar Icon SVG -->
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" style="width: 1em; height: 1em; vertical-align: -0.125em; margin-right: 0.5rem;">
-                                <path fill="currentColor" d="M390.9 298.5s0 .1 .1 .1c9.2 19.4 14.4 41.1 14.4 64-.1 82.5-66.9 149.4-149.4 149.4S106.7 445.1 106.7 362.7c0-22.9 5.2-44.6 14.4-64 1.7-3.6 3.6-7.2 5.6-10.7 4.4-7.6 9.4-14.7 15-21.3 27.4-32.6 68.5-53.3 114.4-53.3 33.6 0 64.6 11.1 89.6 29.9 9.1 6.9 17.4 14.7 24.8 23.5 5.6 6.6 10.6 13.8 15 21.3 2 3.4 3.8 7 5.5 10.5l-.1-.1zm26.4-18.8c-30.1-58.4-91-98.4-161.3-98.4s-131.2 40-161.3 98.4l-94.7-77 256-202.7 256 202.7-94.7 77.1 0-.1z"/>
-                            </svg>
-                            Scholar: <a href="<?= $personnel['google_scholar_url'] ?? 'https://scholar.google.com/' ?>" target="_blank">Google Scholar</a>
+                    <h3 class="mt-4 h5 text-dark">Detail Kontak & Spesialisasi</h3>
+                    <ul class="list-unstyled mt-3">
+                        <li class="mb-2"><i class="bi bi-person-badge me-2 text-primary"></i> NIP: <?= htmlspecialchars($personnel['nip']) ?></li>
+
+                        <li class="mb-2">
+                            <i class="bi bi-envelope me-2 text-primary"></i> Email:
+                            <a href="mailto:<?= htmlspecialchars($personnel['email']) ?>" class="text-decoration-none"><?= htmlspecialchars($personnel['email']) ?></a>
                         </li>
 
-                        <li>
-                            <!-- ResearchGate/LinkedIn Placeholder Icon SVG -->
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640" style="width: 1em; height: 1em; vertical-align: -0.125em; margin-right: 0.5rem;">
-                                <path fill="currentColor" d="M96 96L96 544L544 544L544 96L96 96zM358.2 430.4C351.6 433.4 325 436.4 308.2 416.2C299 405.6 282.9 382.9 266 352.6C257.1 352.6 251.3 352.6 244.6 352L244.6 398.4C244.6 421.9 250.6 419.6 270.4 422.3L270.4 430.4C263.5 430.1 247.3 429.6 234.8 429.6C221.7 429.6 208.7 430.2 201.2 430.4L201.2 422.3C216.7 419.4 223.2 421 223.2 398.4L223.2 289C223.2 266.4 216.8 268 201.2 265.1L201.2 257C227 258 254.3 256.4 272.1 256.4C303.8 256.4 328 270.8 328 302C328 323.1 311.3 344.2 288.8 349.5C302.4 373.7 318.8 395.1 331 408.4C338.2 416.2 348.2 423.1 358.2 423.1L358.2 430.4zM381.1 295.4C357.8 295.4 348.9 279.7 348.9 263.2L348.9 231C348.9 218.8 357.7 200.6 382.9 200.6C408.1 200.6 413.3 218.5 413.3 218.5L402.6 225.7C402.6 225.7 397.1 213.2 382.9 213.2C375 213.2 363.2 220.5 363.2 232.9L363.2 259.7C363.2 273.1 369.8 283 381.1 283C395.2 283 402.6 272.1 402.6 256.2L384.7 256.2L384.7 245.5L415.1 245.5C415.1 266 419.8 295.4 381.1 295.4zM264.6 340.1C255.2 340.1 251 339.8 244.6 339.3L244.6 269.6C251 269 259.6 269 267.1 269C290.4 269 304.3 281.2 304.3 303.5C304.3 325.4 289.3 340.1 264.6 340.1z"/>
-                            </svg>
-                            LinkedIn: <a href="<?= $personnel['researchgate_url'] ?? 'https://www.linkedin.com/' ?>" target="_blank">LinkedIn</a>
+                        <li class="mb-2">
+                            <i class="bi bi-mortarboard me-2 text-primary"></i> Scholar:
+                            <?php if($personnel['google_scholar_url']): ?>
+                                <a href="<?= $personnel['google_scholar_url'] ?>" target="_blank" class="text-decoration-none">Google Scholar Profile</a>
+                            <?php else: ?>
+                                <span class="text-muted">-</span>
+                            <?php endif; ?>
+                        </li>
+
+                        <li class="mb-2">
+                            <i class="bi bi-linkedin me-2 text-primary"></i> LinkedIn:
+                            <?php if($personnel['linkedin_url']): ?>
+                                <a href="<?= $personnel['linkedin_url'] ?>" target="_blank" class="text-decoration-none">LinkedIn Profile</a>
+                            <?php else: ?>
+                                <span class="text-muted">-</span>
+                            <?php endif; ?>
                         </li>
                     </ul>
 
                     <div class="mt-4">
-                        <h4>Spesialisasi:</h4>
+                        <h4 class="h6">Spesialisasi:</h4>
                         <?php if (!empty($personnel['spesialisasi'])): ?>
                             <?php foreach ($personnel['spesialisasi'] as $spec): ?>
-                                <span class="badge bg-dark me-2 mb-2"><?= $spec ?></span>
+                                <span class="badge bg-primary me-1 mb-2"><?= htmlspecialchars($spec) ?></span>
                             <?php endforeach; ?>
                         <?php else: ?>
                             <span class="text-muted small">Tidak ada spesialisasi tercatat.</span>
@@ -94,106 +97,63 @@ $page_title = $personnel ? "Profil Dosen | {$personnel['nama']}" : "Profil Dosen
                     </div>
                 </div>
             </div>
-            
-            <hr class="mt-4"> 
+
+            <hr class="mt-5">
 
             <div class="mt-4">
                 <ul class="nav nav-tabs" id="academicTabs" role="tablist">
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link active" id="publikasi-tab" data-bs-toggle="tab" data-bs-target="#publikasi-pane" type="button" role="tab" aria-controls="publikasi-pane" aria-selected="true">Publikasi (<?= count($personnel['publikasi']) ?>)</button>
+                        <button class="nav-link active" id="publikasi-tab" data-bs-toggle="tab" data-bs-target="#publikasi-pane" type="button">
+                            Publikasi (<?= count($personnel['publikasi']) ?>)
+                        </button>
                     </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="riset-tab" data-bs-toggle="tab" data-bs-target="#riset-pane" type="button" role="tab" aria-controls="riset-pane" aria-selected="false">Riset</button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="ki-tab" data-bs-toggle="tab" data-bs-target="#ki-pane" type="button" role="tab" aria-controls="ki-pane" aria-selected="false">Kekayaan Intelektual</button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="ppm-tab" data-bs-toggle="tab" data-bs-target="#ppm-pane" type="button" role="tab" aria-controls="ppm-pane" aria-selected="false">PPM</button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="aktivitas-tab" data-bs-toggle="tab" data-bs-target="#aktivitas-pane" type="button" role="tab" aria-controls="aktivitas-pane" aria-selected="false">Aktivitas</button>
-                    </li>
+                    <li class="nav-item"><button class="nav-link" data-bs-target="#riset-pane" data-bs-toggle="tab">Riset</button></li>
+                    <li class="nav-item"><button class="nav-link" data-bs-target="#ki-pane" data-bs-toggle="tab">Kekayaan Intelektual</button></li>
+                    <li class="nav-item"><button class="nav-link" data-bs-target="#ppm-pane" data-bs-toggle="tab">PPM</button></li>
+                    <li class="nav-item"><button class="nav-link" data-bs-target="#aktivitas-pane" data-bs-toggle="tab">Aktivitas</button></li>
                 </ul>
-                
-                <div class="tab-content pt-4" id="academicTabsContent">
-                    
-                    <div class="tab-pane fade show active" id="publikasi-pane" role="tabpanel" aria-labelledby="publikasi-tab" tabindex="0">
+
+                <div class="tab-content pt-4 bg-white border border-top-0 p-3 rounded-bottom">
+
+                    <div class="tab-pane fade show active" id="publikasi-pane">
                         <?php if (!empty($personnel['publikasi'])): ?>
-                            <div class="d-flex justify-content-between align-items-center mb-3">
-                                <div>
-                                    <label>
-                                        <select class="form-select form-select-sm d-inline w-auto me-1">
-                                            <option value="10">10</option>
-                                        </select> 
-                                        entries per page
-                                    </label>
-                                </div>
-                                <div>
-                                    <label>
-                                        Search: <input type="search" class="form-control form-control-sm d-inline w-auto ms-1">
-                                    </label>
-                                </div>
-                            </div>
-                            
                             <div class="table-responsive">
-                                <table class="table table-striped table-hover align-middle">
-                                    <thead class="table-info">
+                                <table class="table table-hover align-middle">
+                                    <thead class="table-light">
                                         <tr>
-                                            <th scope="col" style="width: 50px;">NO</th>
-                                            <th scope="col">JUDUL</th>
-                                            <th scope="col" style="width: 100px;">TAHUN</th>
+                                            <th style="width:50px;" class="text-center">No</th>
+                                            <th>Judul Publikasi</th>
+                                            <th style="width:100px;" class="text-center">Tahun</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <?php 
-                                        $no = 1;
-                                        foreach ($personnel['publikasi'] as $pub): 
-                                        ?>
+                                        <?php $no = 1; foreach ($personnel['publikasi'] as $pub): ?>
                                         <tr>
                                             <td class="text-center"><?= $no++ ?></td>
-                                            <td><?= $pub['judul'] ?></td>
-                                            <td class="text-center"><?= $pub['tahun'] ?></td>
+                                            <td><?= htmlspecialchars($pub['judul']) ?></td>
+                                            <td class="text-center"><?= htmlspecialchars($pub['tahun']) ?></td>
                                         </tr>
                                         <?php endforeach; ?>
                                     </tbody>
                                 </table>
                             </div>
                         <?php else: ?>
-                            <p class="text-center text-muted">Belum ada data publikasi yang tersedia.</p>
+                            <p class="text-center text-muted py-3">Belum ada data publikasi.</p>
                         <?php endif; ?>
                     </div>
 
-                    <div class="tab-pane fade" id="riset-pane" role="tabpanel" aria-labelledby="riset-tab" tabindex="0">
-                        <p class="text-center text-muted">Belum ada data riset yang tersedia.</p>
-                    </div>
-                    
-                    <div class="tab-pane fade" id="ki-pane" role="tabpanel" aria-labelledby="ki-tab" tabindex="0">
-                        <p class="text-center text-muted">Belum ada data kekayaan intelektual yang tersedia.</p>
-                    </div>
-
-                    <div class="tab-pane fade" id="ppm-pane" role="tabpanel" aria-labelledby="ppm-tab" tabindex="0">
-                        <p class="text-center text-muted">Belum ada data PPM yang tersedia.</p>
-                    </div>
-
-                    <div class="tab-pane fade" id="aktivitas-pane" role="tabpanel" aria-labelledby="aktivitas-tab" tabindex="0">
-                        <p class="text-center text-muted">Belum ada data aktivitas yang tersedia.</p>
-                    </div>
+                    <div class="tab-pane fade" id="riset-pane"><p class="text-center text-muted py-3">Belum ada data riset.</p></div>
+                    <div class="tab-pane fade" id="ki-pane"><p class="text-center text-muted py-3">Belum ada data KI.</p></div>
+                    <div class="tab-pane fade" id="ppm-pane"><p class="text-center text-muted py-3">Belum ada data PPM.</p></div>
+                    <div class="tab-pane fade" id="aktivitas-pane"><p class="text-center text-muted py-3">Belum ada aktivitas.</p></div>
 
                 </div>
             </div>
 
         </section>
-        
-    <?php else: ?>
-        <div class="alert alert-danger text-center" role="alert">
-            <h2>Dosen Tidak Ditemukan</h2>
-            <p>ID personil yang Anda cari tidak valid atau ada masalah koneksi database.</p>
-            <a href="<?= BASE_URL ?>pages/profil.php" class="btn btn-primary mt-3">Kembali ke Daftar Personil</a>
-        </div>
+
     <?php endif; ?>
+
 </main>
 
-<?php
-require_once ROOT_PATH . '/includes/footer.php';
-?>
+<?php require_once $root . '/includes/footer.php'; ?>

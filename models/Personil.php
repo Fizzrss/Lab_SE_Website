@@ -93,5 +93,24 @@ class PersonilModel {
 
         return $personnel;
     }
+
+    // Fungsi baru: Ambil satu data personil berdasarkan ID
+    public function getById($id) {
+        $sql = "
+            SELECT 
+                p.*, 
+                p.foto_personil AS foto_file,  -- Kita samakan aliasnya agar konsisten
+                pj.jabatan_dosen AS peran
+            FROM personil p
+            LEFT JOIN personil_jabatan pj ON p.id_jabatan = pj.id_jabatan
+            WHERE p.id_personil = :id
+        ";
+
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([':id' => $id]);
+        $data = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        return $data;
+    }
 }
 ?>
