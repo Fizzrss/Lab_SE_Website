@@ -1,64 +1,33 @@
 <?php
 /*
 |--------------------------------------------------------------------------
-| File: pages/mahasiswa_list.php (Clean Version)
+| File: pages/mahasiswa_list.php (View & Entry Point)
 |--------------------------------------------------------------------------
-| Tampilan List Modern & Interaktif.
-| CSS dipisah ke assets/css/style.css
+| Menampilkan data yang diambil dari MahasiswaController.
 */
 
-// 1. Konfigurasi
 require_once '../config/config.php';
+require_once '../controllers/MahasiswaController.php';
 
-$page_title = "Daftar Mahasiswa"; 
+$page_title = "Daftar Mahasiswa";
 
-include '../includes/header.php';   
-include '../includes/navbar.php'; 
+// Ambil data dari controller
+$controller = new MahasiswaController();
+$data = $controller->index();
 
-// 2. DATA DUMMY
-$dummy_mahasiswa_list = [
-    [ 
-        "nama" => "Ahmad Fauzi", 
-        "nim" => "2241720001",
-        "prodi" => "D-IV Sistem Informasi Bisnis", 
-        "status" => "Aktif",
-        "foto" => "https://images.unsplash.com/photo-1599566150163-29194dcaad36?auto=format&fit=crop&w=100&q=80"
-    ],
-    [ 
-        "nama" => "Siti Nurhaliza", 
-        "nim" => "2241720002",
-        "prodi" => "D-IV Sistem Informasi Bisnis", 
-        "status" => "Aktif",
-        "foto" => "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=100&q=80"
-    ],
-    [ 
-        "nama" => "Budi Santoso", 
-        "nim" => "2241720123",
-        "prodi" => "D-IV Teknik Informatika", 
-        "status" => "Cuti",
-        "foto" => "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=100&q=80"
-    ],
-    [ 
-        "nama" => "Dewi Lestari", 
-        "nim" => "2041720099",
-        "prodi" => "D-IV Sistem Informasi Bisnis", 
-        "status" => "Alumni",
-        "foto" => "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=100&q=80"
-    ],
-    [ 
-        "nama" => "Rian Hidayat", 
-        "nim" => "2341720011",
-        "prodi" => "D-IV Teknik Informatika", 
-        "status" => "Aktif",
-        "foto" => "https://images.unsplash.com/photo-1527980965255-d3b416303d12?auto=format&fit=crop&w=100&q=80"
-    ]
-];
+$mahasiswa_list = $data['mahasiswa_list'];
+$prodi_list = $data['prodi_list'];
+$default_foto_url = $data['default_foto_url'];
 
-// Helper Warna Status
+include '../includes/header.php';
+include '../includes/navbar.php';
+
+// Helper warna status
 function getStatusColor($status) {
-    if ($status == 'Aktif') return 'success'; 
-    if ($status == 'Cuti') return 'warning';  
-    if ($status == 'Alumni') return 'secondary'; 
+    $status = strtolower($status);
+    if ($status == 'aktif') return 'success';
+    if ($status == 'cuti') return 'warning';
+    if ($status == 'alumni') return 'secondary';
     return 'primary';
 }
 ?>
@@ -77,64 +46,76 @@ function getStatusColor($status) {
 <main class="main-content-container">
     <div class="container">
 
+        <!-- FILTER CARD -->
         <div class="filter-card" data-aos="fade-up">
             <div class="row g-3 align-items-center">
                 <div class="col-md-6">
                     <div class="input-group">
-                        <span class="input-group-text bg-white border-end-0"><i class="bi bi-search text-muted"></i></span>
-                        <input type="text" id="searchInput" class="form-control border-start-0 ps-0" placeholder="Cari nama atau NIM...">
+                        <span class="input-group-text bg-white border-end-0">
+                            <i class="bi bi-search text-muted"></i>
+                        </span>
+                        <input type="text" id="searchInput" class="form-control border-start-0 ps-0"
+                               placeholder="Cari nama atau NIM...">
                     </div>
                 </div>
+
                 <div class="col-md-4">
                     <select id="prodiFilter" class="form-select">
                         <option value="all">Semua Program Studi</option>
-                        <option value="D-IV Sistem Informasi Bisnis">D-IV Sistem Informasi Bisnis</option>
-                        <option value="D-IV Teknik Informatika">D-IV Teknik Informatika</option>
+                        <?php foreach ($prodi_list as $prodi_name): ?>
+                            <option value="<?= htmlspecialchars($prodi_name) ?>">
+                                <?= htmlspecialchars($prodi_name) ?>
+                            </option>
+                        <?php endforeach; ?>
                     </select>
                 </div>
+
                 <div class="col-md-2 text-end">
-                    <span class="text-muted small">Total: <strong id="totalCount"><?= count($dummy_mahasiswa_list) ?></strong></span>
+                    <span class="text-muted small">Total: <strong id="totalCount"><?= count($mahasiswa_list) ?></strong></span>
                 </div>
             </div>
         </div>
 
+        <!-- DAFTAR MAHASISWA -->
         <div id="studentList">
             <?php 
             $delay = 100;
-            foreach ($dummy_mahasiswa_list as $mhs) : 
+            foreach ($mahasiswa_list as $mhs):
                 $delay += 50;
-                $badgeColor = getStatusColor($mhs['status']);
+
+                $nama  = $mhs['nama'];
+                $nim   = $mhs['nim'];
+                $prodi = $mhs['program_studi'];
+                $status = $mhs['status'];
+
+                $foto = $default_foto_url;
+                $color = getStatusColor($status);
             ?>
-                <div class="student-row" 
-                     data-aos="fade-up" 
+                <div class="student-row"
+                     data-aos="fade-up"
                      data-aos-delay="<?= $delay ?>"
-                     data-name="<?= strtolower($mhs['nama']) ?>"
-                     data-nim="<?= $mhs['nim'] ?>"
-                     data-prodi="<?= $mhs['prodi'] ?>">
-                    
+                     data-name="<?= strtolower($nama) ?>"
+                     data-nim="<?= $nim ?>"
+                     data-prodi="<?= $prodi ?>">
+
                     <div class="student-avatar me-md-4 mb-3 mb-md-0">
-                        <img src="<?= $mhs['foto'] ?>" alt="<?= htmlspecialchars($mhs['nama']) ?>">
+                        <img src="<?= $foto ?>" alt="<?= htmlspecialchars($nama) ?>">
                     </div>
 
                     <div class="student-info flex-grow-1 text-md-start mb-2 mb-md-0">
-                        <h5 class="student-name"><?= htmlspecialchars($mhs['nama']) ?></h5>
-                        <span class="student-nim"><i class="bi bi-card-heading me-1"></i><?= htmlspecialchars($mhs['nim']) ?></span>
+                        <h5 class="student-name"><?= htmlspecialchars($nama) ?></h5>
+                        <span class="student-nim"><i class="bi bi-card-heading me-1"></i><?= htmlspecialchars($nim) ?></span>
                     </div>
 
                     <div class="student-prodi col-md-3 text-md-start mb-2 mb-md-0">
-                        <i class="bi bi-mortarboard me-1 text-primary"></i> <?= htmlspecialchars($mhs['prodi']) ?>
+                        <i class="bi bi-mortarboard me-1 text-primary"></i>
+                        <?= htmlspecialchars($prodi) ?>
                     </div>
 
                     <div class="student-status col-md-2 text-md-center mb-2 mb-md-0">
-                        <span class="badge bg-<?= $badgeColor ?> bg-opacity-10 text-<?= $badgeColor ?> status-badge border border-<?= $badgeColor ?>">
-                            <?= htmlspecialchars($mhs['status']) ?>
+                        <span class="badge bg-<?= $color ?> bg-opacity-10 text-<?= $color ?> status-badge border border-<?= $color ?>">
+                            <?= htmlspecialchars($status) ?>
                         </span>
-                    </div>
-
-                    <div class="ms-md-4">
-                        <a href="#" class="btn-action shadow-sm">
-                            <i class="bi bi-chevron-right"></i>
-                        </a>
                     </div>
 
                 </div>
@@ -152,7 +133,8 @@ function getStatusColor($status) {
                     <div class="card-body">
                         <h4 class="fw-bold mb-3">Tertarik Bergabung?</h4>
                         <p class="text-muted mb-4">Jadilah bagian dari inovasi teknologi bersama kami.</p>
-                        <a href="<?= BASE_URL ?>pages/recruitment_form.php" class="btn btn-custom-accent px-5 py-2 rounded-pill shadow">
+                        <a href="<?= BASE_URL ?>pages/recruitment_form.php"
+                           class="btn btn-custom-accent px-5 py-2 rounded-pill shadow">
                            Daftar Sekarang
                         </a>
                     </div>
@@ -174,30 +156,31 @@ document.addEventListener('DOMContentLoaded', function() {
     function filterStudents() {
         const searchTerm = searchInput.value.toLowerCase();
         const selectedProdi = prodiFilter.value;
-        let visibleCount = 0;
+        let visible = 0;
 
         studentRows.forEach(row => {
-            const name = row.getAttribute('data-name');
-            const nim = row.getAttribute('data-nim');
-            const prodi = row.getAttribute('data-prodi');
+            const name = row.dataset.name;
+            const nim  = row.dataset.nim;
+            const prodi = row.dataset.prodi;
 
-            const matchesSearch = name.includes(searchTerm) || nim.includes(searchTerm);
-            const matchesProdi = selectedProdi === 'all' || prodi === selectedProdi;
+            const matchSearch = name.includes(searchTerm) || nim.includes(searchTerm);
+            const matchProdi  = selectedProdi === 'all' || prodi === selectedProdi;
 
-            if (matchesSearch && matchesProdi) {
-                row.style.display = 'flex'; 
-                visibleCount++;
+            if (matchSearch && matchProdi) {
+                row.style.display = 'flex';
+                visible++;
             } else {
-                row.style.display = 'none'; 
+                row.style.display = 'none';
             }
         });
 
-        if (visibleCount === 0) {
+        if (visible === 0) {
             noResults.classList.remove('d-none');
         } else {
             noResults.classList.add('d-none');
         }
-        totalCount.textContent = visibleCount;
+
+        totalCount.textContent = visible;
     }
 
     searchInput.addEventListener('keyup', filterStudents);
@@ -205,6 +188,4 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 
-<?php
-include '../includes/footer.php';
-?>
+<?php include '../includes/footer.php'; ?>
