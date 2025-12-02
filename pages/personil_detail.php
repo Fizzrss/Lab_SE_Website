@@ -2,20 +2,19 @@
 $root = $_SERVER['DOCUMENT_ROOT'] . "/Lab_SE_Website";
 
 require_once $root . "/config/config.php";
-require_once $root . "/models/personil.php";
+require_once $root . "/models/Personil.php"; 
 require_once $root . "/controllers/PersonilController.php";
 
-// 1. Inisialisasi Database & Controller
 $db = new Database();
 $conn = $db->getConnection();
-$controller = new PersonilController($conn);
 
-// 2. Ambil ID
+$personilModel = new PersonilModel($conn); 
+
+$controller = new PersonilController($personilModel); 
+
 $id = $_GET['id'] ?? null;
 
-// 3. Panggil Fungsi Controller 'detail'
-// Fungsi ini sudah mengembalikan array lengkap dengan URL gambar yang benar
-$data = $controller->detail($id);
+$data = $controller->getDetailData($id);
 
 $personnel = $data['personnel'];
 $error_message = $data['error'];

@@ -34,7 +34,7 @@ class MahasiswaAktifModel {
     }
     
     //READ - Ambil semua mahasiswa
-    public function getAll() {
+    public function getAllMahasiswa() {
         $query = "SELECT * FROM " . $this->table . " ORDER BY nama ASC";
         $stmt = $this->conn->prepare($query);
         $stmt->execute();

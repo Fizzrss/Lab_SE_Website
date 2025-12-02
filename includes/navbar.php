@@ -44,12 +44,8 @@ $current_page = basename($_SERVER['PHP_SELF']);
                     </li>
 
                     <!-- Dropdown Personil -->
-                    <?php
-                    $personil_pages = ['dosen1.php', 'dosen2.php', 'dosen3.php', 'dosen4.php', 'personil.php'];
-                    $is_personil_active = in_array($current_page, $personil_pages);
-                    ?>
                     <li class="nav-item dropdown">
-                        <a class="nav-link nav-pill <?= $is_personil_active ? 'active' : '' ?>" href="<?= BASE_URL ?>pages/personil.php">
+                        <a class="nav-link nav-pill <?= ($current_page === 'personil.php') ? 'active' : '' ?>" href="<?= BASE_URL ?>pages/personil.php">
                             Personil
                         </a>
                     </li>
