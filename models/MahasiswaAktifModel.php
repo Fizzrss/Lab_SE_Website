@@ -38,7 +38,20 @@ class MahasiswaAktifModel {
         $query = "SELECT * FROM " . $this->table . " ORDER BY nama ASC";
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
-        return $stmt;
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function getAllPublic() {
+        $query = "SELECT
+                    nama,
+                    nim,
+                    prodi,
+                    status,
+                    foto    
+                FROM " . $this->table . " ORDER BY nama ASC";
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
     
     // READ - Ambil semua mahasiswa aktif

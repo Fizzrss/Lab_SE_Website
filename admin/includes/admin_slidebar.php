@@ -22,14 +22,14 @@
                 <li class="sidebar-item">
                     <a href="index.php?action=dashboard" class='sidebar-link' data-key="dashboard">
                         <i class="bi bi-house-fill"></i>
-                        <span>Beranda</span>
+                        <span>Dashboard</span>
                     </a>
                 </li>
 
                 <li class="sidebar-item has-sub">
                     <a href="#" class='sidebar-link'>
                         <i class="bi bi-person-circle"></i>
-                        <span>Profil</span>
+                        <span>Manajemen Profil</span>
                     </a>
                     <ul class="submenu">
                         <li class="submenu-item">
@@ -51,7 +51,7 @@
                 <li class="sidebar-item has-sub">
                     <a href="#" class='sidebar-link'>
                         <i class="bi bi-people-fill"></i>
-                        <span>Personil</span>
+                        <span>Manajemen Personil</span>
                     </a>
                     <ul class="submenu">
                         <li class="submenu-item">
@@ -65,17 +65,14 @@
                 <li class="sidebar-item has-sub">
                     <a href="#" class='sidebar-link'>
                         <i class="bi bi-list-ul"></i>
-                        <span>Daftar</span>
+                        <span>Manajemen Recruitment</span>
                     </a>
                     <ul class="submenu">
                         <li class="submenu-item">
                             <a href="index.php?action=mahasiswa_list" class="submenu-link" data-key="mahasiswa_list">Mahasiswa</a>
                         </li>
                         <li class="submenu-item">
-                            <a href="index.php?action=asisten_list" class="submenu-link" data-key="asisten_list">Asisten</a>
-                        </li>
-                        <li class="submenu-item">
-                            <a href="index.php?action=pendaftar_list" class="submenu-link" data-key="recruitment_list">Recruitment</a>
+                            <a href="index.php?action=recruitment_list" class="submenu-link" data-key="recruitment_list">Recruitment</a>
                         </li>
                     </ul>
                 </li>
@@ -83,16 +80,10 @@
                 <li class="sidebar-item">
                     <a href="index.php?action=blog_list" class='sidebar-link' data-key="blog_list">
                         <i class="bi bi-newspaper"></i>
-                        <span>Blog</span>
+                        <span>Manajemen Blog</span>
                     </a>
                 </li>
 
-                <li class="sidebar-item">
-                    <a href="index.php?action=statistik" class='sidebar-link' data-key="statistik">
-                        <i class="bi bi-bar-chart-line-fill"></i>
-                        <span>Statistik</span>
-                    </a>
-                </li>
 
                 <li class="sidebar-title">Pengaturan</li>
 

@@ -1,40 +1,42 @@
 <?php
-// File: ../controllers/MahasiswaController.php
-
-require_once '../config/config.php';
-require_once '../models/MahasiswaModel.php';
-
 class MahasiswaController {
     private $db;
     private $model;
+    private $root;
     
-    public function __construct() {
-        $database = new Database();
-        $this->db = $database->getConnection();
-        $this->model = new MahasiswaModel($this->db);
+    public function __construct(MahasiswaAktifModel $model) {
+        $this->model = $model;
+        $this->root = $_SERVER['DOCUMENT_ROOT'] . '/Lab_SE_Website';
     }
     
     // Fungsi utama untuk menyiapkan data ke View
     public function index() {
-        $data = [
-            'mahasiswa_list' => [],
-            'prodi_list' => [],
-            'default_foto_url' => 'https://images.unsplash.com/photo-1599566150163-29194dcaad36?auto=format&fit=crop&w=100&q=80',
-        ];
+        try {
+            $mahasiswa_list = $this->model->getAllMahasiswa();
 
-        if ($this->db) {
-            try {
-                // Ambil data dari Model
-                $data['mahasiswa_list'] = $this->model->getAllMahasiswa();
-                $data['prodi_list'] = $this->model->getUniqueProdi();
-                
-            } catch (Exception $e) {
-                // Biarkan array kosong jika gagal koneksi/query
-                // Log the error here if needed
-            }
+            include $this->root . '/admin/pages/recruitment/list_mahasiswa.php';
+        } catch (Exception $e) {
+            echo "<div class='alert alert-danger'>Error: " . $e->getMessage() . "</div>";
+        }
+    }
+
+    public function delete($id) {
+        if (empty($id)) {
+            $_SESSION['swal_error'] = "ID Mahasiswa tidak ditemukan!";
+            header("Location: index.php?action=list_mahasiswa");
+            exit;
         }
 
-        return $data;
+        if ($this->model->delete($id)) {
+            $_SESSION['swal_success'] = "Data Mahasiswa berhasil dihapus!";
+        } else {
+            $_SESSION['swal_error'] = "Gagal menghapus data! Cek relasi data.";
+        }
+
+        header("Location: index.php?action=mahasiswa_list");
+        exit;
     }
+
+
 }
 ?>

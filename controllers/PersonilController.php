@@ -38,25 +38,6 @@ class PersonilController
         }
     }
 
-    // method list_personil untuk landing page
-    public function personilListforLanding()
-    {
-        try {
-            // Ambil data dari Model
-            $personil_list = $this->model->getAllPersonil();
-
-            // Mapping path foto untuk View Publik
-            foreach ($personil_list as &$member) {
-                $nama_file = !empty($member['foto']) ? $member['foto'] : 'default-profile.png';
-                $member['foto'] = BASE_URL . 'assets/img/personil/' . $nama_file;
-            }
-
-            include $this->root . '/pages/personil/index.php';
-        } catch (Exception $e) {
-            echo "Terjadi masalah saat memuat data personil publik.";
-        }
-    }
-
     // method getDetailData (dipanggil oleh admin/public detail)
     public function getDetailData($id)
     {
@@ -65,29 +46,31 @@ class PersonilController
         }
 
         try {
-            // Memanggil getPersonilDetail dari Model
+            // 1. Panggil Model
+            // (Hasilnya sudah lengkap: data diri, spesialisasi, publikasi, DAN SOSMED)
             $personnel = $this->model->getPersonilDetail($id);
 
             if ($personnel) {
-                // Mapping Data
+                // 2. Mapping Data Dasar
                 $personnel['nama'] = $personnel['nama_personil'];
-                $personnel['google_scholar_url'] = $personnel['link_gscholar'];
-                $personnel['linkedin_url'] = $personnel['linkedin'];
-
-                // Logika Gambar
+            
+                // 3. Logika Path Gambar
                 $foto_db = $personnel['foto_personil'];
                 $nama_file = !empty($foto_db) ? $foto_db : 'default-profile.png';
-                // Asumsi folder foto personil ada di assets/img/personil
+                
+                // Pastikan BASE_URL sudah didefinisikan di config
                 $personnel['foto'] = BASE_URL . 'assets/img/personil/' . $nama_file;
 
+                // 4. Fallback Bio (Opsional)
                 $personnel['bio'] = $personnel['bio'] ?? 'Biografi belum tersedia.';
 
                 return ['personnel' => $personnel, 'error' => null];
             }
 
             return ['personnel' => null, 'error' => "Personil dengan ID {$id} tidak ditemukan."];
-        } catch (PDOException $e) {
-            return ['personnel' => null, 'error' => "Kesalahan database: " . $e->getMessage()];
+            
+        } catch (Exception $e) {
+            return ['personnel' => null, 'error' => "Kesalahan sistem: " . $e->getMessage()];
         }
     }
 
@@ -139,8 +122,13 @@ class PersonilController
     {
         $personnel = null;
         $jabatan_list = $this->model->getAllJabatan();
+        
         $spesialisasi_list = $this->model->getAllSpesialisasi();
         $owned_specs = [];
+
+        $master_sosmed = $this->model->getAllMasterSosmed();
+        $owned_sosmed = [];
+
         include $this->root . '/admin/pages/personil/add_personil.php';
     }
 
@@ -150,46 +138,51 @@ class PersonilController
             try {
                 $foto = $this->uploadFoto($_FILES['foto']);
 
-                // Ambil data spesialisasi (Array ID)
                 $spesialisasi_ids = $_POST['spesialisasi'] ?? [];
+
+                $sosmed_data = [];
+                if (isset($_POST['sosmed_id']) && isset($_POST['sosmed_link'])) {
+                    foreach ($_POST['sosmed_id'] as $index => $id_sosmed) {
+                        $link = $_POST['sosmed_link'][$index];
+                        
+                        if (!empty($id_sosmed) && !empty($link)) {
+                            $sosmed_data[] = [
+                                'id_sosmed' => $id_sosmed,
+                                'link' => $link
+                            ];
+                        }
+                    }
+                }
 
                 $data = [
                     'nama'     => $_POST['nama'],
                     'nip'      => $_POST['nip'],
                     'email'    => $_POST['email'],
                     'jabatan'  => $_POST['jabatan'],
-                    'gscholar' => $_POST['gscholar'],
-                    'linkedin' => $_POST['linkedin'],
                     'foto'     => $foto
                 ];
 
-                // --- PERBAIKAN DI SINI ---
-                // Kirim $spesialisasi_ids ke fungsi insert model
-                if ($this->model->insert($data, $spesialisasi_ids)) {
+                if ($this->model->insert($data, $spesialisasi_ids, $sosmed_data)) {
                     $_SESSION['swal_success'] = "Data personil berhasil ditambahkan!";
                     header("Location: index.php?action=personil_list");
                     exit;
                 }
             } catch (Exception $e) {
-                // Gunakan session flashdata juga untuk error biar konsisten (Opsional)
                 $_SESSION['swal_error'] = "Gagal: " . $e->getMessage();
                 echo "<script>window.history.back();</script>";
             }
         }
     }
-
     public function edit($id)
     {
-        // Ambil data personil
-        $personnel = $this->model->getPersonilDetail($id); // Data Detail
+        $personnel = $this->model->getPersonilDetail($id);
         $jabatan_list = $this->model->getAllJabatan();
 
-        // 1. AMBIL MASTER DATA SPESIALISASI (Untuk isi opsi dropdown)
         $spesialisasi_list = $this->model->getAllSpesialisasi();
-
-        // 2. AMBIL ID YANG SUDAH DIMILIKI (Untuk set 'selected' di dropdown)
-        // Hasil: [1, 5] misalnya
         $owned_specs = $this->model->getPersonilSpesialisasiIDs($id);
+
+        $master_sosmed = $this->model->getAllMasterSosmed();
+        $owned_sosmed = $this->model->getPersonilSosmed($id); // Ambil sosmed yang dimiliki
 
         include $this->root . '/admin/pages/personil/edit_personil.php';
     }
@@ -197,50 +190,48 @@ class PersonilController
     public function update($id)
     {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            if (!empty($_FILES['foto']['name'])) {
-                // Jika ada upload baru, proses uploadnya
-                $foto = $this->uploadFoto($_FILES['foto']);
-            } else {
-                $foto = $_POST['foto_lama'];
-            }
+            try {
+                if (!empty($_FILES['foto']['name'])) {
+                    $foto = $this->uploadFoto($_FILES['foto']);
+                } else {
+                    $foto = $_POST['foto_lama'];
+                }
 
-            // AMBIL ARRAY DARI DROPDOWN
-            // Isinya sekarang angka ID: [1, 5, 9]
-            $spesialisasi_ids = $_POST['spesialisasi'] ?? [];
+                $spesialisasi_ids = $_POST['spesialisasi'] ?? [];
 
-            $data = [
-                'nama' => $_POST['nama'],
-                'nip' => $_POST['nip'],
-                'email' => $_POST['email'],
-                'jabatan' => $_POST['jabatan'],
-                'gscholar' => $_POST['gscholar'],
-                'linkedin' => $_POST['linkedin'],
-                'foto' => $foto
-            ];
+                $sosmed_data = [];
+                if (isset($_POST['sosmed_id']) && isset($_POST['sosmed_link'])) {
+                    foreach ($_POST['sosmed_id'] as $index => $id_sosmed) {
+                        $link = $_POST['sosmed_link'][$index];
+                        if (!empty($id_sosmed) && !empty($link)) {
+                            $sosmed_data[] = [
+                                'id_sosmed' => $id_sosmed,
+                                'link' => $link
+                            ];
+                        }
+                    }
+                }
 
-            if ($this->model->update($id, $data, $spesialisasi_ids)) {
-                $_SESSION['swal_success'] = "Data personil berhasil diupdate!";
+                $data = [
+                    'nama' => $_POST['nama'],
+                    'nip' => $_POST['nip'],
+                    'email' => $_POST['email'],
+                    'jabatan' => $_POST['jabatan'],
+                    'foto' => $foto
+                ];
 
-                header("Location: index.php?action=personil_list");
-                exit();
-            } else {
-                echo "<script>alert('Gagal mengupdate data!'); window.history.back();</script>";
+                if ($this->model->update($id, $data, $spesialisasi_ids, $sosmed_data)) {
+                    $_SESSION['swal_success'] = "Data personil berhasil diupdate!";
+                    header("Location: index.php?action=personil_list");
+                    exit();
+                } else {
+                    echo "<script>alert('Gagal mengupdate data!'); window.history.back();</script>";
+                }
+            } catch (Exception $e) {
+                $_SESSION['swal_error'] = "Error: " . $e->getMessage();
+                echo "<script>window.history.back();</script>";
             }
         }
-    }
-
-    private function uploadFoto($file)
-    {
-        $targetDir = $this->root . "/assets/img/personil/";
-
-        // Validasi sederhana
-        if ($file['error'] !== 0) throw new Exception("File error / tidak diupload");
-
-        $fileName = time() . "_" . basename($file["name"]);
-        if (move_uploaded_file($file["tmp_name"], $targetDir . $fileName)) {
-            return $fileName;
-        }
-        throw new Exception("Gagal memindahkan file upload.");
     }
 
     public function delete($id)
@@ -252,14 +243,29 @@ class PersonilController
         }
 
         if ($this->model->delete($id)) {
-            // BERHASIL: Simpan pesan sukses
             $_SESSION['swal_success'] = "Data personil berhasil dihapus!";
         } else {
-            // GAGAL: Simpan pesan error
             $_SESSION['swal_error'] = "Gagal menghapus data! Cek relasi data.";
         }
 
         header("Location: index.php?action=personil_list");
         exit;
+    }
+
+    private function uploadFoto($file)
+    {
+        $targetDir = $this->root . "/assets/img/personil/";
+
+        if ($file['error'] !== 0) throw new Exception("File error / tidak diupload");
+
+        $allowed = ['jpg', 'jpeg', 'png', 'gif'];
+        $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+        if (!in_array($ext, $allowed)) throw new Exception("Format file tidak didukung.");
+
+        $fileName = time() . "_" . basename($file["name"]);
+        if (move_uploaded_file($file["tmp_name"], $targetDir . $fileName)) {
+            return $fileName;
+        }
+        throw new Exception("Gagal memindahkan file upload.");
     }
 }

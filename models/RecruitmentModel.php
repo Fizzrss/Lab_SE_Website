@@ -1,17 +1,17 @@
 <?php
-class RecruitmentModel {
+class RecruitmentModel
+{
 
     private $conn;
     private $table = 'recruitment';
-    
-    public function __construct($db) {
+
+    public function __construct($db)
+    {
         $this->conn = $db;
     }
 
-    // =====================================================
-    // CREATE - Tambah pendaftar baru
-    // =====================================================
-    public function create($data) {
+    public function create($data)
+    {
         $query = "INSERT INTO {$this->table}
                   (nama, nim, prodi, email, no_hp, alasan_bergabung, 
                    riwayat_pengalaman, portofolio, cv, foto, angkatan, 
@@ -39,11 +39,10 @@ class RecruitmentModel {
         return $stmt->execute();
     }
 
-    // =====================================================
-    // READ - Ambil semua pendaftar
-    // =====================================================
-    public function getAll() {
+    public function getAll($showAll = false)
+    {
         $query = "SELECT * FROM {$this->table} ORDER BY tanggal_daftar DESC";
+
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -52,7 +51,8 @@ class RecruitmentModel {
     // =====================================================
     // READ - Ambil pendaftar berdasarkan status
     // =====================================================
-    public function getByStatus($status) {
+    public function getByStatus($status)
+    {
         $query = "SELECT * FROM {$this->table} 
                   WHERE status = :status 
                   ORDER BY tanggal_daftar DESC";
@@ -66,7 +66,8 @@ class RecruitmentModel {
     // =====================================================
     // READ - Ambil detail pendaftar
     // =====================================================
-    public function getById($id) {
+    public function getById($id)
+    {
         $query = "SELECT * FROM {$this->table} WHERE id = :id LIMIT 1";
 
         $stmt = $this->conn->prepare($query);
@@ -80,25 +81,76 @@ class RecruitmentModel {
     // UPDATE - Update status pendaftar
     // (Trigger SQL akan berjalan otomatis bila status = 'lulus')
     // =====================================================
-    public function updateStatus($id, $status, $catatan = '') {
-
-        $query = "UPDATE {$this->table}
-                  SET status = :status, catatan = :catatan
-                  WHERE id = :id";
-
+    public function updateStatus($id, $status, $catatan = '')
+    {
+        $query = "UPDATE {$this->table} SET status = :status, catatan = :catatan WHERE id = :id";
         $stmt = $this->conn->prepare($query);
-
-        $stmt->bindParam(':id', $id);
-        $stmt->bindParam(':status', $status);
-        $stmt->bindParam(':catatan', $catatan);
-
-        return $stmt->execute();
+        $stmt->execute([':id' => $id, ':status' => $status, ':catatan' => $catatan]);
+        return true;
     }
 
+    public function processDecision($id, $status)
+    {
+        try {
+            $this->conn->beginTransaction();
+
+            if ($status == 'lulus') {
+                $sql_get = "SELECT * FROM recruitment WHERE id = :id";
+                $stmt_get = $this->conn->prepare($sql_get);
+                $stmt_get->execute([':id' => $id]);
+                $pendaftar = $stmt_get->fetch(PDO::FETCH_ASSOC);
+
+                if (!$pendaftar) {
+                    throw new Exception("Data pendaftar tidak ditemukan.");
+                }
+
+                $sql_check = "SELECT COUNT(*) FROM mahasiswa_aktif WHERE nim = :nim";
+                $stmt_check = $this->conn->prepare($sql_check);
+                $stmt_check->execute([':nim' => $pendaftar['nim']]);
+
+                if ($stmt_check->fetchColumn() == 0) {
+
+                    $sql_insert = "INSERT INTO mahasiswa_aktif 
+                        (recruitment_id, nama, nim, prodi, email, no_hp, angkatan, posisi, status, tanggal_bergabung, foto) 
+                        VALUES 
+                        (:id, :nama, :nim, :prodi, :email, :hp, :angk, :posisi, 'aktif', NOW(), :foto)";
+
+                    $stmt_ins = $this->conn->prepare($sql_insert);
+
+                    $stmt_ins->execute([
+                        ':id' => $id,
+                        ':nama' => $pendaftar['nama'],
+                        ':nim' => $pendaftar['nim'],
+                        ':prodi' => $pendaftar['prodi'],
+                        ':email' => $pendaftar['email'],
+                        ':hp' => $pendaftar['no_hp'],
+                        ':angk' => $pendaftar['angkatan'],
+                        ':posisi' => 'anggota',
+
+                        ':foto' => $pendaftar['foto'] ?? null
+                    ]);
+                }
+            }
+            
+            if ($status == 'tidak_lulus') {
+                $status = 'tidak lulus';
+            }
+            $sql_update = "UPDATE recruitment SET status = :status WHERE id = :id";
+            $stmt_upd = $this->conn->prepare($sql_update);
+            $stmt_upd->execute([':status' => $status, ':id' => $id]);
+
+            $this->conn->commit();
+            return true;
+        } catch (Exception $e) {
+            $this->conn->rollBack();
+            throw new Exception($e->getMessage());
+        }
+    }
     // =====================================================
     // DELETE - Hapus pendaftar
     // =====================================================
-    public function delete($id) {
+    public function delete($id)
+    {
         $query = "DELETE FROM {$this->table} WHERE id = :id";
 
         $stmt = $this->conn->prepare($query);
@@ -110,7 +162,8 @@ class RecruitmentModel {
     // =====================================================
     // COUNT - Hitung jumlah pendaftar berdasarkan status
     // =====================================================
-    public function countByStatus($status) {
+    public function countByStatus($status)
+    {
 
         $query = "SELECT COUNT(*) as total 
                   FROM {$this->table} 
@@ -124,4 +177,3 @@ class RecruitmentModel {
         return $row['total'];
     }
 }
-?>

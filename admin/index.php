@@ -98,8 +98,19 @@ require_once $root . '/admin/includes/admin_slidebar.php';
             $controller->delete($_GET['id']);
             break;
 
-        case 'pendaftar_list':
+        case 'recruitment_list':
             $recruitmentController->adminIndex();
+            break;
+        case 'recruitment_detail':
+            $recruitmentController->detail($_GET['id']);
+            break;
+        case 'recruitment_status':
+            $id = $_GET['id'];
+            $status = $_GET['status']; 
+            $recruitmentController->processStatus($id, $status);
+            break;
+        case 'recruitment_delete':
+            $recruitmentController->delete($_GET['id']);
             break;
 
         // --- Personil Routes ---
@@ -135,7 +146,7 @@ require_once $root . '/admin/includes/admin_slidebar.php';
             break;
         case 'publikasi_edit':
             $publikasiController->edit($_GET['id']);
-            break;    
+            break;
         case 'publikasi_delete':
             $publikasiController->delete($_GET['id']);
             break;
@@ -149,6 +160,6 @@ require_once $root . '/admin/includes/admin_slidebar.php';
     <?php include 'includes/admin_footer.php'; ?>
 </div>
 
-<?php 
+<?php
 ob_end_flush();
 ?>

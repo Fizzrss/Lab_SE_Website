@@ -1,38 +1,31 @@
 <?php
-/*
-|--------------------------------------------------------------------------
-| File: pages/mahasiswa_list.php (View & Entry Point)
-|--------------------------------------------------------------------------
-| Menampilkan data yang diambil dari MahasiswaController.
-*/
-
-require_once '../config/config.php';
-require_once '../controllers/MahasiswaController.php';
-
-$page_title = "Daftar Mahasiswa";
-
-// Ambil data dari controller
-$controller = new MahasiswaController();
-$data = $controller->index();
-
-$mahasiswa_list = $data['mahasiswa_list'];
-$prodi_list = $data['prodi_list'];
-$default_foto_url = $data['default_foto_url'];
-
-include '../includes/header.php';
-include '../includes/navbar.php';
-
 // Helper warna status
 function getStatusColor($status) {
-    $status = strtolower($status);
+    $status = strtolower($status['status'] ?? 'aktif');
     if ($status == 'aktif') return 'success';
     if ($status == 'cuti') return 'warning';
     if ($status == 'alumni') return 'secondary';
     return 'primary';
 }
+
+$root = $_SERVER['DOCUMENT_ROOT'] . '/Lab_SE_Website';
+
+require_once $root . '/config/config.php';
+require_once $root . '/models/MahasiswaAktifModel.php';
+
+$database = new Database();
+$db = $database->getConnection();
+
+$mahasiswaAktifModel = new MahasiswaAktifModel($db);
+$mahasiswa_list = $mahasiswaAktifModel->getAllPublic();
+
+$page_title = "Daftar Personil - Lab SE";
+require_once $root . '/includes/header.php';
+require_once $root . '/includes/navbar.php';
+
 ?>
 
-<section class="page-hero-banner">
+<!-- <section class="page-hero-banner">
     <div class="container">
         <div class="row">
             <div class="col-12">
@@ -41,9 +34,16 @@ function getStatusColor($status) {
             </div>
         </div>
     </div>
-</section>
+</section> -->
 
-<main class="main-content-container">
+<header class="header text-center py-5 text-white" style="background-color: #6096B4;">
+    <div class="container">
+        <h1>Daftar Mahasiswa Lab SE</h1>
+        <p class="lead">Data Mahasiswa Anggota laboratorium SE.</p>
+    </div>
+</header>
+
+<main class="main-content-container py-2">
     <div class="container">
 
         <!-- FILTER CARD -->
@@ -85,10 +85,9 @@ function getStatusColor($status) {
 
                 $nama  = $mhs['nama'];
                 $nim   = $mhs['nim'];
-                $prodi = $mhs['program_studi'];
+                $prodi = $mhs['prodi'];
                 $status = $mhs['status'];
-
-                $foto = $default_foto_url;
+                $foto = $mhs['foto'];
                 $color = getStatusColor($status);
             ?>
                 <div class="student-row"
@@ -98,8 +97,10 @@ function getStatusColor($status) {
                      data-nim="<?= $nim ?>"
                      data-prodi="<?= $prodi ?>">
 
-                    <div class="student-avatar me-md-4 mb-3 mb-md-0">
-                        <img src="<?= $foto ?>" alt="<?= htmlspecialchars($nama) ?>">
+                     <div class="student-avatar me-md-4 mb-3 mb-md-0">
+                        <img src="<?= BASE_URL ?>upload/foto/<?= $foto ?>"
+                             alt="<?= htmlspecialchars($nama) ?>"
+                             onerror="this.src='<?= BASE_URL ?>assets/img/default.png'">
                     </div>
 
                     <div class="student-info flex-grow-1 text-md-start mb-2 mb-md-0">

@@ -32,16 +32,64 @@
                         <?php endforeach; ?>
                     </select>
                 </div>
-                <div class="col-md-6 mb-3">
-                    <label>Link Google Scholar</label>
-                    <input type="text" name="gscholar" class="form-control" value="<?= htmlspecialchars($personnel['link_gscholar']) ?>">
-                </div>
-                <div class="col-md-6 mb-3">
-                    <label>Link LinkedIn</label>
-                    <input type="text" name="linkedin" class="form-control" value="<?= htmlspecialchars($personnel['linkedin']) ?>">
-                </div>
+
                 <div class="col-md-12 mb-3">
-                    <label class="form-label">Spesialisasi</label>
+                    <label class="form-label fw-bold">Sosial Media & Tautan</label>
+                    <div id="container-sosmed">
+                        
+                        <?php 
+                        // Tampilkan Data Sosmed Lama
+                        if (!empty($owned_sosmed)): 
+                            foreach ($owned_sosmed as $os): 
+                        ?>
+                            <div class="row g-2 mb-2 sosmed-row">
+                                <div class="col-md-4">
+                                    <select name="sosmed_id[]" class="form-select">
+                                        <option value="">- Pilih Platform -</option>
+                                        <?php foreach ($master_sosmed as $ms): ?>
+                                            <option value="<?= $ms['id_sosmed'] ?>" <?= ($ms['id_sosmed'] == $os['id_sosmed']) ? 'selected' : '' ?>>
+                                                <?= $ms['nama_sosmed'] ?>
+                                            </option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                </div>
+                                <div class="col-md-7">
+                                    <input type="text" name="sosmed_link[]" class="form-control" value="<?= htmlspecialchars($os['link_sosmed']) ?>" placeholder="Link Profile (https://...)">
+                                </div>
+                                <div class="col-md-1">
+                                    <button type="button" class="btn btn-danger w-100 remove-sosmed"><i class="bi bi-x-lg"></i></button>
+                                </div>
+                            </div>
+                        <?php 
+                            endforeach; 
+                        else: 
+                        ?>
+                            <div class="row g-2 mb-2 sosmed-row">
+                                <div class="col-md-4">
+                                    <select name="sosmed_id[]" class="form-select">
+                                        <option value="">- Pilih Platform -</option>
+                                        <?php foreach ($master_sosmed as $ms): ?>
+                                            <option value="<?= $ms['id_sosmed'] ?>"><?= $ms['nama_sosmed'] ?></option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                </div>
+                                <div class="col-md-7">
+                                    <input type="text" name="sosmed_link[]" class="form-control" placeholder="Link Profile (https://...)">
+                                </div>
+                                <div class="col-md-1">
+                                    <button type="button" class="btn btn-danger w-100 remove-sosmed"><i class="bi bi-x-lg"></i></button>
+                                </div>
+                            </div>
+                        <?php endif; ?>
+
+                    </div>
+                    <button type="button" class="btn btn-outline-primary btn-sm mt-1" id="add-sosmed">
+                        <i class="bi bi-plus-circle"></i> Tambah Sosmed Lain
+                    </button>
+                </div>
+
+                <div class="col-md-12 mb-3">
+                    <label class="form-label fw-bold">Spesialisasi</label>
                     <div id="container-spesialisasi">
                         <?php
                         if (!empty($owned_specs)):
@@ -57,10 +105,7 @@
                                             </option>
                                         <?php endforeach; ?>
                                     </select>
-
-                                    <button type="button" class="btn btn-danger remove-row">
-                                        <i class="bi bi-trash"></i>
-                                    </button>
+                                    <button type="button" class="btn btn-danger remove-row"><i class="bi bi-trash"></i></button>
                                 </div>
                             <?php
                             endforeach;
@@ -78,19 +123,20 @@
                                 <button type="button" class="btn btn-danger remove-row"><i class="bi bi-trash"></i></button>
                             </div>
                         <?php endif; ?>
-
                     </div>
-
                     <button type="button" class="btn btn-success btn-sm mt-1" id="add-row">
                         <i class="bi bi-plus-circle"></i> Tambah Spesialisasi Lain
                     </button>
                 </div>
+
                 <div class="col-md-12 mb-3">
                     <label>Foto Profil</label>
-                    <div class="mb-2">
-                        <img src="../assets/img/personil/<?= $personnel['foto_personil'] ?>" width="100" class="img-thumbnail">
-                        <small class="text-muted d-block">Foto saat ini</small>
-                    </div>
+                    <?php if (!empty($personnel['foto_personil'])): ?>
+                        <div class="mb-2">
+                            <img src="../assets/img/personil/<?= $personnel['foto_personil'] ?>" width="100" class="img-thumbnail">
+                            <small class="text-muted d-block">Foto saat ini</small>
+                        </div>
+                    <?php endif; ?>
                     <input type="file" name="foto" class="form-control" accept="image/*">
                     <small class="text-danger">*Biarkan kosong jika tidak ingin mengubah foto</small>
                 </div>
@@ -105,31 +151,36 @@
 </div>
 
 <script src="/Lab_SE_Website/admin/assets/extensions/sweetalert2/sweetalert2.all.min.js"></script>
-<script src="/Lab_SE_Website/admin/vendor/jquery/jquery.min.js"></script>  
+<script src="/Lab_SE_Website/admin/vendor/jquery/jquery.min.js"></script>
+
 <script>
     $(document).ready(function() {
-        var optionsHtml = '<option value="">-- Pilih Bidang --</option>';
         
+        // --- TEMPLATE SPESIALISASI ---
+        var optionsHtml = '<option value="">-- Pilih Bidang --</option>';
         <?php if(!empty($spesialisasi_list)): ?>
             <?php foreach ($spesialisasi_list as $master): ?>
                 optionsHtml += '<option value="<?= $master["id_spesialisasi"] ?>"><?= htmlspecialchars($master["nama_spesialisasi"]) ?></option>';
             <?php endforeach; ?>
         <?php endif; ?>
 
+        // --- TEMPLATE SOSMED ---
+        var sosmedOptions = '<option value="">- Pilih Platform -</option>';
+        <?php if(!empty($master_sosmed)): ?>
+            <?php foreach ($master_sosmed as $ms): ?>
+                sosmedOptions += '<option value="<?= $ms["id_sosmed"] ?>"><?= htmlspecialchars($ms["nama_sosmed"]) ?></option>';
+            <?php endforeach; ?>
+        <?php endif; ?>
+
+
+        // 1. Logic Spesialisasi
         $('#add-row').click(function(e) {
             e.preventDefault(); 
-
             var html = `
                 <div class="input-group mb-2">
-                    <select name="spesialisasi[]" class="form-select">
-                        ${optionsHtml} 
-                    </select>
-                    <button type="button" class="btn btn-danger remove-row">
-                        <i class="bi bi-trash"></i>
-                    </button>
-                </div>
-            `;
-            
+                    <select name="spesialisasi[]" class="form-select">${optionsHtml}</select>
+                    <button type="button" class="btn btn-danger remove-row"><i class="bi bi-trash"></i></button>
+                </div>`;
             $('#container-spesialisasi').append(html);
         });
 
@@ -142,27 +193,52 @@
             }
         });
 
-        $('form').on('submit', function(e) {
-            e.preventDefault(); // Cegah submit langsung
-            var form = this;
 
+        // 2. Logic Sosmed
+        $('#add-sosmed').click(function(e) {
+            e.preventDefault();
+            var html = `
+                <div class="row g-2 mb-2 sosmed-row">
+                    <div class="col-md-4">
+                        <select name="sosmed_id[]" class="form-select">${sosmedOptions}</select>
+                    </div>
+                    <div class="col-md-7">
+                        <input type="text" name="sosmed_link[]" class="form-control" placeholder="Link Profile (https://...)">
+                    </div>
+                    <div class="col-md-1">
+                        <button type="button" class="btn btn-danger w-100 remove-sosmed"><i class="bi bi-x-lg"></i></button>
+                    </div>
+                </div>`;
+            $('#container-sosmed').append(html);
+        });
+
+        $(document).on('click', '.remove-sosmed', function() {
+            if ($('#container-sosmed .sosmed-row').length > 1) {
+                $(this).closest('.sosmed-row').remove();
+            } else {
+                $(this).closest('.sosmed-row').find('input, select').val('');
+            }
+        });
+
+
+        // 3. Konfirmasi Update
+        $('form').on('submit', function(e) {
+            e.preventDefault();
+            var form = this;
             Swal.fire({
                 title: 'Simpan Perubahan?',
                 text: "Pastikan data sudah benar.",
                 icon: 'question',
                 showCancelButton: true,
-                confirmButtonColor: '#ffc107', // Warna Kuning (Warning)
+                confirmButtonColor: '#ffc107',
                 cancelButtonColor: '#6c757d',
                 confirmButtonText: 'Ya, Update!',
                 cancelButtonText: 'Batal'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    form.submit(); // Lanjutkan submit manual
+                    form.submit();
                 }
             });
         });
     });
 </script>
-
-<!-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> -->
- 

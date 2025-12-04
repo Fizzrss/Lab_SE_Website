@@ -22,7 +22,8 @@ require_once $root . '/includes/navbar.php';
     </div>
 </header>
 
-<main class="container py-5">
+
+<main class="container py-3">
 
     <?php if (empty($all_personnel)): ?>
         <div class="text-center text-muted">
