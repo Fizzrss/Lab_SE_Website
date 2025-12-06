@@ -7,54 +7,59 @@ if (!defined('BASE_URL')) {
     define('BASE_URL', 'http://localhost/Lab_SE_Website/');
 }
 $current_page = basename($_SERVER['PHP_SELF']);
+
+// Load roadmap data from database
+require_once __DIR__ . '/../config/config.php';
+require_once __DIR__ . '/../models/ProfilSections.php';
+
+try {
+    $database = new Database();
+    $db = $database->getConnection();
+    $profilModel = new ProfilSectionsModel($db);
+    
+    $roadmapSection = $profilModel->getByKey('roadmap');
+    $contentData = $roadmapSection ? json_decode($roadmapSection['section_content'], true) : null;
+    
+    $title = $roadmapSection['section_title'] ?? 'Roadmap Pengembangan LAB Software Engineering';
+    $items = $contentData['items'] ?? [
+        ['year' => '2021', 'description' => 'Inisiasi pembentukan LAB Software Engineering dan penyusunan struktur organisasi awal.'],
+        ['year' => '2022', 'description' => 'Mulai kegiatan riset internal dan pembuatan website resmi LAB Software Engineering.'],
+        ['year' => '2023', 'description' => 'Peluncuran sistem informasi internal serta kolaborasi pertama dengan pihak industri.'],
+        ['year' => '2024', 'description' => 'Implementasi CI/CD, modernisasi website, dan penguatan kegiatan DevOps untuk anggota.'],
+        ['year' => '2025', 'description' => 'Fokus pada riset AI, kolaborasi startup teknologi, dan ekspansi skala proyek nasional.']
+    ];
+} catch (Exception $e) {
+    // Fallback values
+    $title = 'Roadmap Pengembangan LAB Software Engineering';
+    $items = [
+        ['year' => '2021', 'description' => 'Inisiasi pembentukan LAB Software Engineering dan penyusunan struktur organisasi awal.'],
+        ['year' => '2022', 'description' => 'Mulai kegiatan riset internal dan pembuatan website resmi LAB Software Engineering.'],
+        ['year' => '2023', 'description' => 'Peluncuran sistem informasi internal serta kolaborasi pertama dengan pihak industri.'],
+        ['year' => '2024', 'description' => 'Implementasi CI/CD, modernisasi website, dan penguatan kegiatan DevOps untuk anggota.'],
+        ['year' => '2025', 'description' => 'Fokus pada riset AI, kolaborasi startup teknologi, dan ekspansi skala proyek nasional.']
+    ];
+}
 ?>
 
 <!-- ===== BAGIAN KONTEN ROADMAP ===== -->
 <section class="roadmap-section">
   <div class="container">
-    <h1 class="roadmap-title">Roadmap Pengembangan LAB Software Engineering</h1>
+    <h1 class="roadmap-title"><?= htmlspecialchars($title) ?></h1>
 
     <div class="roadmap-timeline">
       <div class="roadmap-line"></div>
 
-      <div class="roadmap-item left">
-        <div class="roadmap-box">
-          <h4>2021</h4>
-          <p>Inisiasi pembentukan LAB Software Engineering dan penyusunan struktur organisasi awal.</p>
-        </div>
-      </div>
-
-      <div class="roadmap-item right">
-        <div class="roadmap-box">
-          <h4>2022</h4>
-          <p>Mulai kegiatan riset internal dan pembuatan website resmi LAB Software Engineering.</p>
-        </div>
-      </div>
-
-      <div class="roadmap-item left">
-        <div class="roadmap-box">
-          <h4>2023</h4>
-          <p>Peluncuran sistem informasi internal serta kolaborasi pertama dengan pihak industri.</p>
-        </div>
-      </div>
-
-      <div class="roadmap-item right">
-        <div class="roadmap-box">
-          <h4>2024</h4>
-          <p>Implementasi CI/CD, modernisasi website, dan penguatan kegiatan DevOps untuk anggota.</p>
-        </div>
-      </div>
-
-      <div class="roadmap-item left">
-        <div class="roadmap-box">
-          <h4>2025</h4>
-          <p>Fokus pada riset AI, kolaborasi startup teknologi, dan ekspansi skala proyek nasional.</p>
-        </div>
-      </div>
+      <?php if (!empty($items) && is_array($items)): ?>
+        <?php foreach ($items as $index => $item): ?>
+          <div class="roadmap-item <?= $index % 2 === 0 ? 'left' : 'right' ?>">
+            <div class="roadmap-box">
+              <h4><?= htmlspecialchars($item['year'] ?? '') ?></h4>
+              <p><?= htmlspecialchars($item['description'] ?? '') ?></p>
+            </div>
+          </div>
+        <?php endforeach; ?>
+      <?php endif; ?>
 
     </div>
   </div>
 </section>
-
-<?php
-?>

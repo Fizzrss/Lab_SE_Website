@@ -43,4 +43,52 @@ function pesan($key = "", $pesan = "")
           </div>');
     }
 }
+
+// New functions for berita system
+function setFlashMessage($type, $message)
+{
+    $_SESSION['flash_message'] = [
+        'type' => $type,
+        'message' => $message
+    ];
+}
+
+function getFlashMessage()
+{
+    if (isset($_SESSION['flash_message'])) {
+        $flash = $_SESSION['flash_message'];
+        unset($_SESSION['flash_message']);
+        
+        $alertClass = '';
+        $title = '';
+        
+        switch ($flash['type']) {
+            case 'success':
+                $alertClass = 'alert-success';
+                $title = 'Berhasil!';
+                break;
+            case 'danger':
+                $alertClass = 'alert-danger';
+                $title = 'Gagal!';
+                break;
+            case 'warning':
+                $alertClass = 'alert-warning';
+                $title = 'Peringatan!';
+                break;
+            case 'info':
+                $alertClass = 'alert-info';
+                $title = 'Info!';
+                break;
+            default:
+                $alertClass = 'alert-primary';
+                $title = 'Notifikasi';
+        }
+        
+        return '<div class="alert ' . $alertClass . ' alert-dismissible fade show" role="alert">
+            <strong>' . $title . '</strong> ' . htmlspecialchars($flash['message']) . '
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>';
+    }
+    return '';
+}
 ?>

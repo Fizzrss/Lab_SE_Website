@@ -46,6 +46,18 @@ require_once $root . '/models/RecruitmentModel.php';
 require_once $root . '/controllers/RecruitmentController.php';
 require_once $root . '/models/PublikasiModel.php';
 require_once $root . '/controllers/PublikasiController.php';
+require_once $root . '/models/Berita.php';
+require_once $root . '/controllers/BeritaController.php';
+require_once $root . '/models/KomentarBerita.php';
+require_once $root . '/controllers/KomentarController.php';
+require_once $root . '/models/SocialMediaSettings.php';
+require_once $root . '/controllers/SocialMediaController.php';
+require_once $root . '/models/RelatedPostsSettings.php';
+require_once $root . '/controllers/RelatedPostsController.php';
+require_once $root . '/models/FooterSettings.php';
+require_once $root . '/controllers/FooterController.php';
+require_once $root . '/models/ProfilSections.php';
+require_once $root . '/controllers/ProfilController.php';
 
 // Inisialisasi Database
 $database = new Database();
@@ -64,6 +76,23 @@ $recruitmentController = new RecruitmentController($recruitmentModel);
 $publikasiModel = new PublikasiModel($db);
 $publikasiController = new PublikasiController($publikasiModel);
 
+$beritaModel = new BeritaModel($db);
+$beritaController = new BeritaController($beritaModel);
+
+$komentarModel = new KomentarBeritaModel($db);
+$komentarController = new KomentarController($komentarModel);
+
+$socialMediaModel = new SocialMediaSettingsModel($db);
+$socialMediaController = new SocialMediaController($socialMediaModel);
+
+$relatedPostsModel = new RelatedPostsSettingsModel($db);
+$relatedPostsController = new RelatedPostsController($relatedPostsModel);
+
+$footerModel = new FooterSettingsModel($db);
+$footerController = new FooterController($footerModel);
+
+$profilModel = new ProfilSectionsModel($db);
+$profilController = new ProfilController($profilModel);
 
 // Ambil Action
 $action = isset($_GET['action']) ? $_GET['action'] : 'dashboard';
@@ -149,6 +178,69 @@ require_once $root . '/admin/includes/admin_slidebar.php';
             break;
         case 'publikasi_delete':
             $publikasiController->delete($_GET['id']);
+            break;
+
+        // --- Berita Routes ---
+        case 'berita_list':
+            $beritaController->index();
+            break;
+        case 'berita_add':
+            $beritaController->add();
+            break;
+        case 'berita_save':
+            $beritaController->save();
+            break;
+        case 'berita_edit':
+            $beritaController->edit($_GET['id']);
+            break;
+        case 'berita_update':
+            $beritaController->update($_GET['id']);
+            break;
+        case 'berita_delete':
+            $beritaController->delete($_GET['id']);
+            break;
+
+        // --- Komentar Routes ---
+        case 'komentar_list':
+            $komentarController->index();
+            break;
+        case 'komentar_delete':
+            $komentarController->delete($_GET['id']);
+            break;
+
+        // --- Social Media Settings Routes ---
+        case 'social_media_settings':
+            $socialMediaController->index();
+            break;
+        case 'social_media_update':
+            $socialMediaController->update();
+            break;
+
+        // --- Related Posts Settings Routes ---
+        case 'related_posts_settings':
+            $relatedPostsController->index();
+            break;
+        case 'related_posts_update':
+            $relatedPostsController->update();
+            break;
+
+        // --- Footer Settings Routes ---
+        case 'footer_settings':
+            $footerController->index();
+            break;
+        case 'footer_update':
+            $footerController->update();
+            break;
+
+        // --- Profil Settings Routes ---
+        case 'profil_settings':
+            $profilController->index();
+            break;
+        case 'profil_section_update':
+            $profilController->updateSection();
+            break;
+        case 'profil_hero_update':
+            $profilController->updateHero();
             break;
 
         default:

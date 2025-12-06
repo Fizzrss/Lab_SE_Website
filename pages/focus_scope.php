@@ -5,36 +5,50 @@
 |--------------------------------------------------------------------------
 */
 
-// 1. CARI ALAMAT PASTI FOLDER PROJECT
-$projectRoot = realpath(__DIR__ . '/..');
-
-// 2. Konfigurasi & Config
-if (file_exists($projectRoot . '/includes/config.php')) {
-    require_once $projectRoot . '/includes/config.php';
-} else {
+// Ensure BASE_URL is defined (should already be defined by parent file)
+if (!defined('BASE_URL')) {
     define('BASE_URL', 'http://localhost/Lab_SE_Website/');
 }
 
-$page_title = "Focus & Scope";
-$site_title = "Lab SE";
+// Load focus scope data from database
+require_once __DIR__ . '/../config/config.php';
+require_once __DIR__ . '/../models/ProfilSections.php';
 
-// 3. Panggil Header & Navbar
-include $projectRoot . '/includes/header.php'; 
-include $projectRoot . '/includes/navbar.php'; 
-
-// 4. DATA DUMMY
-$fokus_riset = [
-    "Software Engineering Methodologies and Architecture",
-    "Domain-Specific Software Engineering Applications",
-    "Emerging Technologies in Software Engineering",
-];
-
-$lingkup_detail = [
-    [ "icon" => "bi-diagram-3", "judul" => "Methodologies", "desc" => "Pengembangan metode Agile, Scrum, dan pendekatan modern dalam SDLC." ],
-    [ "icon" => "bi-cpu", "judul" => "Architecture", "desc" => "Perancangan arsitektur Microservices, Monolithic, dan Serverless." ],
-    [ "icon" => "bi-bug", "judul" => "Testing & QA", "desc" => "Otomatisasi pengujian perangkat lunak untuk menjamin kualitas sistem." ],
-    [ "icon" => "bi-phone", "judul" => "Mobile & Web", "desc" => "Riset implementasi teknologi terbaru pada platform web & seluler." ]
-];
+try {
+    $database = new Database();
+    $db = $database->getConnection();
+    $profilModel = new ProfilSectionsModel($db);
+    
+    $focusScopeSection = $profilModel->getByKey('focus_scope');
+    $contentData = $focusScopeSection ? json_decode($focusScopeSection['section_content'], true) : null;
+    
+    $subtitle = $contentData['subtitle'] ?? 'Kami berdedikasi untuk mengeksplorasi batas-batas baru dalam rekayasa perangkat lunak.';
+    $fokus_riset = $contentData['fokus_riset'] ?? [
+        "Software Engineering Methodologies and Architecture",
+        "Domain-Specific Software Engineering Applications",
+        "Emerging Technologies in Software Engineering",
+    ];
+    $lingkup_detail = $contentData['lingkup_detail'] ?? [
+        [ "icon" => "bi-diagram-3", "judul" => "Methodologies", "desc" => "Pengembangan metode Agile, Scrum, dan pendekatan modern dalam SDLC." ],
+        [ "icon" => "bi-cpu", "judul" => "Architecture", "desc" => "Perancangan arsitektur Microservices, Monolithic, dan Serverless." ],
+        [ "icon" => "bi-bug", "judul" => "Testing & QA", "desc" => "Otomatisasi pengujian perangkat lunak untuk menjamin kualitas sistem." ],
+        [ "icon" => "bi-phone", "judul" => "Mobile & Web", "desc" => "Riset implementasi teknologi terbaru pada platform web & seluler." ]
+    ];
+} catch (Exception $e) {
+    // Fallback values
+    $subtitle = 'Kami berdedikasi untuk mengeksplorasi batas-batas baru dalam rekayasa perangkat lunak.';
+    $fokus_riset = [
+        "Software Engineering Methodologies and Architecture",
+        "Domain-Specific Software Engineering Applications",
+        "Emerging Technologies in Software Engineering",
+    ];
+    $lingkup_detail = [
+        [ "icon" => "bi-diagram-3", "judul" => "Methodologies", "desc" => "Pengembangan metode Agile, Scrum, dan pendekatan modern dalam SDLC." ],
+        [ "icon" => "bi-cpu", "judul" => "Architecture", "desc" => "Perancangan arsitektur Microservices, Monolithic, dan Serverless." ],
+        [ "icon" => "bi-bug", "judul" => "Testing & QA", "desc" => "Otomatisasi pengujian perangkat lunak untuk menjamin kualitas sistem." ],
+        [ "icon" => "bi-phone", "judul" => "Mobile & Web", "desc" => "Riset implementasi teknologi terbaru pada platform web & seluler." ]
+    ];
+}
 ?>
 
 <section class="focus-hero-banner d-flex align-items-center">
@@ -43,9 +57,11 @@ $lingkup_detail = [
             Research Areas
         </span>
         <h1 class="display-4 mb-3">Focus & Scope</h1>
+        <?php if (!empty($subtitle)): ?>
         <p class="lead text-white-50" style="max-width: 700px; margin: 0 auto;">
-            Kami berdedikasi untuk mengeksplorasi batas-batas baru dalam rekayasa perangkat lunak.
+            <?= htmlspecialchars($subtitle) ?>
         </p>
+        <?php endif; ?>
     </div>
 </section>
 
@@ -63,27 +79,23 @@ $lingkup_detail = [
             </div>
 
             <div class="row g-4">
-                <?php 
-                $delay = 0;
-                foreach ($fokus_riset as $fokus) : 
-                    $delay += 50; 
-                ?>
-                    <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="<?= $delay ?>">
-                        
-                        <div class="scope-card h-100 d-flex flex-column align-items-start text-start">
-                            
-                            <div class="scope-icon mb-3" style="width: 50px; height: 50px; font-size: 1.2rem;">
-                                <i class="bi bi-search"></i>
+                <?php if (!empty($fokus_riset) && is_array($fokus_riset)): ?>
+                    <?php 
+                    $delay = 0;
+                    foreach ($fokus_riset as $fokus) : 
+                        $delay += 50; 
+                    ?>
+                        <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="<?= $delay ?>">
+                            <div class="scope-card h-100 d-flex flex-column align-items-start text-start">
+                                <div class="scope-icon mb-3" style="width: 50px; height: 50px; font-size: 1.2rem;">
+                                    <i class="bi bi-search"></i>
+                                </div>
+                                <h4 class="h5 fw-bold mb-2"><?= htmlspecialchars($fokus) ?></h4>
+                                <div style="width: 40px; height: 3px; background-color: var(--accent-color); border-radius: 2px; margin-top: auto; opacity: 0.5;"></div>
                             </div>
-
-                            <h4 class="h5 fw-bold mb-2"><?= $fokus ?></h4>
-                            
-                            <div style="width: 40px; height: 3px; background-color: var(--accent-color); border-radius: 2px; margin-top: auto; opacity: 0.5;"></div>
-                            
                         </div>
-
-                    </div>
-                <?php endforeach; ?>
+                    <?php endforeach; ?>
+                <?php endif; ?>
             </div>
         </div>
     </section>
@@ -100,29 +112,25 @@ $lingkup_detail = [
             </div>
 
             <div class="row g-4">
-                <?php 
-                $cardDelay = 100;
-                foreach ($lingkup_detail as $item) : 
-                    $cardDelay += 100;
-                ?>
-                    <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="<?= $cardDelay ?>">
-                        <div class="scope-card">
-                            <div class="scope-icon">
-                                <i class="bi <?= $item['icon'] ?>"></i>
+                <?php if (!empty($lingkup_detail) && is_array($lingkup_detail)): ?>
+                    <?php 
+                    $cardDelay = 100;
+                    foreach ($lingkup_detail as $item) : 
+                        $cardDelay += 100;
+                    ?>
+                        <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="<?= $cardDelay ?>">
+                            <div class="scope-card">
+                                <div class="scope-icon">
+                                    <i class="bi <?= htmlspecialchars($item['icon'] ?? 'bi-circle') ?>"></i>
+                                </div>
+                                <h4 class="h5 fw-bold mb-3"><?= htmlspecialchars($item['judul'] ?? '') ?></h4>
+                                <p class="text-muted small mb-0">
+                                    <?= htmlspecialchars($item['desc'] ?? '') ?>
+                                </p>
                             </div>
-                            <h4 class="h5 fw-bold mb-3"><?= $item['judul'] ?></h4>
-                            <p class="text-muted small mb-0">
-                                <?= $item['desc'] ?>
-                            </p>
                         </div>
-                    </div>
-                <?php endforeach; ?>
+                    <?php endforeach; ?>
+                <?php endif; ?>
             </div>
         </div>
     </section>
-
-</main>
-
-<?php 
-include $projectRoot . '/includes/footer.php'; 
-?>

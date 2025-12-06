@@ -77,11 +77,25 @@
                     </ul>
                 </li>
 
-                <li class="sidebar-item">
-                    <a href="index.php?action=blog_list" class='sidebar-link' data-key="blog_list">
+                <li class="sidebar-item has-sub">
+                    <a href="#" class='sidebar-link'>
                         <i class="bi bi-newspaper"></i>
-                        <span>Manajemen Blog</span>
+                        <span>Manajemen Berita</span>
                     </a>
+                    <ul class="submenu">
+                        <li class="submenu-item">
+                            <a href="index.php?action=berita_list" class="submenu-link" data-key="berita_list">Daftar Berita</a>
+                        </li>
+                        <li class="submenu-item">
+                            <a href="index.php?action=komentar_list" class="submenu-link" data-key="komentar_list">Komentar</a>
+                        </li>
+                        <li class="submenu-item">
+                            <a href="index.php?action=social_media_settings" class="submenu-link" data-key="social_media_settings">Media Sosial</a>
+                        </li>
+                        <li class="submenu-item">
+                            <a href="index.php?action=related_posts_settings" class="submenu-link" data-key="related_posts_settings">Related Posts</a>
+                        </li>
+                    </ul>
                 </li>
 
 
@@ -91,6 +105,20 @@
                     <a href="index.php?action=settings" class='sidebar-link' data-key="settings">
                         <i class="bi bi-gear-fill"></i>
                         <span>Pengaturan</span>
+                    </a>
+                </li>
+
+                <li class="sidebar-item">
+                    <a href="index.php?action=footer_settings" class='sidebar-link' data-key="footer_settings">
+                        <i class="bi bi-layout-text-window-reverse"></i>
+                        <span>Pengaturan Footer</span>
+                    </a>
+                </li>
+
+                <li class="sidebar-item">
+                    <a href="index.php?action=profil_settings" class='sidebar-link' data-key="profil_settings">
+                        <i class="bi bi-house-door"></i>
+                        <span>Pengaturan Beranda & Profil</span>
                     </a>
                 </li>
 
