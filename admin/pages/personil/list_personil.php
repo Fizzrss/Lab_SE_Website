@@ -2,7 +2,6 @@
 $page_title = "Data Personil";
 ?>
 
-
 <div class="page-heading">
     <div class="page-title">
         <div class="row">

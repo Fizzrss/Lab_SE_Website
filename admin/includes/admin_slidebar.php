@@ -1,24 +1,23 @@
 <div id="sidebar">
     <div class="sidebar-wrapper active">
-        <div class="sidebar-header position-relative">
-            <div class="d-flex justify-content-between align-items-center">
+        <div class="sidebar-header text-center">
+            <div class="d-flex flex-column align-items-center">
                 <div class="logo">
-                    <a href="index.php?action=dashboard">
-                        <!-- <a href="index.html"><img
-                                    src="/Lab_SE_Website/admin/assets/img/LAB SE_Outline.png"
-                                    alt="Logo" srcset=""></a> -->
-                        <h4 class="text-primary mb-0"><i class="bi bi-code-square"></i> Lab SE</h4>
-                    </a>
+                    <a href="index.html"><img
+                                src="/Lab_SE_Website/admin/assets/img/LAB SE_Outline.png"
+                                alt="Logo" srcset=""></a>
+                    <!-- <a href="index.php?action=dashboard">
+                        <h5 class="text-primary text-center">Laboratorium SE</h5>
+                    </a> -->
                 </div>
-                <div class="sidebar-toggler x">
+                <!-- <div class="sidebar-toggler x">
                     <a href="#" class="sidebar-hide d-xl-none d-block"><i class="bi bi-x bi-middle"></i></a>
-                </div>
+                </div> -->
             </div>
         </div>
         <div class="sidebar-menu">
             <ul class="menu">
-                <li class="sidebar-title">Menu</li>
-
+                <li class="sidebar-title mt-0">Menu</li>
                 <li class="sidebar-item">
                     <a href="index.php?action=dashboard" class='sidebar-link' data-key="dashboard">
                         <i class="bi bi-house-fill"></i>
@@ -38,6 +37,9 @@
                         </li>
                         <li class="submenu-item">
                             <a href="index.php?action=publikasi_list" class="submenu-link" data-key="publikasi_list">Daftar Publikasi</a>
+                        </li>
+                        <li class="submenu-item">
+                            <a href="index.php?action=spesialisasi_list" class="submenu-link" data-key="spesialisasi_list">Daftar Spesialisasi</a>
                         </li>
                     </ul>
                 </li>

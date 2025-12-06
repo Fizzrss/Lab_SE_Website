@@ -60,6 +60,10 @@ require_once $root . '/models/ProfilSections.php';
 require_once $root . '/controllers/ProfilController.php';
 require_once $root . '/models/BeritaSettings.php';
 require_once $root . '/controllers/BeritaSettingsController.php';
+require_once $root . '/models/SpesialisasiModel.php';
+require_once $root . '/controllers/SpesialisasiController.php';
+require_once $root . '/models/DashboardModel.php';
+require_once $root . '/controllers/DashboardController.php';
 
 // Inisialisasi Database
 $database = new Database();
@@ -98,6 +102,12 @@ $profilController = new ProfilController($profilModel);
 
 $beritaSettingsModel = new BeritaSettingsModel($db);
 $beritaSettingsController = new BeritaSettingsController($beritaSettingsModel);
+$spesialisasiModel = new SpesialisasiModel($db);
+$spesialisasiController = new SpesialisasiController($spesialisasiModel);
+
+$dashboardModel = new DashboardModel($db);
+$dashboardController = new DashboardController($dashboardModel, $recruitmentModel);
+
 
 // Ambil Action
 $action = isset($_GET['action']) ? $_GET['action'] : 'dashboard';
@@ -118,10 +128,7 @@ require_once $root . '/admin/includes/admin_slidebar.php';
     <?php
     switch ($action) {
         case 'dashboard':
-            // if (method_exists($controller, 'getDashboardStats')) {
-            //     $stats = $controller->getDashboardStats();
-            // }
-            include 'pages/dashboard.php';
+            $dashboardController->index();
             break;
 
         // --- Mahasiswa Routes ---
@@ -130,6 +137,9 @@ require_once $root . '/admin/includes/admin_slidebar.php';
             break;
         case 'mahasiswa_delete':
             $controller->delete($_GET['id']);
+            break;
+        case 'mahasiswa_edit':
+            $controller->edit($_GET['id']);
             break;
 
         case 'recruitment_list':
@@ -168,6 +178,20 @@ require_once $root . '/admin/includes/admin_slidebar.php';
             break;
         case 'personil_delete':
             $personilController->delete($_GET['id']);
+            break;
+
+        // --- Spesialisasi Routes ---
+        case'spesialisasi_list':
+            $spesialisasiController->index();
+            break;
+        case 'spesialisasi_add':
+            $spesialisasiController->add();
+            break;
+        case 'spesialisasi_edit':
+            $spesialisasiController->edit($_GET['id']);
+            break;
+        case 'spesialisasi_delete':
+            $spesialisasiController->delete($_GET['id']);
             break;
 
 

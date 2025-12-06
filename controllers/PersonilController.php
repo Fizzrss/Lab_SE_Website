@@ -5,13 +5,9 @@ class PersonilController
     private $model;
     private $root;
 
-    /**
-     * Constructor: Menerima PersonilModel yang sudah terinisialisasi
-     */
     public function __construct(PersonilModel $model)
     {
         $this->model = $model;
-        // Inisialisasi path root untuk include view
         $this->root = $_SERVER['DOCUMENT_ROOT'] . '/Lab_SE_Website';
     }
 
@@ -19,21 +15,15 @@ class PersonilController
     public function personilListforAdmin()
     {
         try {
-            // Ambil data dari Model
             $all_personnel = $this->model->getAllPersonil();
 
-            // Mapping path foto untuk View Admin
             foreach ($all_personnel as &$member) {
-                // Kolom 'foto' sudah dipetakan ke 'foto_file' di Model
                 $nama_file = !empty($member['foto']) ? $member['foto'] : 'default-profile.png';
                 $member['foto'] = BASE_URL . 'assets/img/personil/' . $nama_file;
             }
 
-            // Muat View Admin List
-            // View list_personil.php harus menggunakan variabel $all_personnel
             include $this->root . '/admin/pages/personil/list_personil.php';
         } catch (Exception $e) {
-            // Tampilkan error jika gagal
             echo "<div class='alert alert-danger'>Kesalahan saat memuat data: " . $e->getMessage() . "</div>";
         }
     }
@@ -46,22 +36,16 @@ class PersonilController
         }
 
         try {
-            // 1. Panggil Model
-            // (Hasilnya sudah lengkap: data diri, spesialisasi, publikasi, DAN SOSMED)
             $personnel = $this->model->getPersonilDetail($id);
 
             if ($personnel) {
-                // 2. Mapping Data Dasar
                 $personnel['nama'] = $personnel['nama_personil'];
             
-                // 3. Logika Path Gambar
                 $foto_db = $personnel['foto_personil'];
                 $nama_file = !empty($foto_db) ? $foto_db : 'default-profile.png';
                 
-                // Pastikan BASE_URL sudah didefinisikan di config
                 $personnel['foto'] = BASE_URL . 'assets/img/personil/' . $nama_file;
 
-                // 4. Fallback Bio (Opsional)
                 $personnel['bio'] = $personnel['bio'] ?? 'Biografi belum tersedia.';
 
                 return ['personnel' => $personnel, 'error' => null];
@@ -77,27 +61,22 @@ class PersonilController
     // method detail personil untuk admin
     public function personilDetailforAdmin($id)
     {
-        // Ambil data dari core method
         $data = $this->getDetailData($id);
 
         $personnel = $data['personnel'];
-        $error_message = $data['error']; // Variabel yang akan digunakan di view
+        $error_message = $data['error'];
 
-        // Muat View Detail Admin
         include $this->root . '/admin/pages/personil/detail_personil.php';
     }
 
     // method detail personil untuk landing page
     public function personilDetailforLanding($id)
     {
-        // Ambil data dari core method
         $data = $this->getDetailData($id);
 
         $personnel = $data['personnel'];
-        $error_message = $data['error']; // Variabel yang akan digunakan di view
+        $error_message = $data['error'];
 
-        // Muat View Detail Publik
-        // Asumsi lokasi: /pages/personil_detail.php
         include $this->root . '/pages/personil_detail.php';
     }
 

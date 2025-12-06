@@ -32,7 +32,7 @@ class PersonilModel
 
         // 2. Loop setiap personil untuk ambil detail lainnya
         foreach ($results as $row) {
-            
+
             // A. Ambil Spesialisasi
             $sql_spec = "
                 SELECT s.nama_spesialisasi 
@@ -117,7 +117,13 @@ class PersonilModel
         $personnel['sosmed'] = $stmt_sosmed->fetchAll(PDO::FETCH_ASSOC);
 
         // 4. Ambil Publikasi
-        $sql_pub = "SELECT * FROM publikasi WHERE id_personil = :id ORDER BY tahun DESC";
+        $sql_pub = "SELECT p.*, jp.nama_jenis 
+            FROM publikasi p
+            JOIN personil_publikasi pp ON p.id_publikasi = pp.id_publikasi
+            LEFT JOIN jenis_publikasi jp ON p.id_jenis = jp.id_jenis
+            WHERE pp.id_personil = :id
+            ORDER BY p.tahun DESC";
+
         $stmt_pub = $this->conn->prepare($sql_pub);
         $stmt_pub->execute([':id' => $id]);
         $personnel['publikasi'] = $stmt_pub->fetchAll(PDO::FETCH_ASSOC);
@@ -170,7 +176,7 @@ class PersonilModel
         $stmt = $this->conn->prepare($sql_personnel);
         $stmt->execute([':k' => $search_term]);
         $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        
+
         $all_personnel = [];
 
         foreach ($results as $row) {
@@ -204,7 +210,7 @@ class PersonilModel
                 'peran' => $row['peran'] ?? 'Tidak Ada Jabatan',
                 'foto' => $row['foto_file'],
                 'spesialisasi' => $spesialisasi,
-                'sosmed' => $list_sosmed 
+                'sosmed' => $list_sosmed
             ];
         }
 
@@ -222,11 +228,13 @@ class PersonilModel
         return $this->conn->query("SELECT * FROM spesialisasi ORDER BY nama_spesialisasi ASC")->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function getAllMasterSosmed() {
+    public function getAllMasterSosmed()
+    {
         return $this->conn->query("SELECT * FROM sosmed_personil ORDER BY nama_sosmed ASC")->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function getPersonilSosmed($id_personil) {
+    public function getPersonilSosmed($id_personil)
+    {
         $sql = "SELECT ps.*, m.nama_sosmed 
                 FROM personil_sosmed ps
                 JOIN sosmed_personil m ON ps.id_sosmed = m.id_sosmed
@@ -244,7 +252,8 @@ class PersonilModel
         return $stmt->fetchAll(PDO::FETCH_COLUMN);
     }
 
-    public function insert($data, $spesialisasi_ids = [], $sosmed_data = []) {
+    public function insert($data, $spesialisasi_ids = [], $sosmed_data = [])
+    {
         try {
             $this->conn->beginTransaction();
 
@@ -265,7 +274,7 @@ class PersonilModel
             if (!empty($sosmed_data)) {
                 $sql_sosmed = "INSERT INTO personil_sosmed (id_personil, id_sosmed, link_sosmed) VALUES (?, ?, ?)";
                 $stmt_sosmed = $this->conn->prepare($sql_sosmed);
-                
+
                 foreach ($sosmed_data as $sm) {
                     if (!empty($sm['link']) && !empty($sm['id_sosmed'])) {
                         $stmt_sosmed->execute([$last_id, $sm['id_sosmed'], $sm['link']]);
@@ -281,7 +290,8 @@ class PersonilModel
         }
     }
 
-    public function update($id, $data, $spesialisasi_ids = [], $sosmed_data = []) {
+    public function update($id, $data, $spesialisasi_ids = [], $sosmed_data = [])
+    {
         try {
             $this->conn->beginTransaction();
 
@@ -298,7 +308,7 @@ class PersonilModel
             }
 
             $this->conn->prepare("DELETE FROM personil_sosmed WHERE id_personil = ?")->execute([$id]);
-            
+
             if (!empty($sosmed_data)) {
                 $stmt_sosmed = $this->conn->prepare("INSERT INTO personil_sosmed (id_personil, id_sosmed, link_sosmed) VALUES (?, ?, ?)");
                 foreach ($sosmed_data as $sm) {

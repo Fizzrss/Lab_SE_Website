@@ -8,8 +8,8 @@ require_once $root . "/controllers/PersonilController.php";
 $db = new Database();
 $conn = $db->getConnection();
 
-$personilModel = new PersonilModel($conn); 
-$controller = new PersonilController($personilModel); 
+$personilModel = new PersonilModel($conn);
+$controller = new PersonilController($personilModel);
 
 $id = $_GET['id'] ?? null;
 if (!isset($personnel)) {
@@ -17,6 +17,7 @@ if (!isset($personnel)) {
     $personnel = $data['personnel'];
     $error_message = $data['error'];
 }
+
 
 $page_title = "Detail Personil - Lab SE";
 require_once $root . '/includes/header.php';
@@ -39,8 +40,8 @@ require_once $root . '/includes/navbar.php';
             <div class="row align-items-center">
 
                 <div class="col-md-4 text-center mb-4 mb-md-0">
-                    <img src="<?= $personnel['foto'] ?>" 
-                         alt="<?= htmlspecialchars($personnel['nama']) ?>" 
+                    <img src="<?= $personnel['foto'] ?>"
+                        alt="<?= htmlspecialchars($personnel['nama']) ?>"
                         class="img-fluid rounded shadow-sm w-100"
                         style="aspect-ratio: 1 / 1; object-fit: cover; object-position: top;">
                 </div>
@@ -65,9 +66,9 @@ require_once $root . '/includes/navbar.php';
                     <div class="d-flex flex-wrap gap-2 mb-4">
                         <?php if (!empty($personnel['sosmed'])): ?>
                             <?php foreach ($personnel['sosmed'] as $sm): ?>
-                                <a href="<?= htmlspecialchars($sm['link_sosmed']) ?>" 
-                                   target="_blank" 
-                                   class="btn btn-outline-dark rounded-pill px-3 d-flex align-items-center gap-2 transition-hover">
+                                <a href="<?= htmlspecialchars($sm['link_sosmed']) ?>"
+                                    target="_blank"
+                                    class="btn btn-outline-dark rounded-pill px-3 d-flex align-items-center gap-2 transition-hover">
                                     <i class="<?= htmlspecialchars($sm['icon']) ?> fs-5"></i>
                                     <span><?= htmlspecialchars($sm['nama_sosmed']) ?></span>
                                 </a>
@@ -94,63 +95,267 @@ require_once $root . '/includes/navbar.php';
 
             <hr class="my-5">
 
-            <div class="mt-4">
-                <ul class="nav nav-pills mb-4" id="academicTabs" role="tablist">
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link active rounded-pill px-4" id="publikasi-tab" data-bs-toggle="tab" data-bs-target="#publikasi-pane" type="button">
-                            Publikasi (<?= count($personnel['publikasi']) ?>)
-                        </button>
-                    </li>
-                    <li class="nav-item"><button class="nav-link rounded-pill px-4" data-bs-target="#riset-pane" data-bs-toggle="tab">Riset</button></li>
-                    <li class="nav-item"><button class="nav-link rounded-pill px-4" data-bs-target="#ki-pane" data-bs-toggle="tab">Kekayaan Intelektual</button></li>
-                    <li class="nav-item"><button class="nav-link rounded-pill px-4" data-bs-target="#ppm-pane" data-bs-toggle="tab">PPM</button></li>
-                    <li class="nav-item"><button class="nav-link rounded-pill px-4" data-bs-target="#aktivitas-pane" data-bs-toggle="tab">Aktivitas</button></li>
-                </ul>
+            <?php
+            $list_publikasi = [];
+            $list_riset     = [];
+            $list_ppm       = [];
+            $list_ki        = [];
+            $list_buku      = [];
 
-                <div class="tab-content">
-                    
-                    <div class="tab-pane fade show active" id="publikasi-pane">
-                        <?php if (!empty($personnel['publikasi'])): ?>
-                            <div class="table-responsive">
-                                <table class="table table-hover align-middle">
-                                    <thead class="table-light">
-                                        <tr>
-                                            <th style="width:50px;" class="text-center">No</th>
-                                            <th>Judul Publikasi</th>
-                                            <th style="width:100px;" class="text-center">Tahun</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <?php $no = 1; foreach ($personnel['publikasi'] as $pub): ?>
-                                        <tr>
-                                            <td class="text-center text-muted"><?= $no++ ?></td>
-                                            <td class="fw-semibold text-dark"><?= htmlspecialchars($pub['judul']) ?></td>
-                                            <td class="text-center text-muted"><?= htmlspecialchars($pub['tahun']) ?></td>
-                                        </tr>
-                                        <?php endforeach; ?>
-                                    </tbody>
-                                </table>
+            if (!empty($personnel['publikasi'])) {
+                foreach ($personnel['publikasi'] as $item) {
+
+                    // Ubah nama jenis ke huruf kecil agar pencarian mudah
+                    $jenis = strtolower($item['nama_jenis'] ?? '');
+
+                    // A. Cek PPM (Gunakan huruf kecil 'ppm')
+                    if (strpos($jenis, 'pengabdian') !== false || strpos($jenis, 'ppm') !== false) {
+                        $list_ppm[] = $item;
+                    }
+                    // B. Cek HKI (Gunakan huruf kecil)
+                    elseif (strpos($jenis, 'hki') !== false || strpos($jenis, 'hak cipta') !== false || strpos($jenis, 'paten') !== false || strpos($jenis, 'kekayaan') !== false) {
+                        $list_ki[] = $item;
+                    }
+                    // C. Cek Riset (Gunakan huruf kecil 'riset')
+                    elseif (strpos($jenis, 'riset') !== false || strpos($jenis, 'penelitian') !== false) {
+                        $list_riset[] = $item;
+                    } elseif (strpos($jenis, 'buku') !== false || strpos($jenis, 'ajar') !== false || strpos($jenis, 'modul') !== false) {
+                        $list_buku[] = $item;
+                    } else {
+                        $list_publikasi[] = $item;
+                    }
+                }
+            }
+            ?>
+
+            <div class="row">
+                <div class="col-12">
+
+                    <ul class="nav nav-pills gap-4 mb-4 align-items-center custom-nav" id="profileTabs" role="tablist">
+
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link text-tab active"
+                                id="pills-publikasi-tab" data-bs-toggle="pill" data-bs-target="#pills-publikasi" type="button">
+                                Publikasi (<?= count($list_publikasi) ?>)
+                            </button>
+                        </li>
+
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link text-tab" id="pills-riset-tab" data-bs-toggle="pill" data-bs-target="#pills-riset" type="button">
+                                Riset (<?= count($list_riset) ?>)
+                            </button>
+                        </li>
+
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link text-tab" id="pills-ki-tab" data-bs-toggle="pill" data-bs-target="#pills-ki" type="button">
+                                Kekayaan Intelektual (<?= count($list_ki) ?>)
+                            </button>
+                        </li>
+
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link text-tab" id="pills-ppm-tab" data-bs-toggle="pill" data-bs-target="#pills-ppm" type="button">
+                                PPM (<?= count($list_ppm) ?>)
+                            </button>
+                        </li>
+
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link text-tab" id="pills-buku-tab" data-bs-toggle="pill" data-bs-target="#pills-buku" type="button">
+                                Buku (<?= count($list_buku) ?>)
+                            </button>
+                        </li>
+                    </ul>
+
+                    <div class="tab-content" id="pills-tabContent">
+
+                        <div class="tab-pane fade show active" id="pills-publikasi">
+                            <div class="card border-0">
+                                <div class="card-body p-0">
+                                    <?php if (!empty($list_publikasi)): ?>
+                                        <div class="table-responsive">
+                                            <table class="table table-hover align-middle mb-0">
+                                                <thead>
+                                                    <tr>
+                                                        <th style="width: 50px; font-weight: 700;">No</th>
+                                                        <th style="font-weight: 700;">Judul Publikasi</th>
+                                                        <th class="text-end" style="font-weight: 700; width: 100px;">Tahun</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <?php $no = 1;
+                                                    foreach ($list_publikasi as $pub): ?>
+                                                        <tr>
+                                                            <td class="text-muted"><?= $no++ ?></td>
+                                                            <td class="fw-normal text-dark">
+                                                                <?= htmlspecialchars($pub['judul']) ?>
+                                                            </td>
+                                                            <td class="text-end text-muted"><?= htmlspecialchars($pub['tahun']) ?></td>
+                                                        </tr>
+                                                    <?php endforeach; ?>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    <?php else: ?>
+                                        <div class="py-5 text-center text-muted">Belum ada data publikasi.</div>
+                                    <?php endif; ?>
+                                </div>
                             </div>
-                        <?php else: ?>
-                            <div class="text-center py-5 bg-light rounded-3">
-                                <i class="bi bi-journal-x fs-1 text-muted opacity-50 mb-2"></i>
-                                <p class="text-muted">Belum ada data publikasi.</p>
+                        </div>
+
+                        <div class="tab-pane fade" id="pills-riset">
+                            <div class="card border-0">
+                                <div class="card-body p-0">
+                                    <?php if (!empty($list_riset)): ?>
+                                        <div class="table-responsive">
+                                            <table class="table table-hover align-middle mb-0">
+                                                <thead>
+                                                    <tr>
+                                                        <th style="width: 50px; font-weight: 700;">No</th>
+                                                        <th style="font-weight: 700;">Judul Riset / Penelitian</th>
+                                                        <th class="text-end" style="font-weight: 700; width: 100px;">Tahun</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <?php $no = 1;
+                                                    foreach ($list_riset as $riset): ?>
+                                                        <tr>
+                                                            <td class="text-muted"><?= $no++ ?></td>
+                                                            <td class="fw-normal text-dark">
+                                                                <?= htmlspecialchars($riset['judul']) ?>
+                                                            </td>
+                                                            <td class="text-end text-muted"><?= htmlspecialchars($riset['tahun']) ?></td>
+                                                        </tr>
+                                                    <?php endforeach; ?>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    <?php else: ?>
+                                        <div class="py-5 text-center text-muted">Belum ada data riset.</div>
+                                    <?php endif; ?>
+                                </div>
                             </div>
-                        <?php endif; ?>
+                        </div>
+
+                        <div class="tab-pane fade" id="pills-ki">
+                            <div class="card border-0">
+                                <div class="card-body p-0">
+                                    <?php if (!empty($list_ki)): ?>
+                                        <div class="table-responsive">
+                                            <table class="table table-hover align-middle mb-0">
+                                                <thead>
+                                                    <tr>
+                                                        <th style="width: 50px; font-weight: 700;">No</th>
+                                                        <th style="font-weight: 700;">Judul HKI / Paten</th>
+                                                        <th class="text-end" style="font-weight: 700; width: 100px;">Tahun</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <?php $no = 1;
+                                                    foreach ($list_ki as $ki): ?>
+                                                        <tr>
+                                                            <td class="text-muted"><?= $no++ ?></td>
+                                                            <td class="fw-normal text-dark">
+                                                                <?= htmlspecialchars($ki['judul']) ?>
+                                                            </td>
+                                                            <td class="text-end text-muted"><?= htmlspecialchars($ki['tahun']) ?></td>
+                                                        </tr>
+                                                    <?php endforeach; ?>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    <?php else: ?>
+                                        <div class="py-5 text-center text-muted">Belum ada data HKI.</div>
+                                    <?php endif; ?>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="tab-pane fade" id="pills-ppm">
+                            <div class="card border-0">
+                                <div class="card-body p-0">
+                                    <?php if (!empty($list_ppm)): ?>
+                                        <div class="table-responsive">
+                                            <table class="table table-hover align-middle mb-0">
+                                                <thead>
+                                                    <tr>
+                                                        <th style="width: 50px; font-weight: 700;">No</th>
+                                                        <th style="font-weight: 700;">Judul Pengabdian</th>
+                                                        <th class="text-end" style="font-weight: 700; width: 100px;">Tahun</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <?php $no = 1;
+                                                    foreach ($list_ppm as $ppm): ?>
+                                                        <tr>
+                                                            <td class="text-muted"><?= $no++ ?></td>
+                                                            <td class="fw-normal text-dark">
+                                                                <?= htmlspecialchars($ppm['judul']) ?>
+                                                            </td>
+                                                            <td class="text-end text-muted"><?= htmlspecialchars($ppm['tahun']) ?></td>
+                                                        </tr>
+                                                    <?php endforeach; ?>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    <?php else: ?>
+                                        <div class="py-5 text-center text-muted">Belum ada data PPM.</div>
+                                    <?php endif; ?>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="tab-pane fade" id="pills-buku">
+                            <div class="card border-0">
+                                <div class="card-body p-0">
+                                    <?php if (!empty($list_buku)): ?>
+                                        <div class="table-responsive">
+                                            <table class="table table-hover align-middle mb-0">
+                                                <thead>
+                                                    <tr>
+                                                        <th style="width: 50px; font-weight: 700;">No</th>
+                                                        <th style="font-weight: 700;">Judul Buku</th>
+                                                        <th class="text-end" style="font-weight: 700; width: 100px;">Tahun</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <?php $no = 1;
+                                                    foreach ($list_buku as $buku): ?>
+                                                        <tr>
+                                                            <td class="text-muted"><?= $no++ ?></td>
+                                                            <td class="fw-normal text-dark">
+                                                                <?= htmlspecialchars($buku['judul']) ?>
+                                                                <br><small class="text-muted badge bg-light text-secondary border"><?= htmlspecialchars($buku['nama_jenis']) ?></small>
+                                                            </td>
+                                                            <td class="text-end text-muted"><?= htmlspecialchars($buku['tahun']) ?></td>
+                                                        </tr>
+                                                    <?php endforeach; ?>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    <?php else: ?>
+                                        <div class="py-5 text-center text-muted">Belum ada data Buku Ajar/Modul.</div>
+                                    <?php endif; ?>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-
-                    <div class="tab-pane fade" id="riset-pane"><p class="text-center text-muted py-5 bg-light rounded-3">Belum ada data riset.</p></div>
-                    <div class="tab-pane fade" id="ki-pane"><p class="text-center text-muted py-5 bg-light rounded-3">Belum ada data KI.</p></div>
-                    <div class="tab-pane fade" id="ppm-pane"><p class="text-center text-muted py-5 bg-light rounded-3">Belum ada data PPM.</p></div>
-                    <div class="tab-pane fade" id="aktivitas-pane"><p class="text-center text-muted py-5 bg-light rounded-3">Belum ada aktivitas.</p></div>
-
                 </div>
             </div>
-
         </section>
 
     <?php endif; ?>
 
 </main>
+
+<style>
+    /* Sedikit CSS Tambahan agar tombol lebih cantik */
+    .transition-hover {
+        transition: all 0.2s ease-in-out;
+    }
+
+    .transition-hover:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+</style>
 
 <?php require_once $root . '/includes/footer.php'; ?>
