@@ -7,7 +7,7 @@ class Database
 {
     private $host = "localhost";
     private $port = "5432";
-    private $db_name = "lab_software_engineering_dev";
+    private $db_name = "lab_software_engineering";
     private $username = "postgres";
     private $password = "12345678"; 
     public $conn;
