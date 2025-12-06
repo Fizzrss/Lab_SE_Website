@@ -10,7 +10,9 @@
     <title><?= htmlspecialchars($page_title ?? '') ?> - <?= htmlspecialchars($site_title ?? '') ?></title>
     
     <!-- Favicon -->
-    <link rel="shortcut icon" href="<?= BASE_URL ?>assets/img/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="<?= BASE_URL ?>assets/img/logo_lab.png" type="image/png">
+    <link rel="icon" href="<?= BASE_URL ?>assets/img/logo_lab.png" type="image/png">
+    <link rel="apple-touch-icon" href="<?= BASE_URL ?>assets/img/logo_lab.png">
 
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/Z1srPv7lOy9C27hHQ+Xp8a4MxAQ5a+W5U8lXKfekLAKrylN/pcszFeg5P8v2Q1zVisw==" crossorigin="anonymous" referrerpolicy="no-referrer" />

@@ -14,6 +14,8 @@ $heroTitle = $heroSettings['hero_title'] ?? 'Laboratorium Software Engineering';
 $heroSubtitle = $heroSettings['hero_subtitle'] ?? 'Politeknik Negeri Malang';
 $heroDescription = $heroSettings['hero_description'] ?? 'Mengembangkan inovasi teknologi untuk masa depan yang lebih cerdas.';
 $heroBgImage = $heroSettings['hero_background_image'] ?? 'assets/img/bg_web.webp';
+$heroButtonText = $heroSettings['hero_button_text'] ?? 'Get Started';
+$heroButtonLink = $heroSettings['hero_button_link'] ?? '#profil';
 ?>
 
 <div class="page-heading">
@@ -66,6 +68,20 @@ $heroBgImage = $heroSettings['hero_background_image'] ?? 'assets/img/bg_web.webp
                                    value="<?= htmlspecialchars($heroBgImage) ?>" 
                                    placeholder="assets/img/bg_web.webp">
                             <small class="text-muted">Path relatif dari root website</small>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="hero_button_text" class="form-label">Teks Tombol</label>
+                            <input type="text" class="form-control" id="hero_button_text" name="hero_button_text" 
+                                   value="<?= htmlspecialchars($heroButtonText) ?>" 
+                                   placeholder="Get Started" required>
+                            <small class="text-muted">Teks yang akan ditampilkan pada tombol</small>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="hero_button_link" class="form-label">Link Tombol</label>
+                            <input type="text" class="form-control" id="hero_button_link" name="hero_button_link" 
+                                   value="<?= htmlspecialchars($heroButtonLink) ?>" 
+                                   placeholder="#profil" required>
+                            <small class="text-muted">Link/tujuan ketika tombol diklik (contoh: #profil, /pages/berita.php, dll)</small>
                         </div>
                     </div>
                     <button type="submit" class="btn btn-primary">

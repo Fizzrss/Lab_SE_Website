@@ -10,11 +10,19 @@ if (!defined('BASE_URL')) {
 
 require_once '../config/config.php';
 require_once '../models/Berita.php';
+require_once '../models/BeritaSettings.php';
 
 // Initialize database and model
 $database = new Database();
 $db = $database->getConnection();
 $beritaModel = new BeritaModel($db);
+$beritaSettingsModel = new BeritaSettingsModel($db);
+
+// Get hero banner settings
+$heroBadge = $beritaSettingsModel->getSetting('hero_badge', 'News & Updates');
+$heroTitle = $beritaSettingsModel->getSetting('hero_title', 'Berita & Artikel Terkini');
+$heroDescription = $beritaSettingsModel->getSetting('hero_description', 'Berita terbaru, artikel teknis, dan wawasan seputar teknologi dari Laboratorium Software Engineering.');
+$heroBackgroundImage = $beritaSettingsModel->getSetting('hero_background_image', '../assets/img/lab1.jpg');
 
 // Get parameters
 $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
@@ -33,135 +41,13 @@ include '../includes/header.php';
 include '../includes/navbar.php'; 
 ?>
 
-<style>
-    /* Hero Banner */
-    .blog-hero-banner h1, 
-    .blog-hero-banner p {
-        color: #ffffff !important;
-        text-shadow: 0 2px 15px rgba(0, 0, 0, 0.8);
-    }
-
-    .blog-hero-banner::before {
-        content: '';
-        position: absolute;
-        top: 0; left: 0; right: 0; bottom: 0;
-        background: rgba(0, 0, 0, 0.75); 
-        z-index: 1;
-    }
-    
-    .blog-hero-banner {
-        background-image: url('../assets/img/lab1.jpg'); 
-        background-size: cover;
-        background-position: center;
-        background-attachment: fixed;
-        position: relative;
-        padding: 6rem 1.5rem;
-        text-align: center;
-        color: white;
-        background-color: #2d465e;
-    }
-    
-    .blog-hero-banner .container {
-        position: relative;
-        z-index: 2;
-    }
-    
-    /* Blog Card Styles */
-    .blog-card {
-        border: none;
-        border-radius: 1rem;
-        overflow: hidden;
-        background-color: #fff;
-        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.05);
-        transition: all 0.4s ease;
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-    }
-    
-    .blog-card:hover {
-        transform: translateY(-10px);
-        box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.15);
-    }
-    
-    .blog-card img {
-        height: 220px;
-        object-fit: cover;
-        width: 100%;
-        transition: transform 0.5s ease;
-    }
-    
-    .blog-card:hover img {
-        transform: scale(1.05);
-    }
-    
-    .blog-card-body {
-        padding: 1.5rem;
-        display: flex;
-        flex-direction: column;
-        flex-grow: 1;
-    }
-    
-    .blog-title a {
-        color: #2d465e;
-        text-decoration: none;
-        font-weight: 700;
-        transition: color 0.3s;
-    }
-    
-    .blog-title a:hover {
-        color: var(--accent-color, #0d6efd);
-    }
-    
-    .blog-footer {
-        margin-top: auto;
-        padding-top: 1rem;
-        border-top: 1px solid #eee;
-        font-size: 0.85rem;
-        color: #6c757d;
-        display: flex;
-        justify-content: space-between;
-    }
-
-    .category-badge {
-        display: inline-block;
-        padding: 0.25rem 0.75rem;
-        border-radius: 50px;
-        font-size: 0.75rem;
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-    }
-
-    .filter-btn {
-        transition: all 0.3s ease;
-    }
-
-    .filter-btn.active {
-        background-color: #0d6efd !important;
-        color: white !important;
-        border-color: #0d6efd !important;
-    }
-
-    .no-results {
-        text-align: center;
-        padding: 3rem 1rem;
-    }
-
-    .no-results i {
-        font-size: 4rem;
-        color: #dee2e6;
-        margin-bottom: 1rem;
-    }
-</style>
-
-<section class="blog-hero-banner d-flex align-items-center">
+<section class="blog-hero-banner d-flex align-items-center" style="background-image: url('<?= htmlspecialchars($heroBackgroundImage) ?>');">
     <div class="container" data-aos="fade-down" data-aos-duration="1000">
         <div class="row justify-content-center">
             <div class="col-lg-8">
-                <span class="badge bg-primary rounded-pill mb-3 px-3 py-2">News & Updates</span>
-                <h1 class="display-4 fw-bold mb-3">Berita & Artikel Terkini</h1>
-                <p class="lead mb-4">Berita terbaru, artikel teknis, dan wawasan seputar teknologi dari Laboratorium Software Engineering.</p>
+                <span class="badge bg-primary rounded-pill mb-3 px-3 py-2"><?= htmlspecialchars($heroBadge) ?></span>
+                <h1 class="display-4 fw-bold mb-3"><?= htmlspecialchars($heroTitle) ?></h1>
+                <p class="lead mb-4"><?= htmlspecialchars($heroDescription) ?></p>
                 
                 <form method="GET" action="" class="input-group mb-3 shadow-sm">
                     <input type="text" name="search" class="form-control form-control-lg border-0" 

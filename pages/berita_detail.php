@@ -35,9 +35,6 @@ if (!$berita || $berita['status'] !== 'published') {
 $page_title = htmlspecialchars($berita['judul']);
 $site_title = "Lab SE";
 
-// Increment view count (simple counter - will improve later)
-// TODO: Add view counter table
-
 // Format tanggal
 $tanggal = date('d F Y', strtotime($berita['tanggal_publikasi']));
 
@@ -69,7 +66,11 @@ if ($relatedSettings['enabled']) {
 $viewsModel = new BeritaViewsModel($db);
 $komentarModel = new KomentarBeritaModel($db);
 
-// Get view count
+// Increment view count directly (server-side) - every time page loads/reloads
+// Counter will increment every time the page is accessed (normal behavior)
+$viewsModel->incrementView($berita['id']);
+
+// Get view count (after increment)
 $viewCount = $viewsModel->getTotalViews($berita['id']);
 
 // Get comment count
@@ -79,167 +80,8 @@ include '../includes/header.php';
 include '../includes/navbar.php'; 
 ?>
 
-<style>
-    .berita-detail-header {
-        background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('<?= htmlspecialchars($berita['gambar']) ?>') center/cover no-repeat;
-        background-attachment: fixed;
-        min-height: 400px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: white;
-        text-align: center;
-        position: relative;
-    }
-    
-    .berita-detail-header::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: rgba(0, 0, 0, 0.6);
-        z-index: 1;
-    }
-    
-    .berita-detail-header .container {
-        position: relative;
-        z-index: 2;
-        color: white;
-    }
-    
-    .berita-detail-header h1,
-    .berita-detail-header .display-4,
-    .berita-detail-header * {
-        color: white !important;
-    }
-    
-    .berita-detail-header .badge {
-        background-color: rgba(255, 255, 255, 0.2) !important;
-        color: white !important;
-        border: 1px solid rgba(255, 255, 255, 0.5);
-    }
-    
-    .berita-content {
-        max-width: 900px;
-        margin: 0 auto;
-        padding: 3rem 1.5rem;
-    }
-    
-    .berita-meta {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 1.5rem;
-        padding: 1.5rem 0;
-        border-bottom: 2px solid #e9ecef;
-        margin-bottom: 2rem;
-    }
-    
-    .berita-meta-item {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        color: #6c757d;
-        font-size: 0.9rem;
-    }
-    
-    .berita-meta-item i {
-        color: #0d6efd;
-    }
-    
-    .berita-body {
-        line-height: 1.8;
-        font-size: 1.1rem;
-    }
-    
-    .berita-body img {
-        max-width: 100%;
-        height: auto;
-        border-radius: 0.5rem;
-        margin: 1.5rem 0;
-    }
-    
-    .berita-body h1, .berita-body h2, .berita-body h3 {
-        margin-top: 2rem;
-        margin-bottom: 1rem;
-        color: #2d465e;
-    }
-    
-    .berita-body p {
-        margin-bottom: 1.5rem;
-    }
-    
-    .social-share {
-        padding: 2rem 0;
-        border-top: 2px solid #e9ecef;
-        border-bottom: 2px solid #e9ecef;
-        margin: 2rem 0;
-    }
-    
-    .social-share h5 {
-        margin-bottom: 1rem;
-        color: #2d465e;
-    }
-    
-    .social-share-buttons {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.75rem;
-    }
-    
-    .social-share-btn {
-        padding: 0.5rem 1rem;
-        border-radius: 0.375rem;
-        color: white;
-        text-decoration: none;
-        display: inline-flex;
-        align-items: center;
-        gap: 0.5rem;
-        transition: transform 0.2s;
-    }
-    
-    .social-share-btn:hover {
-        transform: translateY(-2px);
-        color: white;
-        text-decoration: none;
-    }
-    
-    .social-share-btn.facebook { background-color: #1877f2; }
-    .social-share-btn.twitter { background-color: #1da1f2; }
-    .social-share-btn.whatsapp { background-color: #25d366; }
-    .social-share-btn.telegram { background-color: #0088cc; }
-    .social-share-btn.linkedin { background-color: #0077b5; }
-    .social-share-btn.copy { background-color: #6c757d; }
-    
-    .related-posts {
-        margin-top: 4rem;
-        padding-top: 3rem;
-        border-top: 2px solid #e9ecef;
-    }
-    
-    .related-post-card {
-        border: none;
-        border-radius: 0.5rem;
-        overflow: hidden;
-        transition: transform 0.3s;
-        height: 100%;
-    }
-    
-    .related-post-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
-    }
-    
-    .related-post-card img {
-        height: 200px;
-        object-fit: cover;
-        width: 100%;
-    }
-</style>
-
 <!-- Header dengan Foto Utama -->
-<section class="berita-detail-header">
+<section class="berita-detail-header" style="background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('<?= htmlspecialchars($berita['gambar']) ?>') center/cover no-repeat;">
     <div class="container">
         <div class="row">
             <div class="col-lg-10 mx-auto">
@@ -365,8 +207,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Handle comment form
     document.getElementById('comment-form').addEventListener('submit', submitComment);
     
-    // Increment view count (only once per session)
-    incrementViewCount();
+    // View count is already incremented server-side, no need for AJAX call
 });
 
 // Social media configuration
@@ -591,23 +432,8 @@ function submitComment(e) {
     });
 }
 
-function incrementViewCount() {
-    // Increment view count via AJAX (only once per session)
-    fetch('../api/views.php', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ berita_id: <?= $berita['id'] ?> })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            document.getElementById('view-count').textContent = data.view_count || <?= $viewCount ?>;
-        }
-    })
-    .catch(error => console.error('Error incrementing view count:', error));
-}
+// View count is now handled server-side directly on page load
+// No need for AJAX call anymore
 </script>
 
 <?php include '../includes/footer.php'; ?>

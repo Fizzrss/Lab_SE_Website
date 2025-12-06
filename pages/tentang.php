@@ -32,7 +32,7 @@ try {
     <div class="row align-items-center gy-5">
 
       <div class="col-lg-6 pe-lg-5" data-aos="zoom-out" data-aos-duration="1000">
-        <h2 class="lab-title"><?= htmlspecialchars($title) ?></h2>
+        <h2 class="section-title"><?= htmlspecialchars($title) ?></h2>
         <p class="lab-text lead">
           <?= htmlspecialchars($description) ?>
         </p>

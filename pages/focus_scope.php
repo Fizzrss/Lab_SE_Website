@@ -53,9 +53,6 @@ try {
 
 <section class="focus-hero-banner d-flex align-items-center">
     <div class="container" data-aos="fade-down">
-        <span class="badge bg-light text-primary rounded-pill mb-3 px-3 py-2 border border-white">
-            Research Areas
-        </span>
         <h1 class="display-4 mb-3">Focus & Scope</h1>
         <?php if (!empty($subtitle)): ?>
         <p class="lead text-white-50" style="max-width: 700px; margin: 0 auto;">
@@ -68,10 +65,10 @@ try {
 <main>
     <section class="py-5">
         <div class="container">
-            <div class="row mb-5">
-                <div class="col-12" data-aos="fade-right">
-                    <h2 class="section-title">Fokus Riset</h2>
-                    <p class="text-muted">
+            <div class="row mb-5 text-center">
+                <div class="col-12" data-aos="fade-up">
+                    <h2 class="section-title" style="margin: 0 auto 2rem auto;">Fokus Riset</h2>
+                    <p class="text-muted mx-auto" style="max-width: 600px;">
                         Laboratorium kami memprioritaskan penelitian pada area-area kunci berikut 
                         untuk menjawab tantangan industri modern.
                     </p>

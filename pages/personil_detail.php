@@ -153,11 +153,4 @@ require_once $root . '/includes/navbar.php';
 
 </main>
 
-<style>
-    /* Sedikit CSS Tambahan agar tombol lebih cantik */
-    .transition-hover { transition: all 0.2s ease-in-out; }
-    .transition-hover:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
-    .nav-pills .nav-link.active { background-color: #0d6efd; }
-</style>
-
 <?php require_once $root . '/includes/footer.php'; ?>

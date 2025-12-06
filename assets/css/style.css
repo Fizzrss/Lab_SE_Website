@@ -689,21 +689,25 @@ h6 {
 
 .roadmap-section {
     padding: 60px 0;
+    background-color: var(--background-color);
 }
 
 .roadmap-title {
     text-align: center;
-    margin-bottom: 40px;
-    font-size: 32px;
-    font-weight: bold;
+    margin-bottom: 50px;
+    font-size: 2.5rem;
+    font-family: var(--heading-font);
+    color: var(--heading-color);
+    font-weight: 700;
 }
 
 /* Container timeline */
 .roadmap-timeline {
     position: relative;
     width: 100%;
+    max-width: 1200px;
     margin: 0 auto;
-    padding: 20px 0;
+    padding: 40px 0;
 }
 
 /* Garis tengah */
@@ -714,72 +718,137 @@ h6 {
     transform: translateX(-50%);
     width: 4px;
     height: 100%;
-    background: #007bff;
+    background: linear-gradient(to bottom, var(--accent-color), var(--accent-color));
+    border-radius: 2px;
 }
 
 /* Item wrapper */
 .roadmap-item {
     width: 50%;
-    padding: 20px;
+    padding: 20px 40px;
     position: relative;
+    margin-bottom: 40px;
 }
 
-/* Boks isi */
+/* Boks isi - Card style */
 .roadmap-box {
-    background: white;
-    border-radius: 10px;
-    padding: 20px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    border-left: 5px solid #007bff;
-    transition: 0.3s;
+    background: var(--surface-color);
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: 0 5px 20px rgba(96, 150, 180, 0.15);
+    border: 2px solid transparent;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.roadmap-box::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 5px;
+    height: 100%;
+    background: var(--accent-color);
+    transition: width 0.4s ease;
+}
+
+/* Hover effect */
+.roadmap-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 10px 30px rgba(96, 150, 180, 0.3);
+    border-color: var(--accent-color);
+}
+
+.roadmap-card:hover::before {
+    width: 100%;
+    opacity: 0.05;
+}
+
+/* Year styling */
+.roadmap-year {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--accent-color);
+    margin-bottom: 15px;
+    font-family: var(--heading-font);
+    transition: color 0.3s ease;
+}
+
+.roadmap-card:hover .roadmap-year {
+    color: var(--accent-color);
+    transform: scale(1.05);
+}
+
+/* Description styling */
+.roadmap-description {
+    color: var(--default-color);
+    line-height: 1.7;
+    font-size: 1rem;
+    margin: 0;
+    transition: color 0.3s ease;
+}
+
+.roadmap-card:hover .roadmap-description {
+    color: var(--heading-color);
 }
 
 /* Posisi kiri */
 .roadmap-item.left {
     left: 0;
     text-align: right;
+    padding-right: 60px;
 }
 
 /* Posisi kanan */
 .roadmap-item.right {
     left: 50%;
     text-align: left;
+    padding-left: 60px;
 }
 
 /* Bullet titik */
 .roadmap-item::before {
     content: "";
     position: absolute;
-    top: 35px;
-    width: 18px;
-    height: 18px;
-    background: #fff;
-    border: 4px solid #007bff;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 22px;
+    height: 22px;
+    background: var(--surface-color);
+    border: 5px solid var(--accent-color);
     border-radius: 50%;
     z-index: 10;
+    box-shadow: 0 0 0 4px var(--background-color), 0 0 15px rgba(96, 150, 180, 0.3);
+    transition: all 0.4s ease;
+}
+
+.roadmap-item:hover::before {
+    transform: translateY(-50%) scale(1.3);
+    box-shadow: 0 0 0 4px var(--background-color), 0 0 25px rgba(96, 150, 180, 0.5);
 }
 
 /* Titik untuk item kiri */
 .roadmap-item.left::before {
-    right: -9px;
+    right: -11px;
 }
 
 /* Titik untuk item kanan */
 .roadmap-item.right::before {
-    left: -9px;
+    left: -11px;
 }
 
 /* ===== RESPONSIVE ===== */
 @media (max-width: 992px) {
     .roadmap-item {
         width: 100%;
-        padding-left: 50px;
-        padding-right: 50px;
+        padding-left: 60px;
+        padding-right: 20px;
     }
 
-    /* Garis tetap di tengah */
+    /* Garis tetap di kiri */
     .roadmap-line {
-        left: 20px;
+        left: 30px;
         transform: none;
     }
 
@@ -788,27 +857,56 @@ h6 {
     .roadmap-item.right {
         left: 0;
         text-align: left;
+        padding-left: 60px;
+        padding-right: 20px;
     }
 
     /* Titik pindah ke kiri */
     .roadmap-item::before {
-        left: -30px;
+        left: 19px;
+        right: auto;
+    }
+    
+    .roadmap-title {
+        font-size: 2rem;
     }
 }
 
 @media (max-width: 576px) {
     .roadmap-item {
-        padding-left: 35px;
+        padding-left: 50px;
+        padding-right: 10px;
+    }
+    
+    .roadmap-item.left,
+    .roadmap-item.right {
+        padding-left: 50px;
         padding-right: 10px;
     }
 
     .roadmap-item::before {
-        left: -22px;
+        left: 15px;
+        width: 18px;
+        height: 18px;
+        border-width: 4px;
     }
 
     .roadmap-line {
-        left: 15px;
+        left: 24px;
         width: 3px;
+    }
+    
+    .roadmap-title {
+        font-size: 1.75rem;
+        margin-bottom: 30px;
+    }
+    
+    .roadmap-box {
+        padding: 20px;
+    }
+    
+    .roadmap-year {
+        font-size: 1.5rem;
     }
 }
 
@@ -1370,4 +1468,235 @@ h6 {
     .team-grid {
         grid-template-columns: 1fr;
     }
+}
+
+/*--------------------------------------------------------------
+# Berita Detail Page Styles
+--------------------------------------------------------------*/
+.berita-detail-header {
+    background-attachment: fixed;
+    min-height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    text-align: center;
+    position: relative;
+}
+
+.berita-detail-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 1;
+}
+
+.berita-detail-header .container {
+    position: relative;
+    z-index: 2;
+    color: white;
+}
+
+.berita-detail-header h1,
+.berita-detail-header .display-4,
+.berita-detail-header * {
+    color: white !important;
+}
+
+.berita-detail-header .badge {
+    background-color: rgba(255, 255, 255, 0.2) !important;
+    color: white !important;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+.berita-content {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 3rem 1.5rem;
+}
+
+.berita-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    padding: 1.5rem 0;
+    border-bottom: 2px solid #e9ecef;
+    margin-bottom: 2rem;
+}
+
+.berita-meta-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #6c757d;
+    font-size: 0.9rem;
+}
+
+.berita-meta-item i {
+    color: #0d6efd;
+}
+
+.berita-body {
+    line-height: 1.8;
+    font-size: 1.1rem;
+}
+
+.berita-body img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 0.5rem;
+    margin: 1.5rem 0;
+}
+
+.berita-body h1, .berita-body h2, .berita-body h3 {
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    color: #2d465e;
+}
+
+.berita-body p {
+    margin-bottom: 1.5rem;
+}
+
+.social-share {
+    padding: 2rem 0;
+    border-top: 2px solid #e9ecef;
+    border-bottom: 2px solid #e9ecef;
+    margin: 2rem 0;
+}
+
+.social-share h5 {
+    margin-bottom: 1rem;
+    color: #2d465e;
+}
+
+.social-share-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+.social-share-btn {
+    padding: 0.5rem 1rem;
+    border-radius: 0.375rem;
+    color: white;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: transform 0.2s;
+}
+
+.social-share-btn:hover {
+    transform: translateY(-2px);
+    color: white;
+    text-decoration: none;
+}
+
+.social-share-btn.facebook { background-color: #1877f2; }
+.social-share-btn.twitter { background-color: #1da1f2; }
+.social-share-btn.whatsapp { background-color: #25d366; }
+.social-share-btn.telegram { background-color: #0088cc; }
+.social-share-btn.linkedin { background-color: #0077b5; }
+.social-share-btn.copy { background-color: #6c757d; }
+
+.related-posts {
+    margin-top: 4rem;
+    padding-top: 3rem;
+    border-top: 2px solid #e9ecef;
+}
+
+.related-post-card {
+    border: none;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    transition: transform 0.3s;
+    height: 100%;
+}
+
+.related-post-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+.related-post-card img {
+    height: 200px;
+    object-fit: cover;
+    width: 100%;
+}
+
+/*--------------------------------------------------------------
+# Berita Listing Page Additional Styles
+--------------------------------------------------------------*/
+.blog-hero-banner h1, 
+.blog-hero-banner p {
+    color: #ffffff !important;
+    text-shadow: 0 2px 15px rgba(0, 0, 0, 0.8);
+}
+
+.blog-hero-banner {
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    position: relative;
+    padding: 6rem 1.5rem;
+    text-align: center;
+    color: white;
+    background-color: #2d465e;
+}
+
+.blog-hero-banner .container {
+    position: relative;
+    z-index: 2;
+}
+
+.category-badge {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 50px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.filter-btn {
+    transition: all 0.3s ease;
+}
+
+.filter-btn.active {
+    background-color: #0d6efd !important;
+    color: white !important;
+    border-color: #0d6efd !important;
+}
+
+.no-results {
+    text-align: center;
+    padding: 3rem 1rem;
+}
+
+.no-results i {
+    font-size: 4rem;
+    color: #dee2e6;
+    margin-bottom: 1rem;
+}
+
+/*--------------------------------------------------------------
+# Personil Detail Page Styles
+--------------------------------------------------------------*/
+.transition-hover { 
+    transition: all 0.2s ease-in-out; 
+}
+
+.transition-hover:hover { 
+    transform: translateY(-2px); 
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1); 
+}
+
+.nav-pills .nav-link.active { 
+    background-color: #0d6efd; 
 }

@@ -24,12 +24,16 @@ try {
     $heroSubtitle = $heroSettings['hero_subtitle'] ?? 'Politeknik Negeri Malang';
     $heroDescription = $heroSettings['hero_description'] ?? 'Mengembangkan inovasi teknologi untuk masa depan yang lebih cerdas.';
     $heroBgImage = $heroSettings['hero_background_image'] ?? 'assets/img/bg_web.webp';
+    $heroButtonText = $heroSettings['hero_button_text'] ?? 'Get Started';
+    $heroButtonLink = $heroSettings['hero_button_link'] ?? '#profil';
 } catch (Exception $e) {
     // Fallback values
     $heroTitle = 'Laboratorium Software Engineering';
     $heroSubtitle = 'Politeknik Negeri Malang';
     $heroDescription = 'Mengembangkan inovasi teknologi untuk masa depan yang lebih cerdas.';
     $heroBgImage = 'assets/img/bg_web.webp';
+    $heroButtonText = 'Get Started';
+    $heroButtonLink = '#profil';
 }
 
 // Panggil navbar
@@ -51,7 +55,7 @@ require_once __DIR__ . '/includes/navbar.php';
                 <?php if (!empty($heroDescription)): ?>
                     <p><?= htmlspecialchars($heroDescription) ?></p>
                 <?php endif; ?>
-                <a href="#profil" class="btn-get-started">Get Started</a>
+                <a href="<?= htmlspecialchars($heroButtonLink) ?>" class="btn-get-started"><?= htmlspecialchars($heroButtonText) ?></a>
             </div>
         </div>
     </section>

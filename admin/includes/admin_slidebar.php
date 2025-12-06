@@ -26,27 +26,6 @@
                     </a>
                 </li>
 
-                <li class="sidebar-item has-sub">
-                    <a href="#" class='sidebar-link'>
-                        <i class="bi bi-person-circle"></i>
-                        <span>Manajemen Profil</span>
-                    </a>
-                    <ul class="submenu">
-                        <li class="submenu-item">
-                            <a href="index.php?action=tentang" class="submenu-link" data-key="tentang">Tentang LAB SE</a>
-                        </li>
-                        <li class="submenu-item">
-                            <a href="index.php?action=visi_misi" class="submenu-link" data-key="visi_misi">Visi & Misi</a>
-                        </li>
-                        <li class="submenu-item">
-                            <a href="index.php?action=roadmap" class="submenu-link" data-key="roadmap">Roadmap</a>
-                        </li>
-                        <li class="submenu-item">
-                            <a href="index.php?action=focus_scope" class="submenu-link" data-key="focus_scope">Focus & Scope</a>
-                        </li>
-                    </ul>
-                </li>
-
 
                 <li class="sidebar-item has-sub">
                     <a href="#" class='sidebar-link'>
@@ -95,31 +74,28 @@
                         <li class="submenu-item">
                             <a href="index.php?action=related_posts_settings" class="submenu-link" data-key="related_posts_settings">Related Posts</a>
                         </li>
+                        <li class="submenu-item">
+                            <a href="index.php?action=berita_hero_settings" class="submenu-link" data-key="berita_hero_settings">Hero Banner</a>
+                        </li>
                     </ul>
                 </li>
 
 
                 <li class="sidebar-title">Pengaturan</li>
 
-                <li class="sidebar-item">
-                    <a href="index.php?action=settings" class='sidebar-link' data-key="settings">
+                <li class="sidebar-item has-sub">
+                    <a href="#" class='sidebar-link'>
                         <i class="bi bi-gear-fill"></i>
                         <span>Pengaturan</span>
                     </a>
-                </li>
-
-                <li class="sidebar-item">
-                    <a href="index.php?action=footer_settings" class='sidebar-link' data-key="footer_settings">
-                        <i class="bi bi-layout-text-window-reverse"></i>
-                        <span>Pengaturan Footer</span>
-                    </a>
-                </li>
-
-                <li class="sidebar-item">
-                    <a href="index.php?action=profil_settings" class='sidebar-link' data-key="profil_settings">
-                        <i class="bi bi-house-door"></i>
-                        <span>Pengaturan Beranda & Profil</span>
-                    </a>
+                    <ul class="submenu">
+                        <li class="submenu-item">
+                            <a href="index.php?action=profil_settings" class="submenu-link" data-key="profil_settings">Beranda & Profil</a>
+                        </li>
+                        <li class="submenu-item">
+                            <a href="index.php?action=footer_settings" class="submenu-link" data-key="footer_settings">Footer</a>
+                        </li>
+                    </ul>
                 </li>
 
                 <li class="sidebar-item">

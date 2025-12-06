@@ -73,7 +73,9 @@ class ProfilController
             'hero_title' => $_POST['hero_title'] ?? '',
             'hero_subtitle' => $_POST['hero_subtitle'] ?? '',
             'hero_description' => $_POST['hero_description'] ?? '',
-            'hero_background_image' => $_POST['hero_background_image'] ?? ''
+            'hero_background_image' => $_POST['hero_background_image'] ?? '',
+            'hero_button_text' => $_POST['hero_button_text'] ?? 'Get Started',
+            'hero_button_link' => $_POST['hero_button_link'] ?? '#profil'
         ];
 
         $success = true;

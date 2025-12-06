@@ -42,19 +42,23 @@ try {
 ?>
 
 <!-- ===== BAGIAN KONTEN ROADMAP ===== -->
-<section class="roadmap-section">
+<section class="roadmap-section py-5">
   <div class="container">
-    <h1 class="roadmap-title"><?= htmlspecialchars($title) ?></h1>
+    <h1 class="roadmap-title" data-aos="fade-down"><?= htmlspecialchars($title) ?></h1>
 
     <div class="roadmap-timeline">
       <div class="roadmap-line"></div>
 
       <?php if (!empty($items) && is_array($items)): ?>
-        <?php foreach ($items as $index => $item): ?>
-          <div class="roadmap-item <?= $index % 2 === 0 ? 'left' : 'right' ?>">
-            <div class="roadmap-box">
-              <h4><?= htmlspecialchars($item['year'] ?? '') ?></h4>
-              <p><?= htmlspecialchars($item['description'] ?? '') ?></p>
+        <?php 
+        $delay = 0;
+        foreach ($items as $index => $item): 
+          $delay += 100;
+        ?>
+          <div class="roadmap-item <?= $index % 2 === 0 ? 'left' : 'right' ?>" data-aos="<?= $index % 2 === 0 ? 'fade-right' : 'fade-left' ?>" data-aos-delay="<?= $delay ?>">
+            <div class="roadmap-box roadmap-card">
+              <div class="roadmap-year"><?= htmlspecialchars($item['year'] ?? '') ?></div>
+              <p class="roadmap-description"><?= htmlspecialchars($item['description'] ?? '') ?></p>
             </div>
           </div>
         <?php endforeach; ?>

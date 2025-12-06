@@ -58,6 +58,8 @@ require_once $root . '/models/FooterSettings.php';
 require_once $root . '/controllers/FooterController.php';
 require_once $root . '/models/ProfilSections.php';
 require_once $root . '/controllers/ProfilController.php';
+require_once $root . '/models/BeritaSettings.php';
+require_once $root . '/controllers/BeritaSettingsController.php';
 
 // Inisialisasi Database
 $database = new Database();
@@ -93,6 +95,9 @@ $footerController = new FooterController($footerModel);
 
 $profilModel = new ProfilSectionsModel($db);
 $profilController = new ProfilController($profilModel);
+
+$beritaSettingsModel = new BeritaSettingsModel($db);
+$beritaSettingsController = new BeritaSettingsController($beritaSettingsModel);
 
 // Ambil Action
 $action = isset($_GET['action']) ? $_GET['action'] : 'dashboard';
@@ -198,6 +203,12 @@ require_once $root . '/admin/includes/admin_slidebar.php';
             break;
         case 'berita_delete':
             $beritaController->delete($_GET['id']);
+            break;
+        case 'berita_hero_settings':
+            $beritaSettingsController->index();
+            break;
+        case 'berita_hero_update':
+            $beritaSettingsController->update();
             break;
 
         // --- Komentar Routes ---
