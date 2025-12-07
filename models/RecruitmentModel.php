@@ -48,9 +48,6 @@ class RecruitmentModel
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    // =====================================================
-    // READ - Ambil pendaftar berdasarkan status
-    // =====================================================
     public function getByStatus($status)
     {
         $query = "SELECT * FROM {$this->table} 
@@ -63,9 +60,6 @@ class RecruitmentModel
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    // =====================================================
-    // READ - Ambil detail pendaftar
-    // =====================================================
     public function getById($id)
     {
         $query = "SELECT * FROM {$this->table} WHERE id = :id LIMIT 1";
@@ -77,10 +71,6 @@ class RecruitmentModel
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    // =====================================================
-    // UPDATE - Update status pendaftar
-    // (Trigger SQL akan berjalan otomatis bila status = 'lulus')
-    // =====================================================
     public function updateStatus($id, $status, $catatan = '')
     {
         $query = "UPDATE {$this->table} SET status = :status, catatan = :catatan WHERE id = :id";
@@ -146,9 +136,7 @@ class RecruitmentModel
             throw new Exception($e->getMessage());
         }
     }
-    // =====================================================
-    // DELETE - Hapus pendaftar
-    // =====================================================
+
     public function delete($id)
     {
         $query = "DELETE FROM {$this->table} WHERE id = :id";
@@ -159,9 +147,6 @@ class RecruitmentModel
         return $stmt->execute();
     }
 
-    // =====================================================
-    // COUNT - Hitung jumlah pendaftar berdasarkan status
-    // =====================================================
     public function countByStatus($status)
     {
 

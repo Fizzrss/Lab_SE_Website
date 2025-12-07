@@ -114,14 +114,14 @@ require_once $root . '/includes/navbar.php';
       <div class="row mb-3">
         <label class="col-sm-2 col-form-label fw-semibold">Alasan Bergabung</label>
         <div class="col-sm-10">
-          <textarea name="alasan_bergabung" class="form-control" rows="2" placeholder="Tuliskan alasan kamu ingin bergabung"></textarea>
+          <textarea name="alasan_bergabung" class="form-control" rows="5" placeholder="Tuliskan alasan kamu ingin bergabung"></textarea>
         </div>
       </div>
 
       <div class="row mb-3">
         <label class="col-sm-2 col-form-label fw-semibold">Riwayat Pengalaman</label>
         <div class="col-sm-10">
-          <textarea name="riwayat_pengalaman" class="form-control" rows="2" placeholder="Tuliskan pengalamanmu sebelumnya"></textarea>
+          <textarea name="riwayat_pengalaman" class="form-control" rows="5" placeholder="Tuliskan pengalamanmu sebelumnya"></textarea>
         </div>
       </div>
 
@@ -135,16 +135,16 @@ require_once $root . '/includes/navbar.php';
       <div class="row mb-3">
         <label class="col-sm-2 col-form-label fw-semibold">Portofolio</label>
         <div class="col-sm-10">
-          <input type="file" name="portofolio" class="form-control" accept=".pdf, .jpg, .jpeg, .png">
-          <small class="text-muted">Format: PDF, JPG, PNG (Max 5MB)</small>
+          <input type="file" name="portofolio" class="form-control" accept=".pdf" required>
+          <small class="text-muted">Format: PDF (Max 5MB)</small>
         </div>
       </div>
 
       <div class="row mb-3">
         <label class="col-sm-2 col-form-label fw-semibold">CV</label>
         <div class="col-sm-10">
-          <input type="file" name="cv" class="form-control" accept=".pdf, .doc, .docx" required>
-          <small class="text-muted">Format: PDF, DOC, DOCX (Max 5MB)</small>
+          <input type="file" name="cv" class="form-control" accept=".pdf" required>
+          <small class="text-muted">Format: PDF (Max 5MB)</small>
         </div>
       </div>
 

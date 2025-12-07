@@ -23061,7 +23061,7 @@ body .bi:before,
 }
 
 .sidebar-wrapper .sidebar-header img {
-    height: 1.2rem
+    height: 10rem;
 }
 
 .sidebar-wrapper .sidebar-toggler.x {
@@ -23073,7 +23073,7 @@ body .bi:before,
 
 .sidebar-wrapper .menu {
     padding-left: 0;
-    margin-top: 2rem;
+    margin-top: 0rem;
     padding: 0 2rem;
     font-weight: 600
 }
@@ -23408,7 +23408,7 @@ body .bi:before,
 }
 
 .layout-horizontal .header-top .logo img {
-    height: 20px
+    height: 20px;
 }
 
 .layout-horizontal .header-top-right {

@@ -64,7 +64,7 @@
                                     </td>
                                     <td>
                                         <div class="d-flex align-items-center">
-                                            <p class="font-bold ms-3 mb-0"><?= htmlspecialchars($row['nama_personil']) ?></p>
+                                            <p class="font-bold ms-3 mb-0"><?= htmlspecialchars($row['daftar_penulis']) ?></p>
                                         </div>
                                     </td>
                                     <td><?= htmlspecialchars($row['tahun']) ?></td>

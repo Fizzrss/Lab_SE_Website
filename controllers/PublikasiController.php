@@ -7,7 +7,6 @@ class PublikasiController
     public function __construct(PublikasiModel $model)
     {
         $this->model = $model;
-        // Pastikan path ini sesuai struktur foldermu
         $this->root = $_SERVER['DOCUMENT_ROOT'] . '/Lab_SE_Website'; 
     }
 
@@ -15,7 +14,6 @@ class PublikasiController
     {
         try {
             $publikasi_list = $this->model->getAllPublikasi();
-            // Jangan throw exception jika kosong, biarkan view menangani tabel kosong
             include $this->root . '/admin/pages/publikasi/list_publikasi.php';
         } catch (Exception $e) {
             echo "<div class='alert alert-danger'>Kesalahan: " . $e->getMessage() . "</div>";
@@ -24,92 +22,85 @@ class PublikasiController
 
     public function add()
     {
-        $error = null;
-        
-        // --- PROSES MENYIMPAN DATA (POST) ---
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             try {
-                // Input Sanitization (Trim whitespace)
+                $personil_ids = isset($_POST['id_personil']) ? $_POST['id_personil'] : [];
+                
+                if (empty($personil_ids) || !is_array($personil_ids)) {
+                    throw new Exception("Wajib memilih minimal satu personil/penulis.");
+                }
+
                 $data = [
-                    'id_personil' => $_POST['id_personil'] ?? null,
-                    'id_jenis'    => $_POST['id_jenis'] ?? null,
-                    'judul'       => trim($_POST['judul'] ?? ''),
-                    'tahun'       => trim($_POST['tahun'] ?? ''),
-                    'link'        => trim($_POST['link'] ?? ''),
+                    'id_jenis' => $_POST['id_jenis'],
+                    'judul'    => htmlspecialchars($_POST['judul']),
+                    'tahun'    => $_POST['tahun'],
+                    'link'     => $_POST['link'] ?? ''
                 ];
 
-                // Input Validation
-                if (empty($data['id_personil'])) throw new Exception("Personil wajib dipilih.");
-                if (empty($data['id_jenis'])) throw new Exception("Jenis publikasi wajib dipilih.");
-                if (empty($data['judul'])) throw new Exception("Judul tidak boleh kosong.");
-                if (empty($data['tahun']) || !is_numeric($data['tahun'])) throw new Exception("Tahun harus berupa angka.");
-                
-                // Simpan ke database
-                if ($this->model->create($data)) {
-                    $_SESSION['swal_success'] = "Data publikasi berhasil ditambahkan!";
+                if ($this->model->create($data, $personil_ids)) {
+                    if (session_status() === PHP_SESSION_NONE) session_start();
+                    $_SESSION['swal_success'] = "Publikasi berhasil ditambahkan.";
+                    
                     header("Location: index.php?action=publikasi_list");
                     exit();
-                } else {
-                    throw new Exception("Gagal menyimpan data ke database.");
                 }
 
             } catch (Exception $e) {
                 $error = $e->getMessage();
             }
         }
-        
-        // --- PROSES MENAMPILKAN FORM (GET) ---
-        try {
-            // Kita butuh list personil dan jenis untuk Dropdown <select>
-            $personil_list = $this->model->getListPersonil(); 
-            $jenis_list = $this->model->getListJenisPublikasi();
-            
-            // Sertakan view form tambah
-            include $this->root . '/admin/pages/publikasi/add_publikasi.php';
-        } catch (Exception $e) {
-            echo "Error loading form: " . $e->getMessage();
-        }
+
+        $personil_list = $this->model->getListPersonil();
+        $jenis_list = $this->model->getListJenisPublikasi();
+
+        include $this->root . '/admin/pages/publikasi/add_publikasi.php';
     }
 
     public function edit($id)
     {
-        $error = null;
-        
-        // Ambil data lama berdasarkan ID
+        if (session_status() === PHP_SESSION_NONE) session_start();
+
         $data_old = $this->model->getPublikasiById($id);
         if (!$data_old) {
-            echo "Data tidak ditemukan!";
-            return;
+            $_SESSION['swal_error'] = "Data tidak ditemukan!";
+            header("Location: index.php?action=publikasi_list");
+            exit();
         }
 
-        // --- PROSES UPDATE DATA (POST) ---
+        $selected_authors = $this->model->getSelectedAuthors($id); 
+
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             try {
+                $personil_ids = isset($_POST['id_personil']) ? $_POST['id_personil'] : [];
+                
+                if (empty($personil_ids) || !is_array($personil_ids)) {
+                    throw new Exception("Wajib memilih minimal satu personil/penulis.");
+                }
+
                 $data = [
-                    'id_personil' => $_POST['id_personil'],
-                    'id_jenis'    => $_POST['id_jenis'],
-                    'judul'       => trim($_POST['judul']),
-                    'tahun'       => trim($_POST['tahun']),
-                    'link'        => trim($_POST['link']),
+                    'id_jenis' => $_POST['id_jenis'],
+                    'judul'    => htmlspecialchars(trim($_POST['judul'])),
+                    'tahun'    => trim($_POST['tahun']),
+                    'link'     => trim($_POST['link']),
                 ];
 
-                // Validasi sederhana
                 if (empty($data['judul'])) throw new Exception("Judul tidak boleh kosong.");
 
-                if ($this->model->update($id, $data)) {
-                    header("Location: index.php?controller=publikasi&action=index&message=updated");
+                if ($this->model->update($id, $data, $personil_ids)) {
+                    $_SESSION['swal_success'] = "Data publikasi berhasil diperbarui.";
+                    header("Location: index.php?action=publikasi_list");
                     exit();
                 } else {
-                    throw new Exception("Gagal mengupdate data.");
+                    throw new Exception("Gagal mengupdate database.");
                 }
+
             } catch (Exception $e) {
                 $_SESSION['swal_error'] = "Gagal: " . $e->getMessage();
-                echo "<script>window.history.back();</script>";
+                header("Location: index.php?action=publikasi_edit&id=" . $id);
+                exit();
             }
         }
 
-        // --- PROSES MENAMPILKAN FORM EDIT (GET) ---
-        // Kita juga butuh dropdown list di form edit
         $personil_list = $this->model->getListPersonil();
         $jenis_list = $this->model->getListJenisPublikasi();
 
@@ -118,16 +109,11 @@ class PublikasiController
 
     public function delete($id)
     {
-        if (empty($id)) {
-            $_SESSION['swal_error'] = "ID Personil tidak ditemukan!";
-            header("Location: index.php?action=publikasi_list");
-            exit;
-        }
-
         if ($this->model->delete($id)) {
-            $_SESSION['swal_success'] = "Data publikasi berhasil dihapus!";
+            if (session_status() === PHP_SESSION_NONE) session_start();
+            $_SESSION['swal_success'] = "Data publikasi berhasil dihapus.";
         } else {
-            $_SESSION['swal_error'] = "Gagal menghapus data! Cek relasi data.";
+            $_SESSION['swal_error'] = "Gagal menghapus data.";
         }
         header("Location: index.php?action=publikasi_list");
         exit();

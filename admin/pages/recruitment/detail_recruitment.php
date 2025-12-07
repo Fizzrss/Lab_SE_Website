@@ -231,53 +231,14 @@ $uploadPath = '/Lab_SE_Website/upload/';
                     </div>
                 </div>
             </div>
-            <!-- <div class="card">
-                <div class="card-header">
-                    <h5 class="card-title">Lampiran Berkas</h5>
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <div class="border rounded p-3 text-center h-100">
-                                <div class="mb-3 text-primary">
-                                    <i class="bi bi-file-earmark-person-fill" style="font-size: 3rem;"></i>
-                                </div>
-                                <h6 class="mb-2">CV / Resume</h6>
-                                <?php if (!empty($data['cv'])): ?>
-                                    <a href="<?= $uploadPath . 'cv/' . $data['cv'] ?>" target="_blank" class="btn btn-sm btn-primary">
-                                        <i class="bi bi-download me-1"></i> Buka File
-                                    </a>
-                                <?php else: ?>
-                                    <span class="badge bg-danger">Tidak ada file</span>
-                                <?php endif; ?>
-                            </div>
-                        </div>
-
-                        <div class="col-md-6 mb-3">
-                            <div class="border rounded p-3 text-center h-100">
-                                <div class="mb-3 text-info">
-                                    <i class="bi bi-folder-fill" style="font-size: 3rem;"></i>
-                                </div>
-                                <h6 class="mb-2">Portofolio</h6>
-                                <?php if (!empty($data['portofolio'])): ?>
-                                    <a href="<?= $uploadPath . 'portofolio/' . $data['portofolio'] ?>" target="_blank" class="btn btn-sm btn-info text-white">
-                                        <i class="bi bi-download me-1"></i> Buka File
-                                    </a>
-                                <?php else: ?>
-                                    <span class="badge bg-secondary">Tidak ada file</span>
-                                <?php endif; ?>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div> -->
-
         </div>
     </div>
 </section>
 
 
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="/Lab_SE_Website/admin/assets/extensions/sweetalert2/sweetalert2.all.min.js"></script>
+<script src="/Lab_SE_Website/admin/vendor/jquery/jquery.min.js"></script>
+
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         // Logic untuk Tombol Konfirmasi (Terima/Tolak)

@@ -37,6 +37,46 @@ class MahasiswaController {
         exit;
     }
 
+    public function edit($id) {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            try {
+                $data = [
+                    'nama'               => htmlspecialchars($_POST['nama']),
+                    'nim'                => htmlspecialchars($_POST['nim']),
+                    'email'              => htmlspecialchars($_POST['email']),
+                    'no_hp'              => htmlspecialchars($_POST['no_hp']),
+                    'prodi'              => htmlspecialchars($_POST['prodi']),
+                    'angkatan'           => htmlspecialchars($_POST['angkatan']),
+                    'posisi'             => htmlspecialchars($_POST['posisi']),
+                    'status'             => htmlspecialchars($_POST['status'])
+                ];
+
+                if ($this->model->update($id, $data)) {
+                    $_SESSION['swal_success'] = "Data pendaftar berhasil diperbarui.";
+                    header("Location: index.php?action=mahasiswa_list");
+                    exit();
+                } else {
+                    echo "<script>alert('Gagal mengupdate data!'); window.history.back();</script>";
+                }
+
+            } catch (Exception $e) {
+                $_SESSION['swal_error'] = "Error: " . $e->getMessage();
+                echo "<script>window.history.back();</script>";
+            }
+
+        }
+        $data = $this->model->getById($id);
+
+        if (!$data) {
+            if (session_status() === PHP_SESSION_NONE) session_start();
+            $_SESSION['swal_error'] = "Data pendaftar tidak ditemukan.";
+            header("Location: index.php?action=mahasiswa_list");
+            exit();
+        }
+
+        // Panggil View
+        include $this->root . '/admin/pages/recruitment/edit_mahasiswa.php';
+    }
 
 }
 ?>

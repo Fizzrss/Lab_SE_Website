@@ -169,11 +169,11 @@ class RecruitmentController {
         } 
         elseif ($type == 'cv') {
             // Khusus CV: Dokumen
-            $allowed = ['pdf', 'doc', 'docx'];
+            $allowed = ['pdf'];
         } 
         elseif ($type == 'portofolio') {
             // Portofolio: Bisa dokumen atau gambar
-            $allowed = ['pdf', 'jpg', 'jpeg', 'png'];
+            $allowed = ['pdf'];
         } 
         else {
             // Default (jika ada tipe lain)

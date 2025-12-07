@@ -36,7 +36,14 @@ try {
     $heroButtonLink = '#profil';
 }
 
-// Panggil navbar
+require_once 'config/config.php';
+require_once 'helpers/visitorHelper.php';
+
+$db = (new Database())->getConnection();
+
+$visitor = new VisitorHelper($db);
+$visitor->recordVisit();
+
 require_once __DIR__ . '/includes/header.php';
 require_once __DIR__ . '/includes/navbar.php';
 ?>
