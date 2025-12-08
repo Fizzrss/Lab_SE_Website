@@ -53,10 +53,10 @@ class DashboardModel {
     }
     
     public function getVisitorToday() {
-        $today = date('Y-m-d');
         try {
-            $stmt = $this->conn->prepare("SELECT COUNT(*) FROM visitors WHERE access_date = ?");
-            $stmt->execute([$today]);
+            $query = "SELECT COUNT(*) FROM visitors";
+            $stmt = $this->conn->prepare($query);
+            $stmt->execute();
             return $stmt->fetchColumn();
         } catch (Exception $e) { return 0; }
     }

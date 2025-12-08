@@ -8,9 +8,6 @@ class RelatedPostsController
         $this->model = $model;
     }
 
-    /**
-     * Display related posts settings
-     */
     public function index()
     {
         $settings = $this->model->getSettings();
@@ -18,9 +15,6 @@ class RelatedPostsController
         include 'pages/berita/related_posts_settings.php';
     }
 
-    /**
-     * Update related posts settings
-     */
     public function update()
     {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {

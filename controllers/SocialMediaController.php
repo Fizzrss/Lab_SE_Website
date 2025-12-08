@@ -8,9 +8,6 @@ class SocialMediaController
         $this->model = $model;
     }
 
-    /**
-     * Display social media settings
-     */
     public function index()
     {
         $platforms = $this->model->getAll();
@@ -18,9 +15,7 @@ class SocialMediaController
         include 'pages/berita/social_media_settings.php';
     }
 
-    /**
-     * Update social media settings
-     */
+
     public function update()
     {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {

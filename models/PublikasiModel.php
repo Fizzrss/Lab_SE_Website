@@ -24,21 +24,21 @@ class PublikasiModel
                 LEFT JOIN personil p ON p.id_personil = pp.id_personil
                 GROUP BY pb.id_publikasi, jp.nama_jenis
                 ORDER BY pb.tahun DESC";
-                
+
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    
+
     public function create($data, $personil_id)
     {
         try {
             $this->conn->beginTransaction();
-            
+
             $query = "INSERT INTO publikasi (id_jenis, judul, tahun, link) 
                       VALUES (:id_jenis, :judul, :tahun, :link)";
-            
+
             $stmt = $this->conn->prepare($query);
             $stmt->bindParam(':id_jenis', $data['id_jenis']);
             $stmt->bindParam(':judul', $data['judul']);
@@ -51,7 +51,7 @@ class PublikasiModel
                 $queryRel = "INSERT INTO personil_publikasi (id_publikasi, id_personil) 
                              VALUES (:pub_id, :pers_id)";
                 $stmtRel = $this->conn->prepare($queryRel);
-    
+
                 foreach ($personil_id as $p_id) {
                     $stmtRel->execute([
                         ':pub_id'  => $id_publikasi,
@@ -62,7 +62,6 @@ class PublikasiModel
 
             $this->conn->commit();
             return true;
-            
         } catch (Exception $e) {
             $this->conn->rollBack();
             throw $e;
@@ -86,14 +85,14 @@ class PublikasiModel
                           tahun = :tahun, 
                           link = :link 
                       WHERE id_publikasi = :id_publikasi";
-            
+
             $stmt = $this->conn->prepare($query);
             $stmt->bindParam(':id_jenis', $data['id_jenis']);
             $stmt->bindParam(':judul', $data['judul']);
             $stmt->bindParam(':tahun', $data['tahun']);
             $stmt->bindParam(':link', $data['link']);
-            $stmt->bindParam(':id_publikasi', $id); 
-            
+            $stmt->bindParam(':id_publikasi', $id);
+
             $stmt->execute();
 
             $queryDelete = "DELETE FROM personil_publikasi WHERE id_publikasi = :id_publikasi";
@@ -104,7 +103,7 @@ class PublikasiModel
                 $queryRel = "INSERT INTO personil_publikasi (id_publikasi, id_personil) 
                              VALUES (:pub_id, :pers_id)";
                 $stmtRel = $this->conn->prepare($queryRel);
-    
+
                 foreach ($personil_id as $p_id) {
                     $stmtRel->execute([
                         ':pub_id'  => $id,
@@ -115,7 +114,6 @@ class PublikasiModel
 
             $this->conn->commit();
             return true;
-            
         } catch (Exception $e) {
             $this->conn->rollBack();
             throw $e;
@@ -144,11 +142,11 @@ class PublikasiModel
                   JOIN publikasi_penulis pp ON pp.id_publikasi = pb.id_publikasi
                   WHERE pp.id_personil = :id_personil
                   ORDER BY pb.tahun DESC";
-                  
+
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':id_personil', $id_personil);
         $stmt->execute();
-        
+
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
@@ -179,5 +177,11 @@ class PublikasiModel
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
+    public function countAll()
+    {
+        $query = "SELECT COUNT(*) FROM publikasi";
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute();
+        return $stmt->fetchColumn();
+    }
 }
-?>

@@ -10,9 +10,6 @@ class BeritaSettingsController
         $this->model = $model;
     }
 
-    /**
-     * Display settings page
-     */
     public function index()
     {
         $settings = $this->model->getAllSettings();
@@ -25,9 +22,6 @@ class BeritaSettingsController
         include __DIR__ . '/../admin/pages/berita/hero_settings.php';
     }
 
-    /**
-     * Update settings
-     */
     public function update()
     {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
@@ -40,7 +34,6 @@ class BeritaSettingsController
         $heroDescription = $_POST['hero_description'] ?? '';
         $heroBackgroundImage = $_POST['hero_background_image'] ?? '';
 
-        // Handle image upload
         if (isset($_FILES['hero_background_image_file']) && $_FILES['hero_background_image_file']['error'] === UPLOAD_ERR_OK) {
             $uploadDir = __DIR__ . '/../assets/uploads/berita/';
             if (!is_dir($uploadDir)) {

@@ -8,9 +8,6 @@ class ProfilController
         $this->model = $model;
     }
 
-    /**
-     * Display profil sections management page
-     */
     public function index()
     {
         $sections = $this->model->getAll(false);
@@ -24,9 +21,6 @@ class ProfilController
         include 'pages/profil/settings.php';
     }
 
-    /**
-     * Update section
-     */
     public function updateSection()
     {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
@@ -37,8 +31,7 @@ class ProfilController
         $sectionKey = $_POST['section_key'] ?? '';
         $title = $_POST['section_title'] ?? '';
         $contentJson = $_POST['section_content'] ?? '{}';
-        
-        // Validate JSON
+
         $contentData = json_decode($contentJson, true);
         if (json_last_error() !== JSON_ERROR_NONE) {
             setFlashMessage('danger', 'Format data tidak valid!');
@@ -46,8 +39,8 @@ class ProfilController
             exit;
         }
         
-        $isActive = true; // Default active, can be changed via AJAX later
-        $displayOrder = 0; // Can be changed later if needed
+        $isActive = true; 
+        $displayOrder = 0;
 
         if ($this->model->update($sectionKey, $title, $contentJson, $isActive, $displayOrder)) {
             setFlashMessage('success', 'Section berhasil diperbarui!');
@@ -59,9 +52,6 @@ class ProfilController
         exit;
     }
 
-    /**
-     * Update hero settings
-     */
     public function updateHero()
     {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {

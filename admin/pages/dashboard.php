@@ -81,7 +81,7 @@
                         <i class="bi bi-eye-fill"></i>
                     </div>
                     <div>
-                        <h6 class="text-muted mb-1 small fw-bold text-uppercase">Visitor today</h6>
+                        <h6 class="text-muted mb-1 small fw-bold text-uppercase">Pengunjung</h6>
                         <h4 class="mb-0"><?= $jml_visitor ?? 0 ?></h4>
                     </div>
                 </div>

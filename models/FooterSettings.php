@@ -10,9 +10,6 @@ class FooterSettingsModel
         $this->conn = $db;
     }
 
-    /**
-     * Get a setting value by key
-     */
     public function getSetting($key, $default = null)
     {
         $query = "SELECT setting_value FROM " . $this->settings_table . " 
@@ -26,9 +23,6 @@ class FooterSettingsModel
         return $row ? $row['setting_value'] : $default;
     }
 
-    /**
-     * Get all settings as key-value array
-     */
     public function getAllSettings()
     {
         $query = "SELECT setting_key, setting_value FROM " . $this->settings_table;
@@ -44,9 +38,6 @@ class FooterSettingsModel
         return $settings;
     }
 
-    /**
-     * Update a setting
-     */
     public function updateSetting($key, $value)
     {
         $query = "INSERT INTO " . $this->settings_table . " (setting_key, setting_value, updated_at)
@@ -61,9 +52,6 @@ class FooterSettingsModel
         return $stmt->execute();
     }
 
-    /**
-     * Update multiple settings
-     */
     public function updateSettings($settings)
     {
         $this->conn->beginTransaction();
@@ -81,9 +69,6 @@ class FooterSettingsModel
         }
     }
 
-    /**
-     * Get all available pages
-     */
     public function getAvailablePages()
     {
         $query = "SELECT * FROM " . $this->pages_table . " 
@@ -96,9 +81,6 @@ class FooterSettingsModel
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    /**
-     * Get page by ID
-     */
     public function getPageById($id)
     {
         $query = "SELECT * FROM " . $this->pages_table . " WHERE id = :id LIMIT 1";
@@ -110,9 +92,6 @@ class FooterSettingsModel
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    /**
-     * Add new page
-     */
     public function addPage($page_file, $page_title, $page_url, $display_order = 0)
     {
         $query = "INSERT INTO " . $this->pages_table . " 
@@ -133,9 +112,6 @@ class FooterSettingsModel
         return false;
     }
 
-    /**
-     * Update page
-     */
     public function updatePage($id, $page_file, $page_title, $page_url, $display_order)
     {
         $query = "UPDATE " . $this->pages_table . " 
@@ -156,9 +132,6 @@ class FooterSettingsModel
         return $stmt->execute();
     }
 
-    /**
-     * Delete page
-     */
     public function deletePage($id)
     {
         $query = "DELETE FROM " . $this->pages_table . " WHERE id = :id";
@@ -169,9 +142,6 @@ class FooterSettingsModel
         return $stmt->execute();
     }
 
-    /**
-     * Get footer links (selected pages)
-     */
     public function getFooterLinks()
     {
         $linksJson = $this->getSetting('footer_links', '[]');
@@ -192,9 +162,6 @@ class FooterSettingsModel
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    /**
-     * Get footer social media
-     */
     public function getFooterSocialMedia()
     {
         $socialJson = $this->getSetting('footer_social_media', '[]');
@@ -204,7 +171,6 @@ class FooterSettingsModel
             return [];
         }
         
-        // Filter only enabled social media
         return array_filter($socialMedia, function($item) {
             return isset($item['enabled']) && $item['enabled'] === true;
         });

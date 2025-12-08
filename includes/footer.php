@@ -142,18 +142,28 @@ if (count($addressLines) === 1 && strpos($footerAboutAddress, '\\n') !== false) 
   </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  
+  <script src="https://cdn.jsdelivr.net/npm/@srexi/purecounterjs/dist/purecounter_vanilla.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
   <script>
-    // Cek apakah library AOS sudah terload
+    // 1. Inisialisasi AOS (Animasi Scroll)
     if (typeof AOS !== 'undefined') {
-        AOS.init({
-            duration: 800,    // Durasi animasi (ms)
-            easing: 'ease-in-out', // Jenis transisi
-            once: true,       // Animasi hanya sekali saat scroll ke bawah
-            mirror: false     // Jangan animasi ulang saat scroll ke atas
-        });
+        AOS.init({ duration: 800, easing: 'ease-in-out', once: true, mirror: false });
+    }
+
+    // 2. Inisialisasi PureCounter (Animasi Angka)
+    if (typeof PureCounter !== 'undefined') {
+        new PureCounter();
+    } else {
+        console.error("PureCounter library not loaded!");
+    }
+
+    // 3. Inisialisasi GLightbox (Popup Gambar)
+    if (typeof GLightbox !== 'undefined') {
+        const lightbox = GLightbox({ selector: '.glightbox' });
     }
   </script>
 

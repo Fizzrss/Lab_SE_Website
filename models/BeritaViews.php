@@ -9,14 +9,10 @@ class BeritaViewsModel
         $this->conn = $db;
     }
 
-    /**
-     * Increment view count for a berita
-     */
     public function incrementView($berita_id)
     {
         $today = date('Y-m-d');
         
-        // Try to update existing record
         $query = "UPDATE " . $this->table_name . " 
                   SET view_count = view_count + 1
                   WHERE berita_id = :berita_id AND view_date = :view_date";
@@ -28,8 +24,7 @@ class BeritaViewsModel
         if ($stmt->execute() && $stmt->rowCount() > 0) {
             return true;
         }
-        
-        // If no record exists, insert new one
+    
         $query = "INSERT INTO " . $this->table_name . " 
                   (berita_id, view_date, view_count) 
                   VALUES (:berita_id, :view_date, 1)
@@ -43,9 +38,6 @@ class BeritaViewsModel
         return $stmt->execute();
     }
 
-    /**
-     * Get total view count for a berita
-     */
     public function getTotalViews($berita_id)
     {
         $query = "SELECT SUM(view_count) as total FROM " . $this->table_name . " 
@@ -59,9 +51,6 @@ class BeritaViewsModel
         return $row['total'] ? (int)$row['total'] : 0;
     }
 
-    /**
-     * Get views by date range (for statistics)
-     */
     public function getViewsByDateRange($berita_id, $start_date, $end_date)
     {
         $query = "SELECT view_date, view_count FROM " . $this->table_name . " 

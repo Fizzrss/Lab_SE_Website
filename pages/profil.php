@@ -37,12 +37,16 @@ try {
 ?>
 <section>
     <div id="profil">
+        <div id="statistik">
+            <?php require_once __DIR__ . '/statistik.php'; ?>
+        </div>
+        
         <?php if ($tentangData && $tentangData['is_active']): ?>
         <div id="tentang">
             <?php require_once __DIR__ . '/tentang.php'; ?>
         </div>
         <?php endif; ?>
-        
+
         <?php if ($visiMisiData && $visiMisiData['is_active']): ?>
         <div id="visi_misi">
             <?php require_once __DIR__ . '/visi_misi.php'; ?>

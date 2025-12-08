@@ -8,15 +8,11 @@ class BeritaController
     {
         $this->model = $model;
         
-        // Create upload directory if not exists
         if (!file_exists($this->uploadDir)) {
             mkdir($this->uploadDir, 0777, true);
         }
     }
 
-    /**
-     * Display list of berita for admin
-     */
     public function index()
     {
         $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
@@ -35,17 +31,11 @@ class BeritaController
         include 'pages/berita/list_berita.php';
     }
 
-    /**
-     * Show add berita form
-     */
     public function add()
     {
         include 'pages/berita/add_berita.php';
     }
 
-    /**
-     * Save new berita
-     */
     public function save()
     {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
@@ -53,7 +43,6 @@ class BeritaController
             exit;
         }
 
-        // Validate input
         $errors = $this->validateInput($_POST);
         
         if (!empty($errors)) {
@@ -63,7 +52,6 @@ class BeritaController
             exit;
         }
 
-        // Handle image upload
         $gambar = '';
         if (isset($_FILES['gambar']) && $_FILES['gambar']['error'] === UPLOAD_ERR_OK) {
             $gambar = $this->handleImageUpload($_FILES['gambar']);
@@ -75,7 +63,6 @@ class BeritaController
             }
         }
 
-        // Generate slug
         $slug = $this->model->generateSlug($_POST['judul']);
         $counter = 1;
         while ($this->model->slugExists($slug)) {
@@ -83,7 +70,6 @@ class BeritaController
             $counter++;
         }
 
-        // Prepare data
         $data = [
             'judul' => trim($_POST['judul']),
             'kategori' => trim($_POST['kategori']),
@@ -96,7 +82,6 @@ class BeritaController
             'slug' => $slug
         ];
 
-        // Save to database
         if ($this->model->create($data)) {
             setFlashMessage('success', 'Berita berhasil ditambahkan!');
             header('Location: index.php?action=berita_list');
@@ -107,9 +92,6 @@ class BeritaController
         exit;
     }
 
-    /**
-     * Show edit berita form
-     */
     public function edit($id)
     {
         $berita = $this->model->getById($id);
@@ -123,9 +105,6 @@ class BeritaController
         include 'pages/berita/edit_berita.php';
     }
 
-    /**
-     * Update berita
-     */
     public function update($id)
     {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
@@ -141,7 +120,6 @@ class BeritaController
             exit;
         }
 
-        // Validate input
         $errors = $this->validateInput($_POST);
         
         if (!empty($errors)) {
@@ -151,12 +129,10 @@ class BeritaController
             exit;
         }
 
-        // Handle image upload
         $gambar = $berita['gambar'];
         if (isset($_FILES['gambar']) && $_FILES['gambar']['error'] === UPLOAD_ERR_OK) {
             $newGambar = $this->handleImageUpload($_FILES['gambar']);
             if ($newGambar) {
-                // Delete old image
                 if ($gambar && file_exists($gambar)) {
                     unlink($gambar);
                 }
@@ -164,7 +140,6 @@ class BeritaController
             }
         }
 
-        // Generate slug if title changed
         $slug = $berita['slug'];
         if ($_POST['judul'] !== $berita['judul']) {
             $slug = $this->model->generateSlug($_POST['judul']);
@@ -175,7 +150,6 @@ class BeritaController
             }
         }
 
-        // Prepare data
         $data = [
             'judul' => trim($_POST['judul']),
             'kategori' => trim($_POST['kategori']),
@@ -188,7 +162,6 @@ class BeritaController
             'slug' => $slug
         ];
 
-        // Update database
         if ($this->model->update($id, $data)) {
             setFlashMessage('success', 'Berita berhasil diupdate!');
             header('Location: index.php?action=berita_list');
@@ -199,9 +172,6 @@ class BeritaController
         exit;
     }
 
-    /**
-     * Delete berita
-     */
     public function delete($id)
     {
         if ($this->model->delete($id)) {
@@ -214,9 +184,6 @@ class BeritaController
         exit;
     }
 
-    /**
-     * Validate input data
-     */
     private function validateInput($data)
     {
         $errors = [];
@@ -248,30 +215,23 @@ class BeritaController
         return $errors;
     }
 
-    /**
-     * Handle image upload
-     */
     private function handleImageUpload($file)
     {
         $allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
-        $maxSize = 5 * 1024 * 1024; // 5MB
+        $maxSize = 5 * 1024 * 1024; 
 
-        // Validate file type
         if (!in_array($file['type'], $allowedTypes)) {
             return false;
         }
 
-        // Validate file size
         if ($file['size'] > $maxSize) {
             return false;
         }
 
-        // Generate unique filename
         $extension = pathinfo($file['name'], PATHINFO_EXTENSION);
         $filename = 'berita_' . time() . '_' . uniqid() . '.' . $extension;
         $targetPath = $this->uploadDir . $filename;
 
-        // Move uploaded file
         if (move_uploaded_file($file['tmp_name'], $targetPath)) {
             return $targetPath;
         }

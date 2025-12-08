@@ -36,9 +36,7 @@ class ProfilSectionsModel
         return $sections;
     }
 
-    /**
-     * Get section by key
-     */
+
     public function getByKey($key)
     {
         $query = "SELECT * FROM " . $this->sections_table . " 
@@ -57,9 +55,7 @@ class ProfilSectionsModel
         return $section;
     }
 
-    /**
-     * Update section
-     */
+
     public function update($key, $title, $content, $isActive = true, $displayOrder = 0)
     {
         $query = "UPDATE " . $this->sections_table . " 
@@ -80,9 +76,6 @@ class ProfilSectionsModel
         return $stmt->execute();
     }
 
-    /**
-     * Get hero settings
-     */
     public function getHeroSettings()
     {
         $query = "SELECT setting_key, setting_value FROM " . $this->hero_table;
@@ -98,9 +91,7 @@ class ProfilSectionsModel
         return $settings;
     }
 
-    /**
-     * Update hero setting
-     */
+
     public function updateHeroSetting($key, $value)
     {
         $query = "INSERT INTO " . $this->hero_table . " (setting_key, setting_value, updated_at)

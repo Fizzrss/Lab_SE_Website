@@ -350,4 +350,12 @@ class PersonilModel
             return false;
         }
     }
+
+    public function countAll()
+    {
+        $query = "SELECT COUNT(*) FROM personil";
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute();
+        return $stmt->fetchColumn();
+    }
 }

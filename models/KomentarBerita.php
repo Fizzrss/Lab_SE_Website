@@ -9,9 +9,6 @@ class KomentarBeritaModel
         $this->conn = $db;
     }
 
-    /**
-     * Get all comments for a berita
-     */
     public function getByBeritaId($berita_id, $status = 'approved')
     {
         $query = "SELECT * FROM " . $this->table_name . " 
@@ -26,9 +23,6 @@ class KomentarBeritaModel
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    /**
-     * Get comment by ID
-     */
     public function getById($id)
     {
         $query = "SELECT * FROM " . $this->table_name . " WHERE id = :id LIMIT 1";
@@ -38,9 +32,6 @@ class KomentarBeritaModel
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    /**
-     * Create new comment
-     */
     public function create($data)
     {
         $query = "INSERT INTO " . $this->table_name . " 
@@ -61,9 +52,6 @@ class KomentarBeritaModel
         return false;
     }
 
-    /**
-     * Update comment status
-     */
     public function updateStatus($id, $status)
     {
         $query = "UPDATE " . $this->table_name . " 
@@ -77,9 +65,6 @@ class KomentarBeritaModel
         return $stmt->execute();
     }
 
-    /**
-     * Delete comment
-     */
     public function delete($id)
     {
         $query = "DELETE FROM " . $this->table_name . " WHERE id = :id";
@@ -89,9 +74,6 @@ class KomentarBeritaModel
         return $stmt->execute();
     }
 
-    /**
-     * Count comments for a berita
-     */
     public function countByBeritaId($berita_id, $status = 'approved')
     {
         $query = "SELECT COUNT(*) as total FROM " . $this->table_name . " 
@@ -106,9 +88,6 @@ class KomentarBeritaModel
         return $row['total'];
     }
 
-    /**
-     * Get all comments (for admin)
-     */
     public function getAll($limit = 50, $offset = 0, $status = null)
     {
         $query = "SELECT k.*, b.judul as berita_judul 
@@ -135,9 +114,6 @@ class KomentarBeritaModel
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    /**
-     * Count all comments (for admin)
-     */
     public function countAll($status = null)
     {
         $query = "SELECT COUNT(*) as total FROM " . $this->table_name . " WHERE 1=1";

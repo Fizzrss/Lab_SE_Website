@@ -7,7 +7,6 @@ class MahasiswaAktifModel {
         $this->conn = $db;
     }
     
-    // CREATE - Tambah mahasiswa aktif
     public function create($data) {
         $query = "INSERT INTO " . $this->table . " 
                   (recruitment_id, nama, nim, prodi, email, no_hp, angkatan, posisi, status, tanggal_bergabung, foto) 
@@ -33,7 +32,6 @@ class MahasiswaAktifModel {
         return false;
     }
     
-    //READ - Ambil semua mahasiswa
     public function getAllMahasiswa() {
         $query = "SELECT * FROM " . $this->table . " ORDER BY nama ASC";
         $stmt = $this->conn->prepare($query);
@@ -54,7 +52,6 @@ class MahasiswaAktifModel {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
     
-    // READ - Ambil semua mahasiswa aktif
     public function getByStatusAktif() {
         $query = "SELECT * FROM " . $this->table . " WHERE status = 'aktif' ORDER BY nama ASC";
         $stmt = $this->conn->prepare($query);
@@ -62,7 +59,6 @@ class MahasiswaAktifModel {
         return $stmt;
     }
     
-    // READ - Ambil berdasarkan posisi
     public function getByPosisi($posisi) {
         $query = "SELECT * FROM " . $this->table . " WHERE posisi = :posisi AND status = 'aktif' ORDER BY nama ASC";
         $stmt = $this->conn->prepare($query);
@@ -71,7 +67,6 @@ class MahasiswaAktifModel {
         return $stmt;
     }
     
-    // READ - Detail mahasiswa
     public function getById($id) {
         $query = "SELECT * FROM " . $this->table . " WHERE id = :id LIMIT 1";
         $stmt = $this->conn->prepare($query);
@@ -80,7 +75,6 @@ class MahasiswaAktifModel {
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
     
-    // UPDATE - Update data mahasiswa
     public function update($id, $data) {
         $query = "UPDATE " . $this->table . " 
                   SET nama = :nama, email = :email, no_hp = :no_hp, 
@@ -102,7 +96,6 @@ class MahasiswaAktifModel {
         return false;
     }
     
-    // DELETE
     public function delete($id) {
         $query = "DELETE FROM " . $this->table . " WHERE id = :id";
         $stmt = $this->conn->prepare($query);
@@ -114,7 +107,6 @@ class MahasiswaAktifModel {
         return false;
     }
     
-    // Count mahasiswa aktif
     public function countAktif() {
         $query = "SELECT COUNT(*) as total FROM " . $this->table . " WHERE status = 'aktif'";
         $stmt = $this->conn->prepare($query);

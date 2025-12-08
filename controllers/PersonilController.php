@@ -11,7 +11,6 @@ class PersonilController
         $this->root = $_SERVER['DOCUMENT_ROOT'] . '/Lab_SE_Website';
     }
 
-    // method list_personil untuk admin
     public function personilListforAdmin()
     {
         try {
@@ -28,7 +27,6 @@ class PersonilController
         }
     }
 
-    // method getDetailData (dipanggil oleh admin/public detail)
     public function getDetailData($id)
     {
         if (empty($id)) {
@@ -58,7 +56,6 @@ class PersonilController
         }
     }
 
-    // method detail personil untuk admin
     public function personilDetailforAdmin($id)
     {
         $data = $this->getDetailData($id);
@@ -69,7 +66,6 @@ class PersonilController
         include $this->root . '/admin/pages/personil/detail_personil.php';
     }
 
-    // method detail personil untuk landing page
     public function personilDetailforLanding($id)
     {
         $data = $this->getDetailData($id);

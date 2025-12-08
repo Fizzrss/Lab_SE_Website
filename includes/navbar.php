@@ -59,7 +59,7 @@ if (!isset($current_page) || empty($current_page)) {
 
                     <!-- Dropdown Profil -->
                     <?php
-                    $profil_pages = ['profil.php','#tentang', '#visi_misi', '#roadmap', '#focus_scope'];
+                    $profil_pages = ['profil.php', '#tentang', '#visi_misi', '#roadmap', '#focus_scope'];
                     $is_profil_active = in_array($current_page, $profil_pages);
                     ?>
                     <li class="nav-item dropdown">
@@ -108,7 +108,7 @@ if (!isset($current_page) || empty($current_page)) {
 
                     <!-- Statistik -->
                     <li class="nav-item ms-lg-2">
-                        <a class="btn btn-primary-glass nav-link nav-pill <?= ($current_page === 'statistik.php') ? 'active' : '' ?> bi bi-graph-up" href="<?= BASE_URL ?>pages/statistik.php"> Statistik</a>
+                        <a class="btn btn-primary-glass nav-link nav-pill <?= ($current_page === 'profil.php') ? 'active' : '' ?>" href="<?= BASE_URL ?>index.php#statistik"> Statistik</a>
                     </li>
                 </ul>
             </div>

@@ -9,9 +9,6 @@ class BeritaSettingsModel
         $this->conn = $db;
     }
 
-    /**
-     * Get a setting value by key
-     */
     public function getSetting($key, $default = null)
     {
         $query = "SELECT setting_value FROM " . $this->table_name . " 
@@ -25,9 +22,6 @@ class BeritaSettingsModel
         return $row ? $row['setting_value'] : $default;
     }
 
-    /**
-     * Get all settings as key-value array
-     */
     public function getAllSettings()
     {
         $query = "SELECT setting_key, setting_value FROM " . $this->table_name;
@@ -43,9 +37,6 @@ class BeritaSettingsModel
         return $settings;
     }
 
-    /**
-     * Update a setting
-     */
     public function updateSetting($key, $value)
     {
         $query = "INSERT INTO " . $this->table_name . " (setting_key, setting_value, updated_at)
@@ -60,9 +51,6 @@ class BeritaSettingsModel
         return $stmt->execute();
     }
 
-    /**
-     * Update multiple settings at once
-     */
     public function updateSettings($settings)
     {
         $success = true;

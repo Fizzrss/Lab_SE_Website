@@ -8,8 +8,7 @@ class MahasiswaController {
         $this->model = $model;
         $this->root = $_SERVER['DOCUMENT_ROOT'] . '/Lab_SE_Website';
     }
-    
-    // Fungsi utama untuk menyiapkan data ke View
+
     public function index() {
         try {
             $mahasiswa_list = $this->model->getAllMahasiswa();
@@ -74,7 +73,6 @@ class MahasiswaController {
             exit();
         }
 
-        // Panggil View
         include $this->root . '/admin/pages/recruitment/edit_mahasiswa.php';
     }
 

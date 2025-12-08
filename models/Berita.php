@@ -9,14 +9,10 @@ class BeritaModel
         $this->conn = $db;
     }
 
-    /**
-     * Get all berita with pagination and filters (public - only published)
-     */
     public function getAll($limit = 10, $offset = 0, $kategori = null, $search = null, $status = 'published')
     {
         $query = "SELECT * FROM " . $this->table_name . " WHERE 1=1";
-        
-        // Filter by status (default: only published)
+    
         if ($status) {
             $query .= " AND status = :status";
         }
@@ -53,9 +49,6 @@ class BeritaModel
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    /**
-     * Get all berita for admin (all status)
-     */
     public function getAllForAdmin($limit = 10, $offset = 0, $kategori = null, $search = null)
     {
         $query = "SELECT * FROM " . $this->table_name . " WHERE 1=1";
@@ -88,9 +81,6 @@ class BeritaModel
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    /**
-     * Count total berita with filters (public - only published)
-     */
     public function countAll($kategori = null, $search = null, $status = 'published')
     {
         $query = "SELECT COUNT(*) as total FROM " . $this->table_name . " WHERE 1=1";
@@ -127,9 +117,6 @@ class BeritaModel
         return $row['total'];
     }
 
-    /**
-     * Count total berita for admin (all status)
-     */
     public function countAllForAdmin($kategori = null, $search = null)
     {
         $query = "SELECT COUNT(*) as total FROM " . $this->table_name . " WHERE 1=1";
@@ -158,9 +145,6 @@ class BeritaModel
         return $row['total'];
     }
 
-    /**
-     * Get berita by ID
-     */
     public function getById($id)
     {
         $query = "SELECT * FROM " . $this->table_name . " WHERE id = :id LIMIT 1";
@@ -170,9 +154,6 @@ class BeritaModel
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    /**
-     * Create new berita
-     */
     public function create($data)
     {
         $query = "INSERT INTO " . $this->table_name . " 

@@ -101,7 +101,7 @@ try {
         <div class="container">
             <div class="row mb-5 text-center">
                 <div class="col-12" data-aos="fade-up">
-                    <h2 class="section-title" style="margin: 0 auto 2rem auto;">Lingkup Pengembangan</h2>
+                    <h2 class="section-title" style="margin: 0 auto 2rem auto;">Kegiatan & Proyek</h2>
                     <p class="text-muted mx-auto" style="max-width: 600px;">
                         Selain riset teoritis, kami juga aktif dalam pengembangan praktis di berbagai domain teknologi.
                     </p>

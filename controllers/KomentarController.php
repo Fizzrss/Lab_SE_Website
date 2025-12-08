@@ -8,16 +8,12 @@ class KomentarController
         $this->model = $model;
     }
 
-    /**
-     * Display list of comments for admin
-     */
     public function index()
     {
         $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
         $limit = 20;
         $offset = ($page - 1) * $limit;
-        
-        // Show all approved comments (komentar langsung tampil)
+    
         $comments = $this->model->getAll($limit, $offset, 'approved');
         $totalComments = $this->model->countAll('approved');
         $totalPages = ceil($totalComments / $limit);
@@ -33,9 +29,6 @@ class KomentarController
         include 'pages/berita/list_komentar.php';
     }
 
-    /**
-     * Approve comment
-     */
     public function approve($id)
     {
         if ($this->model->updateStatus($id, 'approved')) {
@@ -48,9 +41,6 @@ class KomentarController
         exit;
     }
 
-    /**
-     * Reject comment
-     */
     public function reject($id)
     {
         if ($this->model->updateStatus($id, 'rejected')) {
@@ -63,9 +53,6 @@ class KomentarController
         exit;
     }
 
-    /**
-     * Delete comment
-     */
     public function delete($id)
     {
         if ($this->model->delete($id)) {
