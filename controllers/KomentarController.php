@@ -64,6 +64,76 @@ class KomentarController
         header('Location: index.php?action=komentar_list');
         exit;
     }
+
+    public function create()
+    {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            return [
+                'success' => false,
+                'message' => 'Invalid request method'
+            ];
+        }
+
+        // Validasi input
+        $berita_id = isset($_POST['berita_id']) ? (int)$_POST['berita_id'] : 0;
+        $commenter_name = isset($_POST['commenter_name']) ? trim($_POST['commenter_name']) : '';
+        $commenter_email = isset($_POST['commenter_email']) ? trim($_POST['commenter_email']) : '';
+        $comment_content = isset($_POST['comment_content']) ? trim($_POST['comment_content']) : '';
+
+        // Validasi
+        if ($berita_id <= 0) {
+            return [
+                'success' => false,
+                'message' => 'Berita ID tidak valid'
+            ];
+        }
+
+        if (empty($commenter_name)) {
+            return [
+                'success' => false,
+                'message' => 'Nama tidak boleh kosong'
+            ];
+        }
+
+        if (empty($commenter_email) || !filter_var($commenter_email, FILTER_VALIDATE_EMAIL)) {
+            return [
+                'success' => false,
+                'message' => 'Email tidak valid'
+            ];
+        }
+
+        if (empty($comment_content)) {
+            return [
+                'success' => false,
+                'message' => 'Komentar tidak boleh kosong'
+            ];
+        }
+
+        // Prepare data
+        $data = [
+            'berita_id' => $berita_id,
+            'commenter_name' => $commenter_name,
+            'commenter_email' => $commenter_email,
+            'comment_content' => $comment_content,
+            'status' => 'approved' // Auto-approve, bisa diubah ke 'pending' untuk moderation
+        ];
+
+        // Create comment
+        $comment_id = $this->model->create($data);
+
+        if ($comment_id) {
+            return [
+                'success' => true,
+                'message' => 'Komentar berhasil dikirim!',
+                'comment_id' => $comment_id
+            ];
+        } else {
+            return [
+                'success' => false,
+                'message' => 'Gagal menyimpan komentar. Silakan coba lagi.'
+            ];
+        }
+    }
 }
 ?>
 

@@ -1,4 +1,9 @@
 <?php
+// Start session for flash messages
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
 // Load config and database
 if (!defined('BASE_URL')) {
     define('BASE_URL', '../');
@@ -76,6 +81,9 @@ $viewCount = $viewsModel->getTotalViews($berita['id']);
 // Get comment count
 $commentCount = $komentarModel->countByBeritaId($berita['id']);
 
+// Get comments for this berita
+$comments = $komentarModel->getByBeritaId($berita['id'], 'approved');
+
 include '../includes/header.php'; 
 include '../includes/navbar.php'; 
 ?>
@@ -130,31 +138,63 @@ include '../includes/navbar.php';
     <!-- Comments Section -->
     <div class="comments-section mt-5">
         <h4 class="mb-4"><i class="bi bi-chat-left-text me-2"></i>Komentar</h4>
+        
+        <!-- Display flash messages -->
+        <?php if (isset($_SESSION['komentar_status'])): ?>
+            <div class="alert alert-<?= $_SESSION['komentar_status'] === 'success' ? 'success' : 'danger' ?> alert-dismissible fade show" role="alert">
+                <?= htmlspecialchars($_SESSION['komentar_message'] ?? '') ?>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            <?php 
+            unset($_SESSION['komentar_status']);
+            unset($_SESSION['komentar_message']);
+            ?>
+        <?php endif; ?>
+        
+        <!-- Comments List -->
         <div id="comments-container">
-            <!-- Comments will be loaded here -->
-            <p class="text-muted">Belum ada komentar. Jadilah yang pertama berkomentar!</p>
+            <?php if (!empty($comments)): ?>
+                <?php foreach ($comments as $comment): ?>
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <div>
+                                    <h6 class="mb-1"><?= htmlspecialchars($comment['commenter_name']) ?></h6>
+                                    <small class="text-muted"><?= date('d M Y, H:i', strtotime($comment['created_at'])) ?></small>
+                                </div>
+                            </div>
+                            <p class="mb-0"><?= nl2br(htmlspecialchars($comment['comment_content'])) ?></p>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <p class="text-muted">Belum ada komentar. Jadilah yang pertama berkomentar!</p>
+            <?php endif; ?>
         </div>
         
         <!-- Comment Form -->
         <div class="card mt-4">
             <div class="card-body">
                 <h5 class="card-title">Tinggalkan Komentar</h5>
-                <form id="comment-form">
+                <form method="POST" action="komentar_proses.php">
                     <input type="hidden" name="berita_id" value="<?= $berita['id'] ?>">
+                    <input type="hidden" name="berita_slug" value="<?= htmlspecialchars($berita['slug']) ?>">
                     <div class="mb-3">
                         <label for="commenter_name" class="form-label">Nama <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" id="commenter_name" name="commenter_name" required>
+                        <input type="text" class="form-control" id="commenter_name" name="commenter_name" 
+                               value="<?= isset($_POST['commenter_name']) ? htmlspecialchars($_POST['commenter_name']) : '' ?>" required>
                     </div>
                     <div class="mb-3">
                         <label for="commenter_email" class="form-label">Email <span class="text-danger">*</span></label>
-                        <input type="email" class="form-control" id="commenter_email" name="commenter_email" required>
+                        <input type="email" class="form-control" id="commenter_email" name="commenter_email" 
+                               value="<?= isset($_POST['commenter_email']) ? htmlspecialchars($_POST['commenter_email']) : '' ?>" required>
                     </div>
                     <div class="mb-3">
                         <label for="comment_content" class="form-label">Komentar <span class="text-danger">*</span></label>
-                        <textarea class="form-control" id="comment_content" name="comment_content" rows="4" required></textarea>
+                        <textarea class="form-control" id="comment_content" name="comment_content" rows="4" required><?= isset($_POST['comment_content']) ? htmlspecialchars($_POST['comment_content']) : '' ?></textarea>
                     </div>
-                    <button type="submit" class="btn btn-primary">
-                        <i class="bi bi-send me-2"></i>Kirim Komentar
+                    <button type="submit" class="btn btn-primary" id="submit-btn">
+                        <i class="bi bi-send me-2"></i><span id="btn-text">Kirim Komentar</span>
                     </button>
                 </form>
             </div>
@@ -201,13 +241,39 @@ document.addEventListener('DOMContentLoaded', function() {
     // Load social share buttons
     loadSocialShareButtons();
     
-    // Load comments
-    loadComments();
+    // Handle form submission with loading state
+    const form = document.querySelector('form[action="komentar_proses.php"]');
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            const submitBtn = form.querySelector('#submit-btn');
+            const btnText = form.querySelector('#btn-text');
+            
+            if (submitBtn && btnText) {
+                submitBtn.disabled = true;
+                btnText.textContent = 'Mengirim...';
+            }
+        });
+    }
     
-    // Handle comment form
-    document.getElementById('comment-form').addEventListener('submit', submitComment);
+    // Auto-dismiss alerts after 5 seconds
+    setTimeout(function() {
+        const alerts = document.querySelectorAll('.alert');
+        alerts.forEach(alert => {
+            const bsAlert = new bootstrap.Alert(alert);
+            bsAlert.close();
+        });
+    }, 5000);
     
-    // View count is already incremented server-side, no need for AJAX call
+    // Scroll to comments section if there's a komentar parameter in URL
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('komentar')) {
+        const commentsSection = document.querySelector('.comments-section');
+        if (commentsSection) {
+            setTimeout(() => {
+                commentsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 100);
+        }
+    }
 });
 
 // Social media configuration
@@ -215,23 +281,8 @@ let socialMediaConfig = [];
 
 function loadSocialShareButtons() {
     const container = document.getElementById('social-share-buttons');
-    
-    // Load social media settings from API
-    fetch('../api/social_media.php')
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                socialMediaConfig = data.platforms;
-                renderSocialButtons(container);
-            } else {
-                // Fallback to default if API fails
-                loadDefaultSocialButtons(container);
-            }
-        })
-        .catch(error => {
-            console.error('Error loading social media settings:', error);
-            loadDefaultSocialButtons(container);
-        });
+    // Use default social buttons (no API needed)
+    loadDefaultSocialButtons(container);
 }
 
 function renderSocialButtons(container) {
@@ -307,133 +358,7 @@ function copyToClipboard(text) {
     });
 }
 
-function loadComments() {
-    fetch(`../api/comments.php?berita_id=<?= $berita['id'] ?>`)
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                if (data.comments && data.comments.length > 0) {
-                    displayComments(data.comments);
-                    document.getElementById('comment-count').textContent = data.count || data.comments.length;
-                } else {
-                    document.getElementById('comments-container').innerHTML = '<p class="text-muted">Belum ada komentar. Jadilah yang pertama berkomentar!</p>';
-                    document.getElementById('comment-count').textContent = '0';
-                }
-            }
-        })
-        .catch(error => console.error('Error loading comments:', error));
-}
-
-function displayComments(comments) {
-    const container = document.getElementById('comments-container');
-    container.innerHTML = '';
-    
-    comments.forEach(comment => {
-        const commentDiv = document.createElement('div');
-        commentDiv.className = 'card mb-3';
-        commentDiv.innerHTML = `
-            <div class="card-body">
-                <div class="d-flex justify-content-between align-items-start mb-2">
-                    <div>
-                        <h6 class="mb-1">${comment.commenter_name}</h6>
-                        <small class="text-muted">${comment.created_at}</small>
-                    </div>
-                </div>
-                <p class="mb-0">${comment.comment_content}</p>
-            </div>
-        `;
-        container.appendChild(commentDiv);
-    });
-}
-
-function submitComment(e) {
-    e.preventDefault();
-    
-    const formData = new FormData(e.target);
-    const submitBtn = e.target.querySelector('button[type="submit"]');
-    const originalBtnText = submitBtn.innerHTML;
-    
-    // Disable button and show loading
-    submitBtn.disabled = true;
-    submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Mengirim...';
-    
-    fetch('../api/comments.php', {
-        method: 'POST',
-        body: formData
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            // Reset form
-            e.target.reset();
-            
-            // Add comment immediately to the list
-            if (data.comment) {
-                const container = document.getElementById('comments-container');
-                
-                // Remove "no comments" message if exists
-                if (container.innerHTML.includes('Belum ada komentar')) {
-                    container.innerHTML = '';
-                }
-                
-                // Create and prepend new comment
-                const commentDiv = document.createElement('div');
-                commentDiv.className = 'card mb-3';
-                commentDiv.innerHTML = `
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-start mb-2">
-                            <div>
-                                <h6 class="mb-1">${data.comment.commenter_name}</h6>
-                                <small class="text-muted">${data.comment.created_at}</small>
-                            </div>
-                        </div>
-                        <p class="mb-0">${data.comment.comment_content}</p>
-                    </div>
-                `;
-                container.insertBefore(commentDiv, container.firstChild);
-                
-                // Update comment count
-                const currentCount = parseInt(document.getElementById('comment-count').textContent) || 0;
-                document.getElementById('comment-count').textContent = currentCount + 1;
-                
-                // Show success message
-                const alertDiv = document.createElement('div');
-                alertDiv.className = 'alert alert-success alert-dismissible fade show';
-                alertDiv.innerHTML = `
-                    <i class="bi bi-check-circle me-2"></i>Komentar berhasil dikirim!
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                `;
-                e.target.parentElement.insertBefore(alertDiv, e.target);
-                
-                // Auto-dismiss after 3 seconds
-                setTimeout(() => {
-                    alertDiv.remove();
-                }, 3000);
-                
-                // Scroll to comment
-                commentDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-            } else {
-                // Fallback: reload comments
-                loadComments();
-                alert('Komentar berhasil dikirim!');
-            }
-        } else {
-            alert('Gagal mengirim komentar: ' + data.message);
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('Terjadi kesalahan saat mengirim komentar');
-    })
-    .finally(() => {
-        // Re-enable button
-        submitBtn.disabled = false;
-        submitBtn.innerHTML = originalBtnText;
-    });
-}
-
-// View count is now handled server-side directly on page load
-// No need for AJAX call anymore
+// View count is handled server-side directly on page load
 </script>
 
 <?php include '../includes/footer.php'; ?>
