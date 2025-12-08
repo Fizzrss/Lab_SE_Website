@@ -56,6 +56,13 @@ try {
         $_SESSION['komentar_status'] = 'error';
         $_SESSION['komentar_message'] = $result['message'];
         
+        // Store form data in session to preserve user input after redirect
+        $_SESSION['komentar_old_input'] = [
+            'commenter_name' => $_POST['commenter_name'] ?? '',
+            'commenter_email' => $_POST['commenter_email'] ?? '',
+            'comment_content' => $_POST['comment_content'] ?? ''
+        ];
+        
         if (!empty($berita_slug)) {
             header("Location: berita_detail.php?slug=" . urlencode($berita_slug) . "&komentar=error");
         } else {
@@ -67,6 +74,13 @@ try {
     // --- ERROR SYSTEM ---
     $_SESSION['komentar_status'] = 'error';
     $_SESSION['komentar_message'] = "Terjadi kesalahan sistem: " . $e->getMessage();
+    
+    // Store form data in session to preserve user input after redirect
+    $_SESSION['komentar_old_input'] = [
+        'commenter_name' => $_POST['commenter_name'] ?? '',
+        'commenter_email' => $_POST['commenter_email'] ?? '',
+        'comment_content' => $_POST['comment_content'] ?? ''
+    ];
     
     if (!empty($berita_slug)) {
         header("Location: berita_detail.php?slug=" . urlencode($berita_slug) . "&komentar=error");

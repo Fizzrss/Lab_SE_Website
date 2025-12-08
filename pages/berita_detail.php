@@ -176,22 +176,36 @@ include '../includes/navbar.php';
         <div class="card mt-4">
             <div class="card-body">
                 <h5 class="card-title">Tinggalkan Komentar</h5>
+                <?php
+                // Get old input from session (preserved after validation error redirect)
+                $old_input = $_SESSION['komentar_old_input'] ?? null;
+                
+                // Clear old input from session after retrieving it
+                if (isset($_SESSION['komentar_old_input'])) {
+                    unset($_SESSION['komentar_old_input']);
+                }
+                
+                // Use session data if available, otherwise use POST (for direct form submission without redirect)
+                $commenter_name = $old_input['commenter_name'] ?? ($_POST['commenter_name'] ?? '');
+                $commenter_email = $old_input['commenter_email'] ?? ($_POST['commenter_email'] ?? '');
+                $comment_content = $old_input['comment_content'] ?? ($_POST['comment_content'] ?? '');
+                ?>
                 <form method="POST" action="komentar_proses.php">
                     <input type="hidden" name="berita_id" value="<?= $berita['id'] ?>">
                     <input type="hidden" name="berita_slug" value="<?= htmlspecialchars($berita['slug']) ?>">
                     <div class="mb-3">
                         <label for="commenter_name" class="form-label">Nama <span class="text-danger">*</span></label>
                         <input type="text" class="form-control" id="commenter_name" name="commenter_name" 
-                               value="<?= isset($_POST['commenter_name']) ? htmlspecialchars($_POST['commenter_name']) : '' ?>" required>
+                               value="<?= htmlspecialchars($commenter_name) ?>" required>
                     </div>
                     <div class="mb-3">
                         <label for="commenter_email" class="form-label">Email <span class="text-danger">*</span></label>
                         <input type="email" class="form-control" id="commenter_email" name="commenter_email" 
-                               value="<?= isset($_POST['commenter_email']) ? htmlspecialchars($_POST['commenter_email']) : '' ?>" required>
+                               value="<?= htmlspecialchars($commenter_email) ?>" required>
                     </div>
                     <div class="mb-3">
                         <label for="comment_content" class="form-label">Komentar <span class="text-danger">*</span></label>
-                        <textarea class="form-control" id="comment_content" name="comment_content" rows="4" required><?= isset($_POST['comment_content']) ? htmlspecialchars($_POST['comment_content']) : '' ?></textarea>
+                        <textarea class="form-control" id="comment_content" name="comment_content" rows="4" required><?= htmlspecialchars($comment_content) ?></textarea>
                     </div>
                     <button type="submit" class="btn btn-primary" id="submit-btn">
                         <i class="bi bi-send me-2"></i><span id="btn-text">Kirim Komentar</span>
