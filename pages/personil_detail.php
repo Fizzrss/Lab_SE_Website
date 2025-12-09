@@ -50,7 +50,7 @@ require_once $root . '/includes/navbar.php';
                     <h1 class="display-5 text-dark fw-bold mb-1">
                         <?= htmlspecialchars($personnel['nama']) ?>
                     </h1>
-                    <p class="lead text-primary fw-semibold mb-3"><?= htmlspecialchars($personnel['peran']) ?></p>
+                    <p class="lead text-secondary fw-semibold mb-3"><?= htmlspecialchars($personnel['peran']) ?></p>
 
                     <div class="d-flex align-items-center gap-3 mb-4 text-secondary">
                         <span title="NIP"><i class="bi bi-person-badge me-1"></i> <?= htmlspecialchars($personnel['nip']) ?></span>
@@ -345,17 +345,5 @@ require_once $root . '/includes/navbar.php';
     <?php endif; ?>
 
 </main>
-
-<style>
-    /* Sedikit CSS Tambahan agar tombol lebih cantik */
-    .transition-hover {
-        transition: all 0.2s ease-in-out;
-    }
-
-    .transition-hover:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    }
-</style>
 
 <?php require_once $root . '/includes/footer.php'; ?>

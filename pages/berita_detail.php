@@ -23,12 +23,10 @@ if (empty($slug)) {
     exit;
 }
 
-// Initialize database and model
 $database = new Database();
 $db = $database->getConnection();
 $beritaModel = new BeritaModel($db);
 
-// Get berita by slug
 $berita = $beritaModel->getBySlug($slug);
 
 if (!$berita || $berita['status'] !== 'published') {
@@ -36,49 +34,38 @@ if (!$berita || $berita['status'] !== 'published') {
     exit;
 }
 
-// Konfigurasi halaman - set page title sesuai judul berita
 $page_title = htmlspecialchars($berita['judul']);
 $site_title = "Lab SE";
 
-// Format tanggal
 $tanggal = date('d F Y', strtotime($berita['tanggal_publikasi']));
 
-// Get related posts settings
 $relatedPostsModel = new RelatedPostsSettingsModel($db);
 $relatedSettings = $relatedPostsModel->getSettings();
 
-// Get related posts based on settings
 $relatedPosts = [];
 if ($relatedSettings['enabled']) {
     $maxPosts = $relatedSettings['max_posts'] ?? 3;
     $sameCategory = $relatedSettings['show_same_category'] ?? true;
     
-    // Get more posts than needed to filter out current post
     if ($sameCategory) {
         $relatedPosts = $beritaModel->getAll($maxPosts + 5, 0, $berita['kategori'], null, 'published');
     } else {
         $relatedPosts = $beritaModel->getAll($maxPosts + 5, 0, null, null, 'published');
     }
     
-    // Remove current post from related
     $relatedPosts = array_filter($relatedPosts, function($post) use ($berita) {
         return $post['id'] != $berita['id'];
     });
     $relatedPosts = array_slice($relatedPosts, 0, $maxPosts);
 }
 
-// Initialize views and comments models
 $viewsModel = new BeritaViewsModel($db);
 $komentarModel = new KomentarBeritaModel($db);
 
-// Increment view count directly (server-side) - every time page loads/reloads
-// Counter will increment every time the page is accessed (normal behavior)
 $viewsModel->incrementView($berita['id']);
 
-// Get view count (after increment)
 $viewCount = $viewsModel->getTotalViews($berita['id']);
 
-// Get comment count
 $commentCount = $komentarModel->countByBeritaId($berita['id']);
 
 // Get comments for this berita
