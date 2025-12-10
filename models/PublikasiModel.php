@@ -23,7 +23,7 @@ class PublikasiModel
                 LEFT JOIN personil_publikasi pp ON pp.id_publikasi = pb.id_publikasi
                 LEFT JOIN personil p ON p.id_personil = pp.id_personil
                 GROUP BY pb.id_publikasi, jp.nama_jenis
-                ORDER BY pb.tahun DESC";
+                ORDER BY pb.id_publikasi DESC";
 
         $stmt = $this->conn->prepare($query);
         $stmt->execute();

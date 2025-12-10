@@ -37,7 +37,7 @@ try {
           <?= htmlspecialchars($description) ?>
         </p>
       </div>
-      <div class="col-lg-6" data-aos="fade-left" data-aos-duration="1000" data-aos-delay="200">
+      <div class="col-lg-6" data-aos="fade-left" data-aos-duration="500" data-aos-delay="200">
         <div class="lab-img-wrapper">
           <?php if (!empty($images)): ?>
           <div id="carouselLab" class="carousel slide carousel-fade lab-carousel" data-bs-ride="carousel">
@@ -60,8 +60,7 @@ try {
 
 <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 <script>
-  // Inisialisasi Animasi
   AOS.init({
-    once: true, // Animasi hanya terjadi sekali saat scroll ke bawah
+    once: true, 
   });
 </script>

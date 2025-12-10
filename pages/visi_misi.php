@@ -50,7 +50,7 @@ try {
                 <div class="card border-0 shadow-sm h-100">
                     <div class="card-body p-5">
                         <div class="card-item">
-                            <h2 class="section-title mb-4">Visi</h2>
+                            <h2 class="section-title mb-4" style="margin: 0 auto 2rem auto;">Visi</h2>
                             <p class="lead text-muted mb-0">
                                 <?= htmlspecialchars($visi) ?>
                             </p>
@@ -63,7 +63,7 @@ try {
                 <div class="card border-0 shadow-sm h-100">
                     <div class="card-body p-5">
                         <div class="card-item">
-                            <h2 class="section-title mb-4">Misi</h2>
+                            <h2 class="section-title mb-4" style="margin: 0 auto 2rem auto;">Misi</h2>
                             <?php if (!empty($misi) && is_array($misi)): ?>
                             <ol class="misi-list lead text-muted ps-3">
                                 <?php foreach ($misi as $misiItem): ?>

@@ -70,7 +70,6 @@ require_once $root . '/includes/navbar.php';
                                     target="_blank"
                                     class="btn btn-outline-dark rounded-pill px-3 d-flex align-items-center gap-2 transition-hover">
                                     <i class="<?= htmlspecialchars($sm['icon']) ?> fs-5"></i>
-                                    <span><?= htmlspecialchars($sm['nama_sosmed']) ?></span>
                                 </a>
                             <?php endforeach; ?>
                         <?php else: ?>
@@ -113,7 +112,7 @@ require_once $root . '/includes/navbar.php';
                         $list_ppm[] = $item;
                     }
                     // B. Cek HKI (Gunakan huruf kecil)
-                    elseif (strpos($jenis, 'hki') !== false || strpos($jenis, 'hak cipta') !== false || strpos($jenis, 'paten') !== false || strpos($jenis, 'kekayaan') !== false) {
+                    elseif (strpos($jenis, 'kelayakan intelektual') !== false || strpos($jenis, 'hak cipta') !== false || strpos($jenis, 'paten') !== false || strpos($jenis, 'kekayaan') !== false) {
                         $list_ki[] = $item;
                     }
                     // C. Cek Riset (Gunakan huruf kecil 'riset')
@@ -186,7 +185,13 @@ require_once $root . '/includes/navbar.php';
                                                         <tr>
                                                             <td class="text-muted"><?= $no++ ?></td>
                                                             <td class="fw-normal text-dark">
-                                                                <?= htmlspecialchars($pub['judul']) ?>
+                                                                <?php if (!empty($pub['link'])): ?>
+                                                                    <a href="<?= htmlspecialchars($pub['link']) ?>" target="_blank" class="text-decoration-none text-dark">
+                                                                        <?= htmlspecialchars($pub['judul']) ?> <i class="bi bi-box-arrow-up-right small ms-1"></i>
+                                                                    </a>
+                                                                <?php else: ?>
+                                                                    <?= htmlspecialchars($pub['judul']) ?>
+                                                                <?php endif; ?>
                                                             </td>
                                                             <td class="text-end text-muted"><?= htmlspecialchars($pub['tahun']) ?></td>
                                                         </tr>
@@ -220,7 +225,13 @@ require_once $root . '/includes/navbar.php';
                                                         <tr>
                                                             <td class="text-muted"><?= $no++ ?></td>
                                                             <td class="fw-normal text-dark">
-                                                                <?= htmlspecialchars($riset['judul']) ?>
+                                                                <?php if (!empty($riset['link'])): ?>
+                                                                    <a href="<?= htmlspecialchars($riset['link']) ?>" target="_blank" class="text-decoration-none fw-bold text-primary">
+                                                                        <?= htmlspecialchars($riset['judul']) ?> <i class="bi bi-box-arrow-up-right small ms-1"></i>
+                                                                    </a>
+                                                                <?php else: ?>
+                                                                    <?= htmlspecialchars($riset['judul']) ?>
+                                                                <?php endif; ?>
                                                             </td>
                                                             <td class="text-end text-muted"><?= htmlspecialchars($riset['tahun']) ?></td>
                                                         </tr>
@@ -254,7 +265,13 @@ require_once $root . '/includes/navbar.php';
                                                         <tr>
                                                             <td class="text-muted"><?= $no++ ?></td>
                                                             <td class="fw-normal text-dark">
-                                                                <?= htmlspecialchars($ki['judul']) ?>
+                                                                <?php if (!empty($ki['link'])): ?>
+                                                                    <a href="<?= htmlspecialchars($ki['link']) ?>" target="_blank" class="text-decoration-none text-dark">
+                                                                        <?= htmlspecialchars($ki['judul']) ?> <i class="bi bi-box-arrow-up-right small ms-1"></i>
+                                                                    </a>
+                                                                <?php else: ?>
+                                                                    <?= htmlspecialchars($ki['judul']) ?>
+                                                                <?php endif; ?>
                                                             </td>
                                                             <td class="text-end text-muted"><?= htmlspecialchars($ki['tahun']) ?></td>
                                                         </tr>
@@ -288,7 +305,13 @@ require_once $root . '/includes/navbar.php';
                                                         <tr>
                                                             <td class="text-muted"><?= $no++ ?></td>
                                                             <td class="fw-normal text-dark">
-                                                                <?= htmlspecialchars($ppm['judul']) ?>
+                                                                <?php if (!empty($ppm['link'])): ?>
+                                                                    <a href="<?= htmlspecialchars($ppm['link']) ?>" target="_blank" class="text-decoration-none text-dark">
+                                                                        <?= htmlspecialchars($ppm['judul']) ?> <i class="bi bi-box-arrow-up-right small ms-1"></i>
+                                                                    </a>
+                                                                <?php else: ?>
+                                                                    <?= htmlspecialchars($ppm['judul']) ?>
+                                                                <?php endif; ?>
                                                             </td>
                                                             <td class="text-end text-muted"><?= htmlspecialchars($ppm['tahun']) ?></td>
                                                         </tr>
@@ -322,8 +345,14 @@ require_once $root . '/includes/navbar.php';
                                                         <tr>
                                                             <td class="text-muted"><?= $no++ ?></td>
                                                             <td class="fw-normal text-dark">
-                                                                <?= htmlspecialchars($buku['judul']) ?>
-                                                                <br><small class="text-muted badge bg-light text-secondary border"><?= htmlspecialchars($buku['nama_jenis']) ?></small>
+                                                                <?php if (!empty($buku['link'])): ?>
+                                                                    <a href="<?= htmlspecialchars($buku['link']) ?>" target="_blank" class="text-decoration-none text-dark">
+                                                                        <?= htmlspecialchars($buku['judul']) ?> <i class="bi bi-box-arrow-up-right small ms-1"></i>
+                                                                    </a>
+                                                                <?php else: ?>
+                                                                    <?= htmlspecialchars($buku['judul']) ?>
+                                                                <?php endif; ?>
+
                                                             </td>
                                                             <td class="text-end text-muted"><?= htmlspecialchars($buku['tahun']) ?></td>
                                                         </tr>

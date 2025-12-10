@@ -1387,7 +1387,7 @@ h6 {
 /* CSS Tambahan untuk Tampilan Grid Kartu (Agar tampilan responsif) */
 
 .header {
-    background: linear-gradient(to bottom, #74a5c1, #5f90aa);
+    background-color: #6096B4;
     padding: 60px 20px;
     text-align: center;
     font-family: poppins, sans-serif;

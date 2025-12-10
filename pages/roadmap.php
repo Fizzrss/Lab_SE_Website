@@ -20,7 +20,7 @@ try {
     $roadmapSection = $profilModel->getByKey('roadmap');
     $contentData = $roadmapSection ? json_decode($roadmapSection['section_content'], true) : null;
     
-    $title = $roadmapSection['section_title'] ?? 'Roadmap Pengembangan LAB Software Engineering';
+    $title = $roadmapSection['section_title'] ?? 'Roadmap Pengembangan';
     $items = $contentData['items'] ?? [
         ['year' => '2021', 'description' => 'Inisiasi pembentukan LAB Software Engineering dan penyusunan struktur organisasi awal.'],
         ['year' => '2022', 'description' => 'Mulai kegiatan riset internal dan pembuatan website resmi LAB Software Engineering.'],
@@ -43,8 +43,8 @@ try {
 
 <!-- ===== BAGIAN KONTEN ROADMAP ===== -->
 <section class="roadmap-section py-5">
-  <div class="container">
-    <h1 class="roadmap-title" data-aos="fade-down"><?= htmlspecialchars($title) ?></h1>
+  <div class="container text-center">
+    <h2 class="section-title" style="margin: 0 auto 2rem auto;" data-aos="fade-down"><?= htmlspecialchars($title) ?></h2>
 
     <div class="roadmap-timeline">
       <div class="roadmap-line"></div>

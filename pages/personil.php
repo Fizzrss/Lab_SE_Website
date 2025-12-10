@@ -15,7 +15,7 @@ require_once $root . '/includes/header.php';
 require_once $root . '/includes/navbar.php';
 ?>
 
-<header class="header text-center py-5 text-white" style="background-color: #6096B4;">
+<header class="header text-center py-5 text-white">
     <div class="container">
         <h1>Dosen dan Staf Lab SE</h1>
         <p class="lead">Tim pengajar dan peneliti yang membimbing kegiatan laboratorium.</p>
@@ -48,7 +48,7 @@ require_once $root . '/includes/navbar.php';
 
                     <!-- Nama & Peran -->
                     <h5 class="fw-bold mt-3"><?= htmlspecialchars($member['nama']) ?></h5>
-                    <p class="text-primary fw-semibold mb-1"><?= htmlspecialchars($member['peran']) ?></p>
+                    <p class="text-dark fw-semibold mb-1"><?= htmlspecialchars($member['peran']) ?></p>
 
                     <!-- Spesialisasi -->
                     <p class="small text-muted mb-3">
@@ -58,7 +58,7 @@ require_once $root . '/includes/navbar.php';
 
                     <!-- Tombol Profil -->
                     <a href="<?= BASE_URL ?>pages/personil_detail.php?id=<?= $member['id'] ?>"
-                       class="btn btn-sm btn-outline-info rounded-pill px-4">
+                       class="btn btn-sm btn-outline-secondary rounded-pill px-4">
                         Lihat Profil
                     </a>
 

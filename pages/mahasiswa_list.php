@@ -36,7 +36,7 @@ require_once $root . '/includes/navbar.php';
     </div>
 </section> -->
 
-<header class="header text-center py-5 text-white" style="background-color: #6096B4;">
+<header class="header text-center py-5 text-white">
     <div class="container">
         <h1>Daftar Mahasiswa Lab SE</h1>
         <p class="lead">Data Mahasiswa Anggota laboratorium SE.</p>
