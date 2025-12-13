@@ -64,7 +64,6 @@ class ProfilController
             }
         }
         $finalContentJson = json_encode($contentData);
-        // ----------------------------------------
 
         if ($this->model->update($sectionKey, $title, $finalContentJson, true, 0)) {
             // SWAL SUKSES

@@ -334,10 +334,10 @@ class PersonilModel
             $sql_spesiali = "DELETE FROM personil_spesialisasi WHERE id_personil = :id";
             $this->conn->prepare($sql_spesiali)->execute([':id' => $id]);
 
-            $sql_sosmed = "DELETE FROM personil_sosmed WHERE id_personil = ?";
+            $sql_sosmed = "DELETE FROM personil_sosmed WHERE id_personil = :id";
             $this->conn->prepare($sql_sosmed)->execute([':id' => $id]);
 
-            $sql_publikasi = "DELETE FROM publikasi WHERE id_personil = :id";
+            $sql_publikasi = "DELETE FROM personil_publikasi WHERE id_personil = :id";
             $this->conn->prepare($sql_publikasi)->execute([':id' => $id]);
 
             $sql_personil = "DELETE FROM personil WHERE id_personil = :id";

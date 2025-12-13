@@ -59,7 +59,7 @@
 
                 <hr>
                 <!-- KONTEN & PUBLIKASI -->
-                <li class="sidebar-title">Konten & Publikasi</li>
+                <li class="sidebar-title">Konten & Unggahan</li>
 
                 <li class="sidebar-item has-sub" data-key="berita">
                     <a href="#" class='sidebar-link'>
