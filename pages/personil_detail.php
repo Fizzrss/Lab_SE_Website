@@ -68,8 +68,14 @@ require_once $root . '/includes/navbar.php';
                             <?php foreach ($personnel['sosmed'] as $sm): ?>
                                 <a href="<?= htmlspecialchars($sm['link_sosmed']) ?>"
                                     target="_blank"
-                                    class="btn btn-outline-dark rounded-pill px-3 d-flex align-items-center gap-2 transition-hover">
-                                    <i class="<?= htmlspecialchars($sm['icon']) ?> fs-5"></i>
+                                    class="btn btn-outline-dark rounded-pill px-3 d-flex align-items-center gap-2 transition-hover" title="<?= htmlspecialchars($sm['nama_sosmed']) ?>">
+                                    <?php if ($sm['icon'] === 'custom-sinta'): ?>
+                                        <img src="../assets/icon/logo-sinta.svg" style="width:20px; height:20px;">
+                                    <?php elseif ($sm['icon'] === 'custom-rg'): ?>
+                                        <img src="../assets/icon/logo-researchgate.svg" style="width:20px; height:20px;">
+                                    <?php else: ?>
+                                        <i class="<?= htmlspecialchars($sm['icon']) ?>"></i>
+                                    <?php endif; ?>
                                 </a>
                             <?php endforeach; ?>
                         <?php else: ?>

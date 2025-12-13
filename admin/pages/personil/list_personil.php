@@ -35,13 +35,13 @@ $page_title = "Data Personil";
 <section class="section">
     <div class="card">
         <div class="card-header d-flex justify-content-between align-items-center">
-                <h5 class="card-title m-0">
-                    Daftar Personil
-                </h5>
-                <a href="index.php?action=personil_add" class="btn btn-primary btn-sm">
-                    <i class="bi bi-plus-lg"></i> Tambah Baru
-                </a>
-            </div>
+            <h5 class="card-title m-0">
+                Daftar Personil
+            </h5>
+            <a href="index.php?action=personil_add" class="btn btn-primary btn-sm">
+                <i class="bi bi-plus-lg"></i> Tambah Baru
+            </a>
+        </div>
 
         <div class="card-body">
             <div class="table-responsive">
@@ -94,7 +94,13 @@ $page_title = "Data Personil";
                                                         target="_blank"
                                                         class="btn btn-sm btn-outline-primary py-0 px-1"
                                                         title="<?= htmlspecialchars($sm['nama_sosmed']) ?>">
-                                                        <i class="<?= htmlspecialchars($sm['icon']) ?>"></i>
+                                                        <?php if ($sm['icon'] === 'custom-sinta'): ?>
+                                                            <img src="../assets/icon/logo-sinta.svg" style="width:20px; height:20px;">
+                                                        <?php elseif ($sm['icon'] === 'custom-rg'): ?>
+                                                            <img src="../assets/icon/logo-researchgate.svg" style="width:20px; height:20px;">
+                                                        <?php else: ?>
+                                                            <i class="<?= htmlspecialchars($sm['icon']) ?>"></i>
+                                                        <?php endif; ?>
                                                     </a>
                                                 <?php endforeach; ?>
                                             <?php else: ?>

@@ -23051,7 +23051,9 @@ body .bi:before,
     overflow-y: auto;
     background-color: #fff;
     bottom: 0;
-    transition: left .7s cubic-bezier(.22, 1, .36, 1)
+    transition: left .7s cubic-bezier(.22, 1, .36, 1);
+    display: flex !important;
+    flex-direction: column !important;
 }
 
 .sidebar-wrapper .sidebar-header {
@@ -23061,7 +23063,7 @@ body .bi:before,
 }
 
 .sidebar-wrapper .sidebar-header img {
-    height: 10rem;
+    height: 8rem;
 }
 
 .sidebar-wrapper .sidebar-toggler.x {
@@ -23221,6 +23223,29 @@ body .bi:before,
     background-color: rgba(0, 0, 0, .5);
     z-index: 9
 }
+
+.sidebar-menu {
+    flex: 1 1 auto;
+    overflow-y: auto;
+}
+
+.sidebar-footer {
+    margin-top: auto;
+    padding: 2rem;
+    border-top: 1px solid #eee;
+}
+.sidebar-footer .sidebar-link {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.7rem 1rem;
+    border-radius: 0.5rem;
+}
+
+.sidebar-footer .sidebar-link:hover {
+    background-color: rgba(220, 53, 69, 0.1);
+}
+
 
 @media screen and (max-width: 1199px) {
     .sidebar-wrapper {

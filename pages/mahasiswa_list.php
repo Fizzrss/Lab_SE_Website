@@ -1,6 +1,7 @@
 <?php
 // Helper warna status
-function getStatusColor($status) {
+function getStatusColor($status)
+{
     $status = strtolower($status['status'] ?? 'aktif');
     if ($status == 'aktif') return 'success';
     if ($status == 'cuti') return 'warning';
@@ -25,17 +26,6 @@ require_once $root . '/includes/navbar.php';
 
 ?>
 
-<!-- <section class="page-hero-banner">
-    <div class="container">
-        <div class="row">
-            <div class="col-12">
-                <h1>Daftar Mahasiswa Lab SE</h1>
-                <p class="opacity-75">Data mahasiswa aktif, cuti, dan alumni.</p>
-            </div>
-        </div>
-    </div>
-</section> -->
-
 <header class="header text-center py-5 text-white">
     <div class="container">
         <h1>Daftar Mahasiswa Lab SE</h1>
@@ -55,18 +45,24 @@ require_once $root . '/includes/navbar.php';
                             <i class="bi bi-search text-muted"></i>
                         </span>
                         <input type="text" id="searchInput" class="form-control border-start-0 ps-0"
-                               placeholder="Cari nama atau NIM...">
+                            placeholder="Cari nama atau NIM...">
                     </div>
                 </div>
 
                 <div class="col-md-4">
                     <select id="prodiFilter" class="form-select">
                         <option value="all">Semua Program Studi</option>
-                        <?php foreach ($prodi_list as $prodi_name): ?>
-                            <option value="<?= htmlspecialchars($prodi_name) ?>">
-                                <?= htmlspecialchars($prodi_name) ?>
-                            </option>
-                        <?php endforeach; ?>
+                        <?php
+                        $listProdi = [
+                            "D4 - Teknik Informatika",
+                            "D4 - Sistem Informasi Bisnis"
+                        ];
+
+                        foreach ($listProdi as $p) {
+                            $selected = ($data['prodi'] == $p) ? 'selected' : '';
+                            echo "<option value='$p' $selected>$p</option>";
+                        }
+                        ?>
                     </select>
                 </div>
 
@@ -78,7 +74,7 @@ require_once $root . '/includes/navbar.php';
 
         <!-- DAFTAR MAHASISWA -->
         <div id="studentList">
-            <?php 
+            <?php
             $delay = 100;
             foreach ($mahasiswa_list as $mhs):
                 $delay += 50;
@@ -91,16 +87,16 @@ require_once $root . '/includes/navbar.php';
                 $color = getStatusColor($status);
             ?>
                 <div class="student-row"
-                     data-aos="fade-up"
-                     data-aos-delay="<?= $delay ?>"
-                     data-name="<?= strtolower($nama) ?>"
-                     data-nim="<?= $nim ?>"
-                     data-prodi="<?= $prodi ?>">
+                    data-aos="fade-up"
+                    data-aos-delay="<?= $delay ?>"
+                    data-name="<?= strtolower($nama) ?>"
+                    data-nim="<?= $nim ?>"
+                    data-prodi="<?= $prodi ?>">
 
-                     <div class="student-avatar me-md-4 mb-3 mb-md-0">
+                    <div class="student-avatar me-md-4 mb-3 mb-md-0">
                         <img src="<?= BASE_URL ?>upload/foto/<?= $foto ?>"
-                             alt="<?= htmlspecialchars($nama) ?>"
-                             onerror="this.src='<?= BASE_URL ?>assets/img/default.png'">
+                            alt="<?= htmlspecialchars($nama) ?>"
+                            onerror="this.src='<?= BASE_URL ?>assets/img/default.png'">
                     </div>
 
                     <div class="student-info flex-grow-1 text-md-start mb-2 mb-md-0">
@@ -123,6 +119,11 @@ require_once $root . '/includes/navbar.php';
             <?php endforeach; ?>
         </div>
 
+        <nav aria-label="Page navigation" class="mt-4" id="paginationContainer">
+            <ul class="pagination justify-content-center" id="pagination">
+                </ul>
+        </nav>
+
         <div id="noResults" class="text-center py-5 d-none">
             <i class="bi bi-emoji-frown display-1 text-muted opacity-25"></i>
             <p class="text-muted mt-3">Data mahasiswa tidak ditemukan.</p>
@@ -135,8 +136,8 @@ require_once $root . '/includes/navbar.php';
                         <h4 class="fw-bold mb-3">Tertarik Bergabung?</h4>
                         <p class="text-muted mb-4">Jadilah bagian dari inovasi teknologi bersama kami.</p>
                         <a href="<?= BASE_URL ?>pages/recruitment_form.php"
-                           class="btn btn-custom-accent px-5 py-2 rounded-pill shadow">
-                           Daftar Sekarang
+                            class="btn btn-custom-accent px-5 py-2 rounded-pill shadow">
+                            Daftar Sekarang
                         </a>
                     </div>
                 </div>
@@ -147,46 +148,125 @@ require_once $root . '/includes/navbar.php';
 </main>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const searchInput = document.getElementById('searchInput');
-    const prodiFilter = document.getElementById('prodiFilter');
-    const studentRows = document.querySelectorAll('.student-row');
-    const noResults = document.getElementById('noResults');
-    const totalCount = document.getElementById('totalCount');
+    document.addEventListener('DOMContentLoaded', function() {
+        const itemsPerPage = 10;
+        let currentPage = 1;
+        let filteredRows = [];
 
-    function filterStudents() {
-        const searchTerm = searchInput.value.toLowerCase();
-        const selectedProdi = prodiFilter.value;
-        let visible = 0;
+        const searchInput = document.getElementById('searchInput');
+        const prodiFilter = document.getElementById('prodiFilter');
+        const studentRows = Array.from(document.querySelectorAll('.student-row'));
+        const noResults = document.getElementById('noResults');
+        const totalCount = document.getElementById('totalCount');
+        const paginationList = document.getElementById('pagination');
+        const paginationContainer = document.getElementById('paginationContainer');
 
-        studentRows.forEach(row => {
-            const name = row.dataset.name;
-            const nim  = row.dataset.nim;
-            const prodi = row.dataset.prodi;
+        function filterStudents() {
+            const searchTerm = searchInput.value.toLowerCase();
+            const selectedProdi = prodiFilter.value;
 
-            const matchSearch = name.includes(searchTerm) || nim.includes(searchTerm);
-            const matchProdi  = selectedProdi === 'all' || prodi === selectedProdi;
+            filteredRows = [];
 
-            if (matchSearch && matchProdi) {
-                row.style.display = 'flex';
-                visible++;
-            } else {
+            studentRows.forEach(row => {
+                const name = row.dataset.name;
+                const nim = row.dataset.nim;
+                const prodi = row.dataset.prodi;
+
+                const matchSearch = name.includes(searchTerm) || nim.includes(searchTerm);
+                const matchProdi = selectedProdi === 'all' || prodi === selectedProdi;
+
+                if (matchSearch && matchProdi) {
+                    filteredRows.push(row);
+                }
                 row.style.display = 'none';
-            }
-        });
+            });
 
-        if (visible === 0) {
-            noResults.classList.remove('d-none');
-        } else {
-            noResults.classList.add('d-none');
+            totalCount.textContent = filteredRows.length;
+
+            if (filteredRows.length === 0) {
+                noResults.classList.remove('d-none');
+                paginationContainer.classList.add('d-none');
+            } else {
+                noResults.classList.add('d-none');
+                paginationContainer.classList.remove('d-none');
+                
+                currentPage = 1;
+                
+                renderPagination();
+                showPage(currentPage);
+            }
         }
 
-        totalCount.textContent = visible;
-    }
+        function showPage(page) {
+            filteredRows.forEach(row => row.style.display = 'none');
 
-    searchInput.addEventListener('keyup', filterStudents);
-    prodiFilter.addEventListener('change', filterStudents);
-});
+            const start = (page - 1) * itemsPerPage;
+            const end = start + itemsPerPage;
+
+            const pageItems = filteredRows.slice(start, end);
+
+            pageItems.forEach(row => {
+                row.style.display = 'flex';
+                
+                row.classList.remove('aos-animate');
+                setTimeout(() => row.classList.add('aos-animate'), 50); 
+            });
+        }
+
+        function renderPagination() {
+            paginationList.innerHTML = '';
+            
+            const totalPages = Math.ceil(filteredRows.length / itemsPerPage);
+
+            if (totalPages <= 1) return;
+
+            const prevLi = document.createElement('li');
+            prevLi.className = `page-item ${currentPage === 1 ? 'disabled' : ''}`;
+            prevLi.innerHTML = `<a class="page-link" href="#" aria-label="Previous">&laquo;</a>`;
+            prevLi.addEventListener('click', (e) => {
+                e.preventDefault();
+                if (currentPage > 1) {
+                    currentPage--;
+                    changePage();
+                }
+            });
+            paginationList.appendChild(prevLi);
+
+            for (let i = 1; i <= totalPages; i++) {
+                const li = document.createElement('li');
+                li.className = `page-item ${i === currentPage ? 'active' : ''}`;
+                li.innerHTML = `<a class="page-link" href="#">${i}</a>`;
+                li.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    currentPage = i;
+                    changePage();
+                });
+                paginationList.appendChild(li);
+            }
+
+            const nextLi = document.createElement('li');
+            nextLi.className = `page-item ${currentPage === totalPages ? 'disabled' : ''}`;
+            nextLi.innerHTML = `<a class="page-link" href="#" aria-label="Next">&raquo;</a>`;
+            nextLi.addEventListener('click', (e) => {
+                e.preventDefault();
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    changePage();
+                }
+            });
+            paginationList.appendChild(nextLi);
+        }
+
+        function changePage() {
+            renderPagination();
+            showPage(currentPage);
+        }
+
+        searchInput.addEventListener('keyup', filterStudents);
+        prodiFilter.addEventListener('change', filterStudents);
+
+        filterStudents();
+    });
 </script>
 
 <?php include '../includes/footer.php'; ?>

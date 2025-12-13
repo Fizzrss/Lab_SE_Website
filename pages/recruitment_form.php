@@ -13,18 +13,6 @@ require_once $root . '/includes/header.php';
 require_once $root . '/includes/navbar.php';
 ?>
 
-
-<!-- <section class="page-hero-banner">
-  <div class="container">
-    <div class="row">
-      <div class="col-12">
-        <h1>Formulir Pendaftaran</h1>
-        <p>Bergabunglah dengan tim Laboratorium Software Engineering.</p>
-      </div>
-    </div>
-  </div>
-</section> -->
-
 <header class="header text-center py-5 text-white">
   <div class="container">
     <h1>Formulir Pendaftaran</h1>
@@ -162,5 +150,3 @@ require_once $root . '/includes/navbar.php';
 <?php
 require_once $root . '/includes/footer.php';
 ?>
-
-<!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script> -->

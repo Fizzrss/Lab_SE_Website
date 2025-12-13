@@ -76,11 +76,17 @@ $uploadPath = '/Lab_SE_Website/upload/';
                         <div class="d-flex justify-content-between align-items-center w-100 px-3 mb-2 mt-3">
                             <span class="fw-bold"><i class="bi bi-whatsapp me-2"></i>WhatsApp</span>
                         </div>
-                        <p class="text-muted small px-3 w-100">
-                            <a href="https://wa.me/62<?= ltrim($data['no_hp'], '0') ?>" target="_blank" class="text-decoration-none">
-                                <?= htmlspecialchars($data['no_hp']) ?>
+                        <p class="text-muted small px-3 w-100 text-break"><?= htmlspecialchars($data['no_hp']) ?></p>
+                        <div class="d-grid gap-2 w-100 mt-2 px-3">
+                            <a href="https://mail.google.com/mail/?view=cm&fs=1&to=<?= urlencode($data['email']) ?>" target="_blank" class="btn btn-outline-primary btn-sm">
+                                <i class="bi bi-envelope"></i> Kirim Email
                             </a>
-                        </p>
+                        </div>
+                        <div class="d-grid gap-2 w-100 mt-2 px-3">
+                            <a href="https://wa.me/62<?= ltrim($data['no_hp'], '0') ?>" class="btn btn-outline-success btn-sm">
+                                <i class="bi bi-whatsapp"></i> Kirim Pesan
+                            </a>
+                        </div>
 
                         <?php if ($status == 'pending' || $status == 'proses'): ?>
                             <div class="d-grid gap-2 w-100 mt-4 px-3">

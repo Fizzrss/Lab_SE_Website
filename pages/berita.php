@@ -96,35 +96,36 @@ include '../includes/navbar.php';
                     $tanggal = date('d M Y', strtotime($berita['tanggal_publikasi']));
                 ?>
                     <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="<?= $delay ?>">
-                        <article class="blog-card">
-                            <div class="overflow-hidden">
-                                <img src="<?= htmlspecialchars($berita['gambar']) ?>" 
-                                     alt="<?= htmlspecialchars($berita['judul']) ?>" 
-                                     loading="lazy"
-                                     onerror="this.src='https://placehold.co/800x600/png?text=No+Image'">
-                            </div>
-
-                            <div class="blog-card-body">
-                                <div class="text-primary fw-bold text-uppercase small mb-2 category-badge bg-primary bg-opacity-10">
-                                    <?= htmlspecialchars($berita['kategori']) ?>
+                        <a href="berita_detail.php?slug=<?= htmlspecialchars($berita['slug']) ?>">
+                            <article class="blog-card">
+                                <div class="overflow-hidden">
+                                    <img src="<?= htmlspecialchars($berita['gambar']) ?>" 
+                                         alt="<?= htmlspecialchars($berita['judul']) ?>" 
+                                         loading="lazy"
+                                         onerror="this.src='https://placehold.co/800x600/png?text=No+Image'">
                                 </div>
-                                
-                                <h3 class="h5 blog-title mb-3">
-                                    <a href="berita_detail.php?slug=<?= htmlspecialchars($berita['slug']) ?>">
+    
+                                <div class="blog-card-body">
+                                    <div class="text-primary fw-bold text-uppercase small mb-2 category-badge bg-primary bg-opacity-10">
+                                        <?= htmlspecialchars($berita['kategori']) ?>
+                                    </div>
+                                    
+                                    <h3 class="h5 blog-title mb-3">
                                         <?= htmlspecialchars($berita['judul']) ?>
-                                    </a>
-                                </h3>
-                                
-                                <p class="text-muted small mb-4 flex-grow-1">
-                                    <?= htmlspecialchars($berita['isi_singkat']) ?>
-                                </p>
-
-                                <div class="blog-footer">
-                                    <span><i class="bi bi-calendar3 me-1"></i> <?= $tanggal ?></span>
-                                    <span><i class="bi bi-person-circle me-1"></i> <?= htmlspecialchars($berita['penulis']) ?></span>
+                                    </h3>
+                                    
+                                    <p class="text-muted small mb-4 flex-grow-1">
+                                        <?= htmlspecialchars($berita['isi_singkat']) ?>
+                                    </p>
+    
+                                    <div class="blog-footer">
+                                        <span><i class="bi bi-calendar3 me-1"></i> <?= $tanggal ?></span>
+                                        <span><i class="bi bi-person-circle me-1"></i> <?= htmlspecialchars($berita['penulis']) ?></span>
+                                    </div>
                                 </div>
-                            </div>
-                        </article>
+                            </article>
+
+                        </a>
                     </div>
                 <?php endforeach; ?>
             </div>

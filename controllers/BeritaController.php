@@ -2,12 +2,12 @@
 class BeritaController
 {
     private $model;
-    private $uploadDir = '../assets/uploads/berita/';
+    private $uploadDir = '../assets/img';
 
     public function __construct($model)
     {
         $this->model = $model;
-        
+
         if (!file_exists($this->uploadDir)) {
             mkdir($this->uploadDir, 0777, true);
         }
@@ -18,16 +18,16 @@ class BeritaController
         $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
         $limit = 10;
         $offset = ($page - 1) * $limit;
-        
+
         $kategori = isset($_GET['kategori']) ? $_GET['kategori'] : null;
         $search = isset($_GET['search']) ? $_GET['search'] : null;
-        
+
         // Admin can see all status
         $beritaList = $this->model->getAllForAdmin($limit, $offset, $kategori, $search);
         $totalBerita = $this->model->countAllForAdmin($kategori, $search);
         $totalPages = ceil($totalBerita / $limit);
         $categories = $this->model->getCategories();
-        
+
         include 'pages/berita/list_berita.php';
     }
 
@@ -44,7 +44,7 @@ class BeritaController
         }
 
         $errors = $this->validateInput($_POST);
-        
+
         if (!empty($errors)) {
             $_SESSION['errors'] = $errors;
             $_SESSION['old_input'] = $_POST;
@@ -83,10 +83,10 @@ class BeritaController
         ];
 
         if ($this->model->create($data)) {
-            setFlashMessage('success', 'Berita berhasil ditambahkan!');
-            header('Location: index.php?action=berita_list');
+            $_SESSION['swal_success'] = 'Berita berhasil ditambahkan!';
+            header('Location: index.php?action=berita_list&message=created');
         } else {
-            setFlashMessage('danger', 'Gagal menambahkan berita!');
+            $_SESSION['swal_error'] = 'Gagal menambahkan berita!';
             header('Location: index.php?action=berita_add');
         }
         exit;
@@ -95,13 +95,13 @@ class BeritaController
     public function edit($id)
     {
         $berita = $this->model->getById($id);
-        
+
         if (!$berita) {
             setFlashMessage('danger', 'Berita tidak ditemukan!');
             header('Location: index.php?action=berita_list');
             exit;
         }
-        
+
         include 'pages/berita/edit_berita.php';
     }
 
@@ -113,7 +113,7 @@ class BeritaController
         }
 
         $berita = $this->model->getById($id);
-        
+
         if (!$berita) {
             setFlashMessage('danger', 'Berita tidak ditemukan!');
             header('Location: index.php?action=berita_list');
@@ -121,7 +121,7 @@ class BeritaController
         }
 
         $errors = $this->validateInput($_POST);
-        
+
         if (!empty($errors)) {
             $_SESSION['errors'] = $errors;
             $_SESSION['old_input'] = $_POST;
@@ -163,10 +163,10 @@ class BeritaController
         ];
 
         if ($this->model->update($id, $data)) {
-            setFlashMessage('success', 'Berita berhasil diupdate!');
-            header('Location: index.php?action=berita_list');
+            $_SESSION['swal_success'] = 'Berita berhasil diperbarui!';
+            header('Location: index.php?action=berita_list&message=updated');
         } else {
-            setFlashMessage('danger', 'Gagal mengupdate berita!');
+            $_SESSION['swal_error'] = 'Gagal mengupdate berita!';
             header('Location: index.php?action=berita_edit&id=' . $id);
         }
         exit;
@@ -175,12 +175,12 @@ class BeritaController
     public function delete($id)
     {
         if ($this->model->delete($id)) {
-            setFlashMessage('success', 'Berita berhasil dihapus!');
+            $_SESSION['swal_success'] = 'Berita berhasil dihapus!';
+            header('Location: index.php?action=berita_list&message=deleted');
         } else {
-            setFlashMessage('danger', 'Gagal menghapus berita!');
+            $_SESSION['swal_error'] = 'Gagal menghapus berita!';
+            header('Location: index.php?action=berita_list');
         }
-        
-        header('Location: index.php?action=berita_list');
         exit;
     }
 
@@ -218,7 +218,7 @@ class BeritaController
     private function handleImageUpload($file)
     {
         $allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
-        $maxSize = 5 * 1024 * 1024; 
+        $maxSize = 5 * 1024 * 1024;
 
         if (!in_array($file['type'], $allowedTypes)) {
             return false;
@@ -239,5 +239,3 @@ class BeritaController
         return false;
     }
 }
-?>
-

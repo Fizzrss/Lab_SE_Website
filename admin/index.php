@@ -242,6 +242,9 @@ require_once $root . '/admin/includes/admin_slidebar.php';
         case 'komentar_delete':
             $komentarController->delete($_GET['id']);
             break;
+        case 'komentar_detail':
+            $komentarController->detail($_GET['id']);
+            break;
 
         // --- Social Media Settings Routes ---
         case 'social_media_settings':

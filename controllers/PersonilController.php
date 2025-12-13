@@ -157,7 +157,7 @@ class PersonilController
         $owned_specs = $this->model->getPersonilSpesialisasiIDs($id);
 
         $master_sosmed = $this->model->getAllMasterSosmed();
-        $owned_sosmed = $this->model->getPersonilSosmed($id); // Ambil sosmed yang dimiliki
+        $owned_sosmed = $this->model->getPersonilSosmed($id);
 
         include $this->root . '/admin/pages/personil/edit_personil.php';
     }

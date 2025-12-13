@@ -156,7 +156,6 @@
 <script>
     $(document).ready(function() {
         
-        // --- TEMPLATE SPESIALISASI ---
         var optionsHtml = '<option value="">-- Pilih Bidang --</option>';
         <?php if(!empty($spesialisasi_list)): ?>
             <?php foreach ($spesialisasi_list as $master): ?>
@@ -164,7 +163,6 @@
             <?php endforeach; ?>
         <?php endif; ?>
 
-        // --- TEMPLATE SOSMED ---
         var sosmedOptions = '<option value="">- Pilih Platform -</option>';
         <?php if(!empty($master_sosmed)): ?>
             <?php foreach ($master_sosmed as $ms): ?>
@@ -173,7 +171,6 @@
         <?php endif; ?>
 
 
-        // 1. Logic Spesialisasi
         $('#add-row').click(function(e) {
             e.preventDefault(); 
             var html = `
@@ -194,7 +191,6 @@
         });
 
 
-        // 2. Logic Sosmed
         $('#add-sosmed').click(function(e) {
             e.preventDefault();
             var html = `
@@ -221,7 +217,6 @@
         });
 
 
-        // 3. Konfirmasi Update
         $('form').on('submit', function(e) {
             e.preventDefault();
             var form = this;

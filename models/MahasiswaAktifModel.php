@@ -46,7 +46,7 @@ class MahasiswaAktifModel {
                     prodi,
                     status,
                     foto    
-                FROM " . $this->table . " ORDER BY nama ASC";
+                FROM " . $this->table . " WHERE status = 'aktif' ORDER BY nama ASC";
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);

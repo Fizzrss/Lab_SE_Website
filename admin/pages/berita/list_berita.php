@@ -22,7 +22,6 @@ if (!defined('ROOT_PATH')) {
         </div>
     </div>
 
-    <?php echo getFlashMessage(); ?>
 
     <section class="section">
         <div class="card">
@@ -39,15 +38,14 @@ if (!defined('ROOT_PATH')) {
                 </div>
             </div>
             <div class="card-body">
-                <!-- Filter & Search -->
                 <div class="row mb-3">
                     <div class="col-md-4">
                         <form method="GET" action="">
                             <input type="hidden" name="action" value="berita_list">
                             <div class="input-group">
-                                <input type="text" name="search" class="form-control" 
-                                       placeholder="Cari berita..." 
-                                       value="<?= htmlspecialchars($search ?? '') ?>">
+                                <input type="text" name="search" class="form-control"
+                                    placeholder="Cari berita..."
+                                    value="<?= htmlspecialchars($search ?? '') ?>">
                                 <button class="btn btn-primary" type="submit">
                                     <i class="bi bi-search"></i>
                                 </button>
@@ -60,8 +58,8 @@ if (!defined('ROOT_PATH')) {
                             <select name="kategori" class="form-select" onchange="this.form.submit()">
                                 <option value="">Semua Kategori</option>
                                 <?php foreach ($categories as $cat): ?>
-                                    <option value="<?= htmlspecialchars($cat) ?>" 
-                                            <?= $kategori === $cat ? 'selected' : '' ?>>
+                                    <option value="<?= htmlspecialchars($cat) ?>"
+                                        <?= $kategori === $cat ? 'selected' : '' ?>>
                                         <?= htmlspecialchars($cat) ?>
                                     </option>
                                 <?php endforeach; ?>
@@ -75,7 +73,7 @@ if (!defined('ROOT_PATH')) {
                     <table class="table table-striped table-hover">
                         <thead>
                             <tr>
-                                <th>#</th>
+                                <th>No</th>
                                 <th>Gambar</th>
                                 <th>Judul</th>
                                 <th>Kategori</th>
@@ -94,17 +92,17 @@ if (!defined('ROOT_PATH')) {
                                     </td>
                                 </tr>
                             <?php else: ?>
-                                <?php 
+                                <?php
                                 $no = $offset + 1;
-                                foreach ($beritaList as $berita): 
+                                foreach ($beritaList as $berita):
                                 ?>
                                     <tr>
                                         <td><?= $no++ ?></td>
                                         <td>
-                                            <img src="<?= htmlspecialchars($berita['gambar']) ?>" 
-                                                 alt="<?= htmlspecialchars($berita['judul']) ?>"
-                                                 style="width: 60px; height: 60px; object-fit: cover; border-radius: 5px;"
-                                                 onerror="this.src='https://placehold.co/60x60/png?text=No+Image'">
+                                            <img src="<?= htmlspecialchars($berita['gambar']) ?>"
+                                                alt="<?= htmlspecialchars($berita['judul']) ?>"
+                                                style="width: 60px; height: 60px; object-fit: cover; border-radius: 5px;"
+                                                onerror="this.src='https://placehold.co/60x60/png?text=No+Image'">
                                         </td>
                                         <td>
                                             <strong><?= htmlspecialchars($berita['judul']) ?></strong>
@@ -129,14 +127,14 @@ if (!defined('ROOT_PATH')) {
                                         </td>
                                         <td>
                                             <div class="btn-group" role="group">
-                                                <a href="index.php?action=berita_edit&id=<?= $berita['id'] ?>" 
-                                                   class="btn btn-sm btn-warning" title="Edit">
+                                                <a href="index.php?action=berita_edit&id=<?= $berita['id'] ?>"
+                                                    class="btn btn-sm btn-warning" title="Edit">
                                                     <i class="bi bi-pencil"></i>
                                                 </a>
-                                                <a href="index.php?action=berita_delete&id=<?= $berita['id'] ?>" 
-                                                   class="btn btn-sm btn-danger" 
-                                                   onclick="return confirm('Yakin ingin menghapus berita ini?')"
-                                                   title="Hapus">
+                                                <a href="index.php?action=berita_delete&id=<?= $berita['id'] ?>"
+                                                    class="btn btn-sm btn-danger btn-delete"
+                                                    data-bs-toggle="tooltip"
+                                                    title="Hapus">
                                                     <i class="bi bi-trash"></i>
                                                 </a>
                                             </div>
@@ -157,7 +155,7 @@ if (!defined('ROOT_PATH')) {
                                     Previous
                                 </a>
                             </li>
-                            
+
                             <?php for ($i = 1; $i <= $totalPages; $i++): ?>
                                 <li class="page-item <?= $i === $page ? 'active' : '' ?>">
                                     <a class="page-link" href="?action=berita_list&page=<?= $i ?><?= $kategori ? '&kategori=' . urlencode($kategori) : '' ?><?= $search ? '&search=' . urlencode($search) : '' ?>">
@@ -165,7 +163,7 @@ if (!defined('ROOT_PATH')) {
                                     </a>
                                 </li>
                             <?php endfor; ?>
-                            
+
                             <li class="page-item <?= $page >= $totalPages ? 'disabled' : '' ?>">
                                 <a class="page-link" href="?action=berita_list&page=<?= $page + 1 ?><?= $kategori ? '&kategori=' . urlencode($kategori) : '' ?><?= $search ? '&search=' . urlencode($search) : '' ?>">
                                     Next
@@ -179,3 +177,49 @@ if (!defined('ROOT_PATH')) {
     </section>
 </div>
 
+<script src="/Lab_SE_Website/admin/vendor/jquery/jquery.min.js"></script>
+<script src="/Lab_SE_Website/admin/assets/extensions/sweetalert2/sweetalert2.all.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        <?php if (isset($_SESSION['swal_success'])): ?>
+            Swal.fire({
+                title: 'Berhasil!',
+                text: '<?= $_SESSION['swal_success']; ?>',
+                icon: 'success',
+                timer: 2000,
+                showConfirmButton: false
+            });
+            <?php unset($_SESSION['swal_success']); ?>
+        <?php endif; ?>
+
+        <?php if (isset($_SESSION['swal_error'])): ?>
+            Swal.fire({
+                title: 'Gagal!',
+                text: '<?= $_SESSION['swal_error']; ?>',
+                icon: 'error'
+            });
+            <?php unset($_SESSION['swal_error']); ?>
+        <?php endif; ?>
+
+        $('body').on('click', '.btn-delete', function(e) {
+            e.preventDefault();
+            var url = $(this).attr('href');
+
+            Swal.fire({
+                title: 'Yakin hapus data ini?',
+                text: "Data berita ini akan dihapus permanen!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Ya, Hapus!',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = url;
+                }
+            });
+        });
+    });
+</script>

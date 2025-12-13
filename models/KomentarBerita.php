@@ -23,11 +23,14 @@ class KomentarBeritaModel
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function getById($id)
-    {
-        $query = "SELECT * FROM " . $this->table_name . " WHERE id = :id LIMIT 1";
+    public function getById($id) {
+        $query = "SELECT k.*, b.judul as berita_judul 
+                  FROM " . $this->table_name . " k
+                  LEFT JOIN berita b ON k.berita_id = b.id
+                  WHERE k.id = :id";
+                  
         $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->bindParam(':id', $id);
         $stmt->execute();
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }

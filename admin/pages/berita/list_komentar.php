@@ -23,8 +23,6 @@ if (!defined('ROOT_PATH')) {
         </div>
     </div>
 
-    <?php echo getFlashMessage(); ?>
-
     <section class="section">
         <div class="card">
             <div class="card-header">
@@ -33,10 +31,10 @@ if (!defined('ROOT_PATH')) {
             </div>
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table table-striped table-hover">
+                    <table class="table table-striped table-hover" id="table1">
                         <thead>
                             <tr>
-                                <th>#</th>
+                                <th>No</th>
                                 <th>Berita</th>
                                 <th>Nama</th>
                                 <th>Email</th>
@@ -54,9 +52,9 @@ if (!defined('ROOT_PATH')) {
                                     </td>
                                 </tr>
                             <?php else: ?>
-                                <?php 
+                                <?php
                                 $no = $offset + 1;
-                                foreach ($comments as $comment): 
+                                foreach ($comments as $comment):
                                 ?>
                                     <tr>
                                         <td><?= $no++ ?></td>
@@ -76,13 +74,22 @@ if (!defined('ROOT_PATH')) {
                                             </div>
                                         </td>
                                         <td><?= date('d/m/Y H:i', strtotime($comment['created_at'])) ?></td>
-                                        <td>
-                                            <a href="index.php?action=komentar_delete&id=<?= $comment['id'] ?>" 
-                                               class="btn btn-sm btn-danger" 
-                                               onclick="return confirm('Yakin ingin menghapus komentar ini?')"
-                                               title="Hapus Komentar">
-                                                <i class="bi bi-trash"></i> Hapus
-                                            </a>
+                                        <td class="text-center">
+                                            <div class="d-flex justify-content-center align-items-center gap-2">
+
+                                                <a href="index.php?action=komentar_detail&id=<?= $comment['id'] ?>"
+                                                    class="btn btn-sm btn-secondary text-white"
+                                                    data-bs-toggle="tooltip" title="Lihat Detail">
+                                                    <i class="bi bi-eye"></i>
+                                                </a>
+
+                                                <a href="index.php?action=komentar_delete&id=<?= $comment['id'] ?>"
+                                                    class="btn btn-sm btn-danger btn-delete"
+                                                    data-bs-toggle="tooltip" title="Hapus">
+                                                    <i class="bi bi-trash"></i>
+                                                </a>
+
+                                            </div>
                                         </td>
                                     </tr>
                                 <?php endforeach; ?>
@@ -90,35 +97,65 @@ if (!defined('ROOT_PATH')) {
                         </tbody>
                     </table>
                 </div>
-
-                <!-- Pagination -->
-                <?php if ($totalPages > 1): ?>
-                    <nav aria-label="Page navigation" class="mt-3">
-                        <ul class="pagination justify-content-center">
-                            <li class="page-item <?= $page <= 1 ? 'disabled' : '' ?>">
-                                <a class="page-link" href="?action=komentar_list&page=<?= $page - 1 ?>">
-                                    Previous
-                                </a>
-                            </li>
-                            
-                            <?php for ($i = 1; $i <= $totalPages; $i++): ?>
-                                <li class="page-item <?= $i === $page ? 'active' : '' ?>">
-                                    <a class="page-link" href="?action=komentar_list&page=<?= $i ?>">
-                                        <?= $i ?>
-                                    </a>
-                                </li>
-                            <?php endfor; ?>
-                            
-                            <li class="page-item <?= $page >= $totalPages ? 'disabled' : '' ?>">
-                                <a class="page-link" href="?action=komentar_list&page=<?= $page + 1 ?>">
-                                    Next
-                                </a>
-                            </li>
-                        </ul>
-                    </nav>
-                <?php endif; ?>
             </div>
         </div>
     </section>
 </div>
 
+<script src="/Lab_SE_Website/admin/assets/extensions/simple-datatables/umd/simple-datatables.js"></script>
+<script src="/Lab_SE_Website/admin/assets/static/js/pages/simple-datatables.js"></script>
+<script src="/Lab_SE_Website/admin/assets/extensions/sweetalert2/sweetalert2.all.min.js"></script>
+<script src="/Lab_SE_Website/admin/vendor/jquery/jquery.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        
+        // --- 1. ALERT SUKSES / ERROR (Sesuai Controller Baru) ---
+        <?php if (isset($_SESSION['swal_icon'])): ?>
+            Swal.fire({
+                title: '<?= $_SESSION['swal_title']; ?>',
+                text: '<?= $_SESSION['swal_text']; ?>',
+                icon: '<?= $_SESSION['swal_icon']; ?>',
+                timer: 2500,
+                showConfirmButton: true
+            });
+            <?php 
+            // Hapus session agar tidak muncul terus
+            unset($_SESSION['swal_icon']); 
+            unset($_SESSION['swal_title']); 
+            unset($_SESSION['swal_text']); 
+            ?>
+        <?php endif; ?>
+
+        // --- 2. ALERT KHUSUS WARNING (Opsional) ---
+        <?php if (isset($_SESSION['swal_warning'])): ?>
+            Swal.fire({
+                title: 'Perhatian',
+                text: '<?= $_SESSION['swal_warning']; ?>',
+                icon: 'warning'
+            });
+            <?php unset($_SESSION['swal_warning']); ?>
+        <?php endif; ?>
+
+        // --- 3. KONFIRMASI HAPUS (Tetap Sama) ---
+        $('body').on('click', '.btn-delete', function(e) {
+            e.preventDefault();
+            var url = $(this).attr('href');
+
+            Swal.fire({
+                title: 'Yakin hapus komentar ini?',
+                text: "Data akan dihapus permanen!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Ya, Hapus!',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = url;
+                }
+            });
+        });
+    });
+</script>

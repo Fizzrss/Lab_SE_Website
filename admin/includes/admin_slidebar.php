@@ -1,146 +1,192 @@
-<div id="sidebar">
+<div id="sidebar" class="active">
     <div class="sidebar-wrapper active">
         <div class="sidebar-header text-center">
             <div class="d-flex flex-column align-items-center">
                 <div class="logo">
-                    <a href="index.html"><img
-                                src="/Lab_SE_Website/admin/assets/img/LAB SE_Outline.png"
-                                alt="Logo" srcset=""></a>
-                    <!-- <a href="index.php?action=dashboard">
-                        <h5 class="text-primary text-center">Laboratorium SE</h5>
-                    </a> -->
+                    <a href="index.php?action=dashboard">
+                        <img src="/Lab_SE_Website/admin/assets/img/LAB SE_Outline.png" alt="Lab SE Logo">
+                        <h6 class="text-primary text-center">Software Engineering</h6>
+                    </a>
                 </div>
-                <!-- <div class="sidebar-toggler x">
-                    <a href="#" class="sidebar-hide d-xl-none d-block"><i class="bi bi-x bi-middle"></i></a>
-                </div> -->
             </div>
         </div>
         <div class="sidebar-menu">
             <ul class="menu">
-                <li class="sidebar-title mt-0">Menu</li>
-                <li class="sidebar-item">
-                    <a href="index.php?action=dashboard" class='sidebar-link' data-key="dashboard">
-                        <i class="bi bi-house-fill"></i>
+                <!-- DASHBOARD -->
+                <li class="sidebar-item" data-key="dashboard">
+                    <a href="index.php?action=dashboard" class='sidebar-link'>
+                        <i class="bi bi-grid-fill"></i>
                         <span>Dashboard</span>
                     </a>
                 </li>
 
+                <hr>
+                <!-- MANAJEMEN DATA -->
+                <li class="sidebar-title">Manajemen Data</li>
 
-                <li class="sidebar-item has-sub">
+                <li class="sidebar-item has-sub" data-key="personil">
                     <a href="#" class='sidebar-link'>
                         <i class="bi bi-people-fill"></i>
-                        <span>Manajemen Personil</span>
+                        <span>Personil</span>
                     </a>
                     <ul class="submenu">
-                        <li class="submenu-item">
-                            <a href="index.php?action=personil_list" class="submenu-link" data-key="personil_list">Daftar Personil</a>
+                        <li class="submenu-item" data-key="personil_list">
+                            <a href="index.php?action=personil_list" class="submenu-link">Daftar Personil</a>
                         </li>
-                        <li class="submenu-item">
-                            <a href="index.php?action=publikasi_list" class="submenu-link" data-key="publikasi_list">Daftar Publikasi</a>
+                        <li class="submenu-item" data-key="publikasi_list">
+                            <a href="index.php?action=publikasi_list" class="submenu-link">Publikasi</a>
                         </li>
-                        <li class="submenu-item">
-                            <a href="index.php?action=spesialisasi_list" class="submenu-link" data-key="spesialisasi_list">Daftar Spesialisasi</a>
-                        </li>
-                    </ul>
-                </li>
-                <li class="sidebar-item has-sub">
-                    <a href="#" class='sidebar-link'>
-                        <i class="bi bi-list-ul"></i>
-                        <span>Manajemen Recruitment</span>
-                    </a>
-                    <ul class="submenu">
-                        <li class="submenu-item">
-                            <a href="index.php?action=mahasiswa_list" class="submenu-link" data-key="mahasiswa_list">Mahasiswa</a>
-                        </li>
-                        <li class="submenu-item">
-                            <a href="index.php?action=recruitment_list" class="submenu-link" data-key="recruitment_list">Recruitment</a>
+                        <li class="submenu-item" data-key="spesialisasi_list">
+                            <a href="index.php?action=spesialisasi_list" class="submenu-link">Spesialisasi</a>
                         </li>
                     </ul>
                 </li>
 
-                <li class="sidebar-item has-sub">
+                <li class="sidebar-item has-sub" data-key="mahasiswa">
+                    <a href="#" class='sidebar-link'>
+                        <i class="bi bi-mortarboard-fill"></i>
+                        <span>Mahasiswa</span>
+                    </a>
+                    <ul class="submenu">
+                        <li class="submenu-item" data-key="mahasiswa_list">
+                            <a href="index.php?action=mahasiswa_list" class="submenu-link">Data Mahasiswa</a>
+                        </li>
+                        <li class="submenu-item" data-key="recruitment_list">
+                            <a href="index.php?action=recruitment_list" class="submenu-link">Recruitment</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <hr>
+                <!-- KONTEN & PUBLIKASI -->
+                <li class="sidebar-title">Konten & Publikasi</li>
+
+                <li class="sidebar-item has-sub" data-key="berita">
                     <a href="#" class='sidebar-link'>
                         <i class="bi bi-newspaper"></i>
-                        <span>Manajemen Berita</span>
+                        <span>Berita</span>
                     </a>
                     <ul class="submenu">
-                        <li class="submenu-item">
-                            <a href="index.php?action=berita_list" class="submenu-link" data-key="berita_list">Daftar Berita</a>
+                        <li class="submenu-item" data-key="berita_list">
+                            <a href="index.php?action=berita_list" class="submenu-link">Daftar Berita</a>
                         </li>
-                        <li class="submenu-item">
-                            <a href="index.php?action=komentar_list" class="submenu-link" data-key="komentar_list">Komentar</a>
+                        <li class="submenu-item" data-key="komentar_list">
+                            <a href="index.php?action=komentar_list" class="submenu-link">Komentar</a>
                         </li>
-                        <li class="submenu-item">
-                            <a href="index.php?action=social_media_settings" class="submenu-link" data-key="social_media_settings">Media Sosial</a>
-                        </li>
-                        <li class="submenu-item">
-                            <a href="index.php?action=related_posts_settings" class="submenu-link" data-key="related_posts_settings">Related Posts</a>
-                        </li>
-                        <li class="submenu-item">
-                            <a href="index.php?action=berita_hero_settings" class="submenu-link" data-key="berita_hero_settings">Hero Banner</a>
+                        <li class="submenu-item" data-key="berita_hero_settings">
+                            <a href="index.php?action=berita_hero_settings" class="submenu-link">Hero Banner</a>
                         </li>
                     </ul>
                 </li>
 
+                <li class="sidebar-item has-sub" data-key="content">
+                    <a href="#" class='sidebar-link'>
+                        <i class="bi bi-file-earmark-text-fill"></i>
+                        <span>Konten Lainnya</span>
+                    </a>
+                    <ul class="submenu">
+                        <li class="submenu-item" data-key="related_posts_settings">
+                            <a href="index.php?action=related_posts_settings" class="submenu-link">Related Posts</a>
+                        </li>
+                        <li class="submenu-item" data-key="social_media_settings">
+                            <a href="index.php?action=social_media_settings" class="submenu-link">Media Sosial</a>
+                        </li>
+                    </ul>
+                </li>
 
+                <hr>
+                <!-- PENGATURAN WEBSITE -->
                 <li class="sidebar-title">Pengaturan</li>
 
-                <li class="sidebar-item has-sub">
+                <li class="sidebar-item has-sub" data-key="settings">
                     <a href="#" class='sidebar-link'>
                         <i class="bi bi-gear-fill"></i>
-                        <span>Pengaturan</span>
+                        <span>Website</span>
                     </a>
                     <ul class="submenu">
-                        <li class="submenu-item">
-                            <a href="index.php?action=profil_settings" class="submenu-link" data-key="profil_settings">Beranda & Profil</a>
+                        <li class="submenu-item" data-key="profil_settings">
+                            <a href="index.php?action=profil_settings" class="submenu-link">Beranda & Profil</a>
                         </li>
-                        <li class="submenu-item">
-                            <a href="index.php?action=footer_settings" class="submenu-link" data-key="footer_settings">Footer</a>
+                        <li class="submenu-item" data-key="footer_settings">
+                            <a href="index.php?action=footer_settings" class="submenu-link">Footer</a>
                         </li>
                     </ul>
                 </li>
 
+                <!-- LOGOUT -->
+                <!-- <li class="sidebar-title">Akun</li>
+                
                 <li class="sidebar-item">
-                    <a href="index.php?action=logout" class='sidebar-link text-danger' onclick="return confirm('Yakin ingin logout?');">
+                    <a href="index.php?action=logout" class='sidebar-link' onclick="return confirm('Apakah Anda yakin ingin keluar?');">
                         <i class="bi bi-box-arrow-right"></i>
                         <span>Logout</span>
                     </a>
-                </li>
+                </li> -->
 
             </ul>
+        </div>
+        <div class="sidebar-footer">
+            <a href="#" id="btnLogout" class="sidebar-link text-danger">
+                <i class="bi bi-box-arrow-right"></i>
+                <span>Logout</span>
+            </a>
         </div>
     </div>
 </div>
 
+<script src="/Lab_SE_Website/admin/vendor/jquery/jquery.min.js"></script>
+<script src="/Lab_SE_Website/admin/assets/extensions/sweetalert2/sweetalert2.all.min.js"></script>
+
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // 1. Ambil parameter 'action' dari URL
         const urlParams = new URLSearchParams(window.location.search);
-        const currentAction = urlParams.get('action') || 'dashboard'; // Default dashboard
+        const currentAction = urlParams.get('action') || 'dashboard';
 
-        // 2. Cari link yang punya data-key sama dengan action saat ini
-        const activeLink = document.querySelector(`[data-key="${currentAction}"]`);
+        document.querySelectorAll('.sidebar-item').forEach(item => {
+            item.classList.remove('active');
+        });
+        document.querySelectorAll('.submenu-item').forEach(item => {
+            item.classList.remove('active');
+        });
 
-        if (activeLink) {
-            // 3. Tambahkan class active ke parent <li>
-            const parentItem = activeLink.closest('.sidebar-item');
-            if (parentItem) {
-                parentItem.classList.add('active');
-            }
+        const activeItem = document.querySelector(`[data-key="${currentAction}"]`);
 
-            // 4. Jika ini adalah submenu, buka parent-nya juga
-            const parentSubmenu = activeLink.closest('.submenu');
-            if (parentSubmenu) {
-                // Cari parent utamanya (sidebar-item has-sub)
-                const mainParent = parentSubmenu.closest('.sidebar-item');
-                if (mainParent) {
-                    mainParent.classList.add('active');
-                    parentSubmenu.style.display = 'block'; // Paksa buka submenu
+        if (activeItem) {
+            activeItem.classList.add('active');
+
+            if (activeItem.classList.contains('submenu-item')) {
+                const parentItem = activeItem.closest('.sidebar-item.has-sub');
+                if (parentItem) {
+                    parentItem.classList.add('active');
                 }
-                // Tandai submenu item juga
-                const submenuItem = activeLink.closest('.submenu-item');
-                if (submenuItem) submenuItem.classList.add('active');
             }
         }
+
+        const menuItems = document.querySelectorAll('.sidebar-item.has-sub > a');
+        menuItems.forEach(item => {
+            item.addEventListener('click', function(e) {
+                e.preventDefault();
+                this.parentElement.classList.toggle('active');
+            });
+        });
     });
+
+    document.getElementById('btnLogout').addEventListener('click', function(e) {
+    e.preventDefault();
+
+    Swal.fire({
+        title: 'Logout?',
+        text: 'Anda yakin ingin keluar dari sistem?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#dc3545',
+        cancelButtonColor: '#6c757d',
+        confirmButtonText: 'Ya, Logout',
+        cancelButtonText: 'Batal'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            window.location.href = 'index.php?action=logout';
+        }
+    });
+});
 </script>

@@ -9,21 +9,21 @@ require_once __DIR__ . '/../config/config.php';
 require_once __DIR__ . '/../models/ProfilSections.php';
 
 try {
-    $database = new Database();
-    $db = $database->getConnection();
-    $profilModel = new ProfilSectionsModel($db);
-    
-    $tentangSection = $profilModel->getByKey('tentang');
-    $contentData = $tentangSection ? json_decode($tentangSection['section_content'], true) : null;
-    
-    $title = $tentangSection['section_title'] ?? 'Tentang Kami';
-    $description = $contentData['description'] ?? 'Laboratorium Rekayasa Perangkat Lunak merupakan fasilitas akademik di bawah naungan Jurusan Teknologi Informasi di Fakultas Teknik bidang rekayasa perangkat lunak yang mendukung Laboratorium ini dilengkapi tumbuh menjadi pusat aktivitas penelitian dan pengabdian masyarakat yang berfokus pada pengembangan teknologi perangkat lunak';
-    $images = $contentData['images'] ?? ['assets/img/bg_web.webp', 'assets/img/background.jpeg', 'assets/img/lab2.jpeg'];
+  $database = new Database();
+  $db = $database->getConnection();
+  $profilModel = new ProfilSectionsModel($db);
+
+  $tentangSection = $profilModel->getByKey('tentang');
+  $contentData = $tentangSection ? json_decode($tentangSection['section_content'], true) : null;
+
+  $title = $tentangSection['section_title'] ?? 'Tentang Kami';
+  $description = $contentData['description'] ?? 'Laboratorium Rekayasa Perangkat Lunak merupakan fasilitas akademik di bawah naungan Jurusan Teknologi Informasi di Fakultas Teknik bidang rekayasa perangkat lunak yang mendukung Laboratorium ini dilengkapi tumbuh menjadi pusat aktivitas penelitian dan pengabdian masyarakat yang berfokus pada pengembangan teknologi perangkat lunak';
+  $images = $contentData['images'] ?? ['assets/img/bg_web.webp', 'assets/img/background.jpeg', 'assets/img/lab2.jpeg'];
 } catch (Exception $e) {
-    // Fallback values
-    $title = 'Tentang Kami';
-    $description = 'Laboratorium Rekayasa Perangkat Lunak merupakan fasilitas akademik di bawah naungan Jurusan Teknologi Informasi di Fakultas Teknik bidang rekayasa perangkat lunak yang mendukung Laboratorium ini dilengkapi tumbuh menjadi pusat aktivitas penelitian dan pengabdian masyarakat yang berfokus pada pengembangan teknologi perangkat lunak';
-    $images = ['assets/img/bg_web.webp', 'assets/img/background.jpeg', 'assets/img/lab2.jpeg'];
+  // Fallback values
+  $title = 'Tentang Kami';
+  $description = 'Laboratorium Rekayasa Perangkat Lunak merupakan fasilitas akademik di bawah naungan Jurusan Teknologi Informasi di Fakultas Teknik bidang rekayasa perangkat lunak yang mendukung Laboratorium ini dilengkapi tumbuh menjadi pusat aktivitas penelitian dan pengabdian masyarakat yang berfokus pada pengembangan teknologi perangkat lunak';
+  $images = ['assets/img/bg_web.webp', 'assets/img/background.jpeg', 'assets/img/lab2.jpeg'];
 }
 ?>
 
@@ -37,18 +37,34 @@ try {
           <?= htmlspecialchars($description) ?>
         </p>
       </div>
-      <div class="col-lg-6" data-aos="fade-left" data-aos-duration="500" data-aos-delay="200">
+
+      <div class="col-lg-6" data-aos="fade-left" data-aos-duration="500" data-aos-delay="100">
         <div class="lab-img-wrapper">
           <?php if (!empty($images)): ?>
-          <div id="carouselLab" class="carousel slide carousel-fade lab-carousel" data-bs-ride="carousel">
-            <div class="carousel-inner">
-              <?php foreach ($images as $index => $image): ?>
-              <div class="carousel-item <?= $index === 0 ? 'active' : '' ?>" data-bs-interval="5000">
-                <img src="<?= BASE_URL . htmlspecialchars($image) ?>" alt="Suasana Lab <?= $index + 1 ?>" onerror="this.src='<?= BASE_URL ?>assets/img/bg_web.webp'">
+
+            <div id="carouselLab" class="carousel slide lab-carousel" data-bs-ride="carousel">
+
+              <div class="carousel-inner">
+                <?php foreach ($images as $index => $image): ?>
+                  <div class="carousel-item <?= $index === 0 ? 'active' : '' ?>" data-bs-interval="5000">
+                    <img src="<?= BASE_URL . htmlspecialchars($image) ?>"
+                      class="d-block w-100"
+                      alt="Suasana Lab <?= $index + 1 ?>"
+                      onerror="this.src='<?= BASE_URL ?>assets/img/bg_web.webp'">
+                  </div>
+                <?php endforeach; ?>
               </div>
-              <?php endforeach; ?>
+
+              <button class="carousel-control-prev" type="button" data-bs-target="#carouselLab" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+              </button>
+              <button class="carousel-control-next" type="button" data-bs-target="#carouselLab" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+              </button>
+
             </div>
-          </div>
           <?php endif; ?>
         </div>
       </div>
@@ -61,6 +77,6 @@ try {
 <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 <script>
   AOS.init({
-    once: true, 
+    once: true,
   });
 </script>
