@@ -375,11 +375,10 @@ include "../helpers/flash_message.php";
                 }
             }
             ?>
-            <?php // FlashMessage::display(); ?>
             
             <form method="POST" action="../controllers/AuthController.php" id="loginForm">
                 <div class="form-group">
-                    <label class="form-label">Username or email</label>
+                    <label class="form-label">Username</label>
                     <input type="text" 
                            class="form-control" 
                            name="username" 
