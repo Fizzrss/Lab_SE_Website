@@ -1,11 +1,8 @@
 <?php
-// Load footer settings
-// BASE_URL should already be defined by the calling page
 if (!defined('BASE_URL')) {
   define('BASE_URL', 'http://localhost/Lab_SE_Website/');
 }
 
-// Determine base path based on where footer is called from
 $footerPath = __DIR__;
 if (strpos($footerPath, 'includes') !== false) {
   require_once $footerPath . '/../config/config.php';
@@ -20,11 +17,9 @@ try {
   $db = $database->getConnection();
   $footerModel = new FooterSettingsModel($db);
 } catch (Exception $e) {
-  // Fallback if database fails
   $footerModel = null;
 }
 
-// Get footer data
 if ($footerModel) {
   $footerAboutTitle = $footerModel->getSetting('footer_about_title', 'Laboratorium Software Engineering');
   $footerAboutAddress = $footerModel->getSetting('footer_about_address', 'Gedung Teknik Sipil dan Teknologi Informasi\nPoliteknik Negeri Malang, Malang');
@@ -40,7 +35,6 @@ if ($footerModel) {
 
   $footerCopyright = $footerModel->getSetting('footer_copyright', '© Copyright Lab Software Engineering. All Rights Reserved');
 } else {
-  // Fallback values
   $footerAboutTitle = 'Laboratorium Software Engineering';
   $footerAboutAddress = "Gedung Teknik Sipil dan Teknologi Informasi\nPoliteknik Negeri Malang, Malang";
   $footerAboutPhone = '+62 341 123456';
@@ -53,7 +47,6 @@ if ($footerModel) {
   $footerCopyright = '© Copyright Lab Software Engineering. All Rights Reserved';
 }
 
-// Platform icons mapping
 $platformIcons = [
   'facebook' => 'bi-facebook',
   'twitter' => 'bi-twitter-x',
@@ -65,7 +58,6 @@ $platformIcons = [
   'telegram' => 'bi-telegram'
 ];
 
-// Parse address (split by newline - handle both \n and actual newlines)
 $addressLines = preg_split('/\r\n|\r|\n/', $footerAboutAddress);
 if (count($addressLines) === 1 && strpos($footerAboutAddress, '\\n') !== false) {
   $addressLines = explode('\\n', $footerAboutAddress);

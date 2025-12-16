@@ -26,13 +26,13 @@ class SpesialisasiController
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             try {
-                $data = [
-                    'spesialisasi' => trim($_POST['nama_spesialisasi'] ?? ''),
-                ];
+                $nama_spesialisasi = trim($_POST['nama_spesialisasi'] ?? '');
 
-                if (empty($data['nama_spesialisasi'])) throw new Exception("Spesialisasi tidak boleh kosong.");
+                if (empty($nama_spesialisasi)) {
+                    throw new Exception("Spesialisasi tidak boleh kosong.");
+                }
 
-                if ($this->model->create($data)) {
+                if ($this->model->create($nama_spesialisasi)) {
                     $_SESSION['swal_success'] = "Data spesialisasi berhasil ditambahkan!";
                     header("Location: index.php?action=spesialisasi_list");
                     exit();
@@ -46,21 +46,31 @@ class SpesialisasiController
         include $this->root . '/admin/pages/spesialisasi/add_spesialisasi.php';
     }
 
-    public function edit($id){
+    public function edit($id)
+    {
         $error = null;
         $spesialisasi = $this->model->getById($id);
 
+        if (!$spesialisasi) {
+            header("Location: index.php?action=spesialisasi_list");
+            exit();
+        }
+
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             try {
+                $input_nama = trim($_POST['nama_spesialisasi'] ?? '');
+
+                if (empty($input_nama)) {
+                    throw new Exception("Spesialisasi tidak boleh kosong.");
+                }
+
                 $data = [
-                    'spesialisasi' => trim($_POST['spesialisasi'] ?? ''),
+                    'nama_spesialisasi' => $input_nama
                 ];
 
-                if (empty($data['spesialisasi'])) throw new Exception("Spesialisasi tidak boleh kosong.");
-
                 if ($this->model->update($id, $data)) {
-                    $_SESSION['swal_success'] = "Data spesialisasi berhasil diupdate!";
-                    header("Location: index.php?controller=spesialisasi&action=index");
+                    $_SESSION['swal_success'] = "Data spesialisasi berhasil diperbarui!";
+                    header("Location: index.php?action=spesialisasi_list"); // Pastikan redirect ke list yang benar
                     exit();
                 } else {
                     throw new Exception("Gagal mengupdate data.");
@@ -72,7 +82,8 @@ class SpesialisasiController
         include $this->root . '/admin/pages/spesialisasi/edit_spesialisasi.php';
     }
 
-    public function delete($id){
+    public function delete($id)
+    {
         if ($this->model->delete($id)) {
             $_SESSION['swal_success'] = "Data spesialisasi berhasil dihapus!";
         } else {
@@ -82,4 +93,3 @@ class SpesialisasiController
         exit();
     }
 }
-?>

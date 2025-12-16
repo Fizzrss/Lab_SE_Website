@@ -32,7 +32,7 @@
 
                                 <div class="col-md-6 mb-3">
                                     <label>Nama Spesialisasi</label>
-                                    <input type="text" name="nama" class="form-control" required placeholder="Masukkan Nama Spesialisasi">
+                                    <input type="text" name="nama_spesialisasi" class="form-control" required placeholder="Masukkan Nama Spesialisasi">
                                 </div>
                                 <div class="mt-3">
                                     <button type="submit" class="btn btn-primary">Simpan</button>

@@ -8,7 +8,6 @@ class PublikasiModel
         $this->conn = $db;
     }
 
-    // Ambil Semua Publikasi (Untuk Tabel Utama)
     public function getAllPublikasi()
     {
         $query = "SELECT 
@@ -67,7 +66,7 @@ class PublikasiModel
             throw $e;
         }
     }
-    // [BARU] Ambil List Personil untuk Dropdown
+
     public function getListPersonil()
     {
         $query = "SELECT id_personil, nama_personil FROM personil ORDER BY nama_personil ASC";
@@ -75,6 +74,7 @@ class PublikasiModel
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+    
     public function update($id, $data, $personil_id)
     {
         try {
@@ -128,7 +128,6 @@ class PublikasiModel
         return $stmt->execute();
     }
 
-    // Ambil Publikasi Berdasarkan ID Personil
     public function getPublikasiByPersonil($id_personil)
     {
         $query = "SELECT 
@@ -150,7 +149,6 @@ class PublikasiModel
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    // [BARU] Ambil List Jenis Publikasi untuk Dropdown
     public function getListJenisPublikasi()
     {
         $query = "SELECT id_jenis, nama_jenis FROM jenis_publikasi ORDER BY nama_jenis ASC";

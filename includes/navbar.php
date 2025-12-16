@@ -31,7 +31,6 @@ if (!isset($current_page) || empty($current_page)) {
 ?>
 
 <body>
-    <!-- ===== NAVBAR ===== -->
     <nav class="navbar navbar-expand-lg navbar-glass fixed-top">
         <div class="container">
             <a class="navbar-brand" href="<?= BASE_URL ?>index.php">
@@ -117,7 +116,6 @@ if (!isset($current_page) || empty($current_page)) {
 
     <div style="height: 80px;"></div>
 
-    <!-- ===== SCRIPTS ===== -->
     <script src="<?= BASE_URL ?>assets/bootstrap/js/bootstrap.bundle.min.js"></script>
 
     <script>

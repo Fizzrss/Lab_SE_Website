@@ -9,9 +9,6 @@ class SocialMediaSettingsModel
         $this->conn = $db;
     }
 
-    /**
-     * Get all social media settings
-     */
     public function getAll()
     {
         $query = "SELECT * FROM " . $this->table_name . " 
@@ -23,9 +20,6 @@ class SocialMediaSettingsModel
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    /**
-     * Get enabled social media platforms
-     */
     public function getEnabled()
     {
         $query = "SELECT * FROM " . $this->table_name . " 
@@ -38,9 +32,6 @@ class SocialMediaSettingsModel
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    /**
-     * Update platform status
-     */
     public function updateStatus($platform, $enabled)
     {
         $query = "UPDATE " . $this->table_name . " 
@@ -54,9 +45,6 @@ class SocialMediaSettingsModel
         return $stmt->execute();
     }
 
-    /**
-     * Update display order
-     */
     public function updateOrder($platform, $order)
     {
         $query = "UPDATE " . $this->table_name . " 

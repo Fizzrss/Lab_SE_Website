@@ -23,7 +23,6 @@ class RecruitmentModel
 
         $stmt = $this->conn->prepare($query);
 
-        // Bind parameters
         $stmt->bindParam(':nama', $data['nama']);
         $stmt->bindParam(':nim', $data['nim']);
         $stmt->bindParam(':prodi', $data['prodi']);

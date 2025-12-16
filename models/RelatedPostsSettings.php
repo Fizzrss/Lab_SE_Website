@@ -9,17 +9,13 @@ class RelatedPostsSettingsModel
         $this->conn = $db;
     }
 
-    /**
-     * Get settings
-     */
     public function getSettings()
     {
         $query = "SELECT * FROM " . $this->table_name . " ORDER BY id DESC LIMIT 1";
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        
-        // Return default if no settings exist
+
         if (!$result) {
             return [
                 'enabled' => true,
@@ -31,16 +27,11 @@ class RelatedPostsSettingsModel
         return $result;
     }
 
-    /**
-     * Update settings
-     */
     public function update($data)
     {
-        // Check if settings exist
         $existing = $this->getSettings();
         
         if (isset($existing['id'])) {
-            // Update existing
             $query = "UPDATE " . $this->table_name . " 
                       SET enabled = :enabled, 
                           max_posts = :max_posts, 
@@ -56,7 +47,6 @@ class RelatedPostsSettingsModel
             
             return $stmt->execute();
         } else {
-            // Insert new
             $query = "INSERT INTO " . $this->table_name . " 
                       (enabled, max_posts, show_same_category) 
                       VALUES (:enabled, :max_posts, :show_same_category)";

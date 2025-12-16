@@ -120,9 +120,9 @@
             <?php unset($_SESSION['swal_error']); ?>
         <?php endif; ?>
 
-        $('.btn-delete').on('click', function(e) {
-            e.preventDefault(); // Cegah link langsung jalan
-            var url = $(this).attr('href'); // Ambil link dari tombol
+        $(document).on('click', '.btn-delete', function(e) {
+            e.preventDefault();
+            var url = $(this).attr('href');
 
             Swal.fire({
                 title: 'Yakin hapus data ini?',
@@ -135,7 +135,7 @@
                 cancelButtonText: 'Batal'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    window.location.href = url; // Lanjut ke link penghapusan
+                    window.location.href = url;
                 }
             });
         });

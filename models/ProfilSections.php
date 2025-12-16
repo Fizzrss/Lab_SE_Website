@@ -10,9 +10,6 @@ class ProfilSectionsModel
         $this->conn = $db;
     }
 
-    /**
-     * Get all sections
-     */
     public function getAll($onlyActive = true)
     {
         $query = "SELECT * FROM " . $this->sections_table;
@@ -90,7 +87,6 @@ class ProfilSectionsModel
         
         return $settings;
     }
-
 
     public function updateHeroSetting($key, $value)
     {

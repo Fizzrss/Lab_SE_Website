@@ -27,16 +27,18 @@
                 </div>
                 <div class="card-content">
                     <div class="card-body">
-                        <form class="form" method="POST" action="index.php?action=spesialisasi_edit">
+                        <form class="form" method="POST" action="index.php?action=spesialisasi_edit&id=<?= $spesialisasi['id_spesialisasi'] ?>">
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <label>Nama Spesialisasi</label>
-                                    <input type="text" name="nama" class="form-control" value="<?= htmlspecialchars($spesialisasi['nama_spesialisasi']) ?>" required>
+                                    <input type="text" name="nama_spesialisasi" class="form-control"
+                                        value="<?= htmlspecialchars($spesialisasi['nama_spesialisasi'] ?? '') ?>" required>
                                 </div>
                                 <div class="mt-3">
-                                    <button type="submit" class="btn btn-primary">Simpan</button>
+                                    <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
                                     <a href="index.php?action=spesialisasi_list" class="btn btn-secondary">Batal</a>
                                 </div>
+                            </div>
                         </form>
                     </div>
                 </div>
@@ -46,30 +48,30 @@
 </section>
 
 
-    <script src="/Lab_SE_Website/admin/assets/extensions/sweetalert2/sweetalert2.all.min.js"></script>
-    <script src="/Lab_SE_Website/admin/vendor/jquery/jquery.min.js"></script>
+<script src="/Lab_SE_Website/admin/assets/extensions/sweetalert2/sweetalert2.all.min.js"></script>
+<script src="/Lab_SE_Website/admin/vendor/jquery/jquery.min.js"></script>
 
-    <script>
-        $(document).ready(function() {
-            // Konfirmasi Simpan dengan SweetAlert
-            $('form').on('submit', function(e) {
-                e.preventDefault(); // Cegah submit langsung
-                var form = this;
+<script>
+    $(document).ready(function() {
+        // Konfirmasi Simpan dengan SweetAlert
+        $('form').on('submit', function(e) {
+            e.preventDefault(); // Cegah submit langsung
+            var form = this;
 
-                Swal.fire({
-                    title: 'Simpan Data?',
-                    text: "Pastikan data sudah benar.",
-                    icon: 'question',
-                    showCancelButton: true,
-                    confirmButtonColor: '#435ebe', // Warna Biru Mazer
-                    cancelButtonColor: '#6c757d',
-                    confirmButtonText: 'Ya, Simpan!',
-                    cancelButtonText: 'Batal'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        form.submit(); // Lanjutkan submit manual
-                    }
-                });
+            Swal.fire({
+                title: 'Simpan Data?',
+                text: "Pastikan data sudah benar.",
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#435ebe', // Warna Biru Mazer
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Ya, Simpan!',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    form.submit(); // Lanjutkan submit manual
+                }
             });
         });
-    </script>
+    });
+</script>

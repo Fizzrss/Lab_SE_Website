@@ -9,10 +9,8 @@ class PersonilModel
         $this->conn = $db;
     }
 
-    // Fungsi untuk Halaman Depan (List Personil)
     public function getAllPersonil()
     {
-        // 1. Ambil Data Personil Saja (Tanpa Sosmed dulu)
         $sql_personnel = "
             SELECT 
                 p.id_personil, 
@@ -30,10 +28,7 @@ class PersonilModel
         $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
         $all_personnel = [];
 
-        // 2. Loop setiap personil untuk ambil detail lainnya
         foreach ($results as $row) {
-
-            // A. Ambil Spesialisasi
             $sql_spec = "
                 SELECT s.nama_spesialisasi 
                 FROM personil_spesialisasi ps
@@ -45,8 +40,6 @@ class PersonilModel
             $stmt_spec->execute([':id' => $row['id_personil']]);
             $spesialisasi = $stmt_spec->fetchColumn() ?: '-';
 
-            // B. AMBIL SEMUA SOSMED (DINAMIS)
-            // Kita ambil Link, Nama Sosmed, dan Icon-nya sekalian
             $sql_sosmed = "
                 SELECT ps.link_sosmed, m.nama_sosmed, m.icon
                 FROM personil_sosmed ps
@@ -57,7 +50,6 @@ class PersonilModel
             $stmt_sosmed->execute([':id' => $row['id_personil']]);
             $list_sosmed = $stmt_sosmed->fetchAll(PDO::FETCH_ASSOC);
 
-            // C. Susun Data
             $all_personnel[] = [
                 'id' => $row['id_personil'],
                 'nip' => $row['nip'],
@@ -66,17 +58,15 @@ class PersonilModel
                 'peran' => $row['peran'] ?? 'Tidak Ada Jabatan',
                 'foto' => $row['foto_file'],
                 'spesialisasi' => $spesialisasi,
-                'sosmed' => $list_sosmed // <--- Ini sekarang berisi Array List Sosmed
+                'sosmed' => $list_sosmed 
             ];
         }
 
         return $all_personnel;
     }
 
-    // Fungsi untuk Halaman Detail (Detail Profil)
     public function getPersonilDetail($id)
     {
-        // 1. Ambil Data Diri Utama
         $sql = "
             SELECT 
                 p.*, 
@@ -86,14 +76,12 @@ class PersonilModel
             WHERE p.id_personil = :id
         ";
 
-        // Pastikan konsisten pakai $this->conn atau $this->pdo (sesuai constructor kamu)
         $stmt = $this->conn->prepare($sql);
         $stmt->execute([':id' => $id]);
         $personnel = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if (!$personnel) return null;
 
-        // 2. Ambil Semua Spesialisasi
         $sql_specs = "
             SELECT s.nama_spesialisasi 
             FROM personil_spesialisasi ps
@@ -104,8 +92,6 @@ class PersonilModel
         $stmt_specs->execute([':id' => $id]);
         $personnel['spesialisasi'] = $stmt_specs->fetchAll(PDO::FETCH_COLUMN);
 
-        // 3. [BARU] Ambil Semua Sosial Media
-        // Kita ambil Link, Nama Sosmed, dan Icon-nya
         $sql_sosmed = "
             SELECT ps.link_sosmed, m.nama_sosmed, m.icon
             FROM personil_sosmed ps
@@ -116,7 +102,6 @@ class PersonilModel
         $stmt_sosmed->execute([':id' => $id]);
         $personnel['sosmed'] = $stmt_sosmed->fetchAll(PDO::FETCH_ASSOC);
 
-        // 4. Ambil Publikasi
         $sql_pub = "SELECT p.*, jp.nama_jenis 
             FROM publikasi p
             JOIN personil_publikasi pp ON p.id_publikasi = pp.id_publikasi
@@ -131,7 +116,6 @@ class PersonilModel
         return $personnel;
     }
 
-    // Fungsi baru: Ambil satu data personil berdasarkan ID
     public function getById($id)
     {
         $sql = "
@@ -151,7 +135,6 @@ class PersonilModel
         return $data;
     }
 
-    // Fungsi baru: Pencarian personil berdasarkan nama atau NIP
     public function searchPersonil($keyword)
     {
         $search_term = "%" . $keyword . "%";

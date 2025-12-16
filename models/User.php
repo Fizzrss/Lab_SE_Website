@@ -7,7 +7,6 @@ class User {
     }
 
     public function getUserByUsername($username) {
-        // Sesuaikan nama tabel "user" dan kolom sesuai gambar
         $sql = "SELECT id, username, password, level FROM \"user\" WHERE username = :username LIMIT 1";
         
         $stmt = $this->db->prepare($sql);
@@ -17,7 +16,6 @@ class User {
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    // Fungsi update password (jika nanti bikin fitur ganti password)
     public function updatePassword($id, $newPassword) {
         $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
         
