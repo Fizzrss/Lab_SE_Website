@@ -73,6 +73,21 @@ class ProfilSectionsModel
         return $stmt->execute();
     }
 
+    public function updateSectionStatus($key, $isActive)
+    {
+        $query = "UPDATE " . $this->sections_table . " 
+                  SET is_active = :is_active,
+                      updated_at = CURRENT_TIMESTAMP
+                  WHERE section_key = :key";
+        
+        $stmt = $this->conn->prepare($query);
+        
+        $stmt->bindParam(':is_active', $isActive, PDO::PARAM_BOOL); 
+        $stmt->bindParam(':key', $key);
+        
+        return $stmt->execute();
+    }
+
     public function getHeroSettings()
     {
         $query = "SELECT setting_key, setting_value FROM " . $this->hero_table;

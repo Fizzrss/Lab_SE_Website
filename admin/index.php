@@ -280,6 +280,9 @@ require_once $root . '/admin/includes/admin_slidebar.php';
         case 'profil_hero_update':
             $profilController->updateHero();
             break;
+        case 'profil_section_status_update':
+            $profilController->updateStatus(); // Panggil fungsi baru yang kita buat di langkah 1
+        break;
 
         default:
             include 'pages/dashboard.php';

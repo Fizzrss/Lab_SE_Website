@@ -81,6 +81,32 @@ class ProfilController
         exit;
     }
 
+    public function updateStatus()
+    {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            http_response_code(405); 
+            exit;
+        }
+
+        $sectionKey = $_POST['section_key'] ?? '';
+        $isActive = $_POST['is_active'] ?? 0;
+
+        if (empty($sectionKey)) {
+            http_response_code(400); 
+            echo "Error: Section key tidak ditemukan.";
+            exit;
+        }
+
+        if ($this->model->updateSectionStatus($sectionKey, $isActive)) {
+            echo "Success"; 
+        } else {
+            http_response_code(500); 
+            echo "Error: Gagal update database.";
+        }
+        
+        exit; 
+    }
+
     public function updateHero()
     {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {

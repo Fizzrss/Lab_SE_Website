@@ -458,6 +458,39 @@ $heroButtonLink = $heroSettings['hero_button_link'] ?? '#profil';
     }
 
     function updateSectionStatus(key, status) {
-        console.log(key, status);
+        var isActive = status ? 1 : 0;
+
+        $.ajax({
+            url: 'index.php?action=profil_section_status_update',
+            type: 'POST',
+            data: {
+                section_key: key,
+                is_active: isActive
+            },
+            success: function(response) {
+                const Toast = Swal.mixin({
+                    toast: true,
+                    position: 'top',
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true
+                });
+
+                Toast.fire({
+                    icon: 'success',
+                    title: 'Status berhasil diperbarui'
+                });
+            },
+            error: function(xhr, status, error) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Gagal!',
+                    text: 'Gagal memperbarui status. Periksa koneksi atau server.'
+                });
+                // Kembalikan status checkbox ke posisi semula
+                var checkbox = document.getElementById(key + '_active');
+                checkbox.checked = !status;
+            }
+        });
     }
 </script>
