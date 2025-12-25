@@ -457,6 +457,165 @@ $heroButtonLink = $heroSettings['hero_button_link'] ?? '#profil';
         form.submit();
     }
 
+    function prepareRoadmapForm(e) {
+        e.preventDefault();
+        const form = e.target.closest('form');
+        const items = [];
+        const itemElements = form.querySelectorAll('.roadmap-item');
+        itemElements.forEach(itemEl => {
+            const year = itemEl.querySelector('.roadmap-year').value;
+            const description = itemEl.querySelector('.roadmap-desc').value;
+            if (year.trim() !== '' && description.trim() !== '') {
+                items.push({
+                    year: year.trim(),
+                    description: description.trim()
+                });
+            }
+        });
+
+        const content = {
+            title: form.querySelector('[name="section_title"]').value,
+            items: items
+        };
+
+        form.querySelector('#roadmap_content_json').value = JSON.stringify(content);
+        form.submit();
+    }
+
+    function addRoadmapItem() {
+    const container = document.getElementById('roadmap_items');
+    const html = `
+        <div class="roadmap-item mb-3 p-3 border rounded">
+            <div class="row">
+                <div class="col-md-3">
+                    <label class="form-label">Tahun</label>
+                    <input type="text" class="form-control roadmap-year" placeholder="Contoh: 2024" required>
+                </div>
+                <div class="col-md-9">
+                    <label class="form-label">Deskripsi</label>
+                    <textarea class="form-control roadmap-desc" rows="2" placeholder="Deskripsi rencana..." required></textarea>
+                </div>
+            </div>
+            <button type="button" class="btn btn-sm btn-danger mt-2" onclick="removeRoadmapItem(this)">
+                <i class="bi bi-trash"></i> Hapus
+            </button>
+        </div>
+    `;
+    container.insertAdjacentHTML('beforeend', html);
+    }
+
+    function removeRoadmapItem(btn) {
+        btn.closest('.roadmap-item').remove();
+    }
+
+    function prepareRoadmapForm(e) {
+        e.preventDefault();
+        const form = e.target.closest('form');
+        const items = [];
+        const roadmapElements = form.querySelectorAll('.roadmap-item');
+
+        roadmapElements.forEach(el => {
+            const year = el.querySelector('.roadmap-year').value;
+            const description = el.querySelector('.roadmap-desc').value;
+            if (year.trim() !== "" || description.trim() !== "") {
+                items.push({
+                    year,
+                    description
+                });
+            }
+        });
+
+        const content = {
+            items: items
+        };
+
+        form.querySelector('#roadmap_content_json').value = JSON.stringify(content);
+        form.submit();
+    }
+
+    function prepareFocusScopeForm(e) {
+        e.preventDefault();
+        const form = e.target.closest('form');
+        const items = [];
+        const itemElements = form.querySelectorAll('.focus-scope-item');
+        itemElements.forEach(itemEl => {
+            const title = itemEl.querySelector('.focus-scope-title').value;
+            const description = itemEl.querySelector('.focus-scope-desc').value;
+            if (title.trim() !== '' && description.trim() !== '') {
+                items.push({
+                    title: title.trim(),
+                    description: description.trim()
+                });
+            }
+        });
+
+        const content = {
+            title: form.querySelector('[name="section_title"]').value,
+            items: items
+        };
+
+        form.querySelector('#focus_scope_content_json').value = JSON.stringify(content);
+        form.submit();
+    }
+
+    function addLingkupItem() {
+    const container = document.getElementById('lingkup_items');
+    const html = `
+        <div class="lingkup-item mb-3 p-3 border rounded">
+            <div class="row">
+                <div class="col-md-3">
+                    <label class="form-label">Icon (Bootstrap Icons)</label>
+                    <input type="text" class="form-control lingkup-icon" placeholder="bi-check-circle" value="bi-circle">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Judul</label>
+                    <input type="text" class="form-control lingkup-judul" required>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Deskripsi</label>
+                    <textarea class="form-control lingkup-desc" rows="2" required></textarea>
+                </div>
+            </div>
+            <button type="button" class="btn btn-sm btn-danger mt-2" onclick="removeLingkupItem(this)">
+                <i class="bi bi-trash"></i> Hapus
+            </button>
+        </div>
+    `;
+    container.insertAdjacentHTML('beforeend', html);
+    }
+
+    function removeLingkupItem(btn) {
+        btn.closest('.lingkup-item').remove();
+    }
+
+    function prepareFocusScopeForm(e) {
+        e.preventDefault();
+        const form = e.target.closest('form');
+
+        const fokusText = form.querySelector('[name="fokus_riset"]').value;
+        const fokusRiset = fokusText.split('\n').filter(f => f.trim() !== '').map(f => f.trim());
+
+        const lingkupDetails = [];
+        const lingkupElements = form.querySelectorAll('.lingkup-item');
+
+        lingkupElements.forEach(el => {
+            lingkupDetails.push({
+                icon: el.querySelector('.lingkup-icon').value || 'bi-circle',
+                judul: el.querySelector('.lingkup-judul').value,
+                desc: el.querySelector('.lingkup-desc').value
+            });
+        });
+
+        const content = {
+            subtitle: form.querySelector('[name="focus_subtitle"]').value,
+            fokus_riset: fokusRiset,
+            lingkup_detail: lingkupDetails
+        };
+
+        form.querySelector('#focus_scope_content_json').value = JSON.stringify(content);
+        form.submit();
+    }
+
     function updateSectionStatus(key, status) {
         var isActive = status ? 1 : 0;
 

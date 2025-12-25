@@ -14,6 +14,7 @@ require_once '../models/Berita.php';
 require_once '../models/RelatedPostsSettings.php';
 require_once '../models/BeritaViews.php';
 require_once '../models/KomentarBerita.php';
+require_once '../models/SocialMediaSettings.php';
 
 // Get slug from URL
 $slug = isset($_GET['slug']) ? $_GET['slug'] : '';
@@ -61,12 +62,15 @@ if ($relatedSettings['enabled']) {
 
 $viewsModel = new BeritaViewsModel($db);
 $komentarModel = new KomentarBeritaModel($db);
+$socialModel = new SocialMediaSettingsModel($db);
 
 $viewsModel->incrementView($berita['id']);
 
 $viewCount = $viewsModel->getTotalViews($berita['id']);
 
 $commentCount = $komentarModel->countByBeritaId($berita['id']);
+
+$socialSettings = $socialModel->getAll();
 
 // Get comments for this berita
 $comments = $komentarModel->getByBeritaId($berita['id'], 'approved');
@@ -280,12 +284,13 @@ include '../includes/navbar.php';
     });
 
     // Social media configuration
-    let socialMediaConfig = [];
+    let socialMediaConfig = <?= json_encode($socialSettings) ?>;
 
     function loadSocialShareButtons() {
         const container = document.getElementById('social-share-buttons');
-        // Use default social buttons (no API needed)
-        loadDefaultSocialButtons(container);
+        if (!container) return;
+
+        renderSocialButtons(container);
     }
 
     function renderSocialButtons(container) {
@@ -320,17 +325,20 @@ include '../includes/navbar.php';
         };
 
         // Sort by display_order
-        socialMediaConfig.sort((a, b) => a.order - b.order);
+        socialMediaConfig.sort((a, b) => a.display_order - b.display_order);
 
         socialMediaConfig.forEach(social => {
-            if (social.enabled) {
+            // 2. Cek status aktif (mengatasi masalah boolean PostgreSQL/MySQL)
+            const isEnabled = social.enabled === true || social.enabled === 't' || social.enabled == 1;
+
+            if (isEnabled) {
                 const btn = document.createElement('a');
                 btn.href = shareUrls[social.platform] || '#';
                 btn.className = `social-share-btn ${social.platform}`;
                 btn.target = social.platform === 'copy' ? '' : '_blank';
+                btn.title = `Bagikan ke ${social.platform}`;
 
-                // Hanya icon tanpa teks
-                btn.innerHTML = `<i class="bi ${icons[social.platform]}"></i>`;
+                btn.innerHTML = `<i class="bi ${icons[social.platform] || 'bi-share'}"></i>`;
 
                 if (social.platform === 'copy') {
                     btn.onclick = function(e) {

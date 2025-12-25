@@ -43,7 +43,7 @@ if (!defined('ROOT_PATH')) {
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php 
+                                <?php
                                 $platformNames = [
                                     'facebook' => 'Facebook',
                                     'twitter' => 'Twitter',
@@ -52,7 +52,7 @@ if (!defined('ROOT_PATH')) {
                                     'linkedin' => 'LinkedIn',
                                     'copy' => 'Salin Link'
                                 ];
-                                
+
                                 $platformIcons = [
                                     'facebook' => 'bi-facebook',
                                     'twitter' => 'bi-twitter',
@@ -61,17 +61,17 @@ if (!defined('ROOT_PATH')) {
                                     'linkedin' => 'bi-linkedin',
                                     'copy' => 'bi-link-45deg'
                                 ];
-                                
-                                foreach ($platforms as $platform): 
+
+                                foreach ($platforms as $platform):
                                 ?>
                                     <tr>
                                         <td>
-                                            <input type="number" 
-                                                   name="platforms[<?= $platform['platform'] ?>][order]" 
-                                                   class="form-control form-control-sm" 
-                                                   value="<?= $platform['display_order'] ?>"
-                                                   min="0"
-                                                   style="width: 70px;">
+                                            <input type="number"
+                                                name="platforms[<?= $platform['platform'] ?>][order]"
+                                                class="form-control form-control-sm"
+                                                value="<?= $platform['display_order'] ?>"
+                                                min="0"
+                                                style="width: 70px;">
                                         </td>
                                         <td>
                                             <strong><?= $platformNames[$platform['platform']] ?? ucfirst($platform['platform']) ?></strong>
@@ -79,12 +79,12 @@ if (!defined('ROOT_PATH')) {
                                         </td>
                                         <td>
                                             <div class="form-check form-switch">
-                                                <input class="form-check-input" 
-                                                       type="checkbox" 
-                                                       name="platforms[<?= $platform['platform'] ?>][enabled]" 
-                                                       value="1"
-                                                       id="switch_<?= $platform['platform'] ?>"
-                                                       <?= $platform['enabled'] ? 'checked' : '' ?>>
+                                                <input class="form-check-input"
+                                                    type="checkbox"
+                                                    name="platforms[<?= $platform['platform'] ?>][enabled]"
+                                                    value="1"
+                                                    id="switch_<?= $platform['platform'] ?>"
+                                                    <?= ($platform['enabled'] === true || $platform['enabled'] === 't' || $platform['enabled'] == 1) ? 'checked' : '' ?>>
                                                 <label class="form-check-label" for="switch_<?= $platform['platform'] ?>"></label>
                                             </div>
                                         </td>
@@ -96,7 +96,7 @@ if (!defined('ROOT_PATH')) {
                             </tbody>
                         </table>
                     </div>
-                    
+
                     <div class="mt-4">
                         <button type="submit" class="btn btn-primary">
                             <i class="bi bi-save"></i> Simpan Pengaturan
@@ -108,7 +108,7 @@ if (!defined('ROOT_PATH')) {
                 </form>
             </div>
         </div>
-        
+
         <div class="card mt-3">
             <div class="card-header">
                 <h5 class="card-title">Informasi</h5>
@@ -123,4 +123,3 @@ if (!defined('ROOT_PATH')) {
         </div>
     </section>
 </div>
-

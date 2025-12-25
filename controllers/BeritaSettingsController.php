@@ -45,7 +45,7 @@ class BeritaSettingsController
             $targetPath = $uploadDir . $fileName;
 
             if (move_uploaded_file($_FILES['hero_background_image_file']['tmp_name'], $targetPath)) {
-                $heroBackgroundImage = 'assets/uploads/berita/' . $fileName;
+                $heroBackgroundImage = '../assets/uploads/berita/' . $fileName;
             }
         }
 

@@ -26,7 +26,7 @@ class SocialMediaController
         // Update each platform
         if (isset($_POST['platforms'])) {
             foreach ($_POST['platforms'] as $platform => $settings) {
-                $enabled = isset($settings['enabled']) ? true : false;
+                $enabled = isset($settings['enabled']) ? 1 : 0;
                 $order = isset($settings['order']) ? (int)$settings['order'] : 0;
                 
                 $this->model->updateStatus($platform, $enabled);
