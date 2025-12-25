@@ -1,22 +1,16 @@
 <?php
-// Tentukan Root Path
 $root = $_SERVER['DOCUMENT_ROOT'] . '/Lab_SE_Website';
 
-// Load Controller
 require_once $root . '/controllers/StatistikController.php';
 
-// Inisialisasi Controller
 $statsController = new StatistikController();
 
-// Ambil Data (Array)
 $dataStats = $statsController->getStats();
 
-// Ekstrak Array ke Variabel ($jml_visitor, $jml_personil, dll otomatis terbuat)
 extract($dataStats);
 
 $page_title = "Statistik - Lab SE";
 require_once $root . '/includes/header.php';
-// require_once $root . '/includes/navbar.php';
 ?>
 
 <main>
@@ -28,7 +22,7 @@ require_once $root . '/includes/header.php';
                     <i class="bi bi-people-fill"></i>
                     <div class="stats-item">
                         <p>Pendaftar</p>
-                        <span data-purecounter-start="0" data-purecounter-end="<?= $jml_visitor ?>" data-purecounter-duration="1" class="purecounter"></span>
+                        <span data-purecounter-start="0" data-purecounter-end="<?= $jml_pendaftar ?>" data-purecounter-duration="1" class="purecounter"></span>
                     </div>
                 </div>
 

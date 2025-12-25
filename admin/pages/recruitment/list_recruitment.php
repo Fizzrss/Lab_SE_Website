@@ -23,6 +23,7 @@
     </div>
 </div>
 
+
 <section class="row">
     <div class="col-12 col-lg-3 col-md-6">
         <div class="card">
@@ -135,7 +136,6 @@
 <script>
     document.addEventListener('DOMContentLoaded', () => {
 
-        // 1. Setup Datatable
         let tableElement = document.querySelector('#table1');
         if (tableElement) {
             new simpleDatatables.DataTable(tableElement, {
@@ -143,9 +143,7 @@
                 fixedHeight: false,
                 perPage: 10,
 
-                // KONFIGURASI SORTING
                 columns: [
-                    // Hanya mematikan sorting untuk kolom index 7 (Aksi)
                     {
                         select: 7,
                         sortable: false
@@ -161,8 +159,29 @@
             });
         }
 
-        // 2. Logic SweetAlert untuk Lulus/Tolak
+        <?php if (isset($_SESSION['swal_success'])): ?>
 
+            Swal.fire({
+                title: 'Berhasil!',
+                text: '<?= $_SESSION['swal_success']; ?>', 
+                icon: 'success',
+                timer: 2000,
+                showConfirmButton: false
+            });
+
+            <?php unset($_SESSION['swal_success']); ?>
+
+        <?php endif; ?>
+
+        <?php if (isset($_SESSION['swal_error'])): ?>
+            Swal.fire({
+                title: 'Gagal!',
+                text: '<?= $_SESSION['swal_error']; ?>',
+                icon: 'error'
+            });
+            <?php unset($_SESSION['swal_error']); ?>
+        <?php endif; ?>
+        
         document.body.addEventListener('click', function(e) {
             let target = e.target.closest('.btn-konfirmasi');
 
@@ -192,7 +211,6 @@
             }
         });
 
-        // 3. Logic SweetAlert Hapus
         document.body.addEventListener('click', function(e) {
             let target = e.target.closest('.btn-delete');
             if (target) {

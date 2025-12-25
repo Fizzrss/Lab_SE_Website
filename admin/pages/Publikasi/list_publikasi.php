@@ -16,17 +16,6 @@
         </div>
     </div>
 
-    <?php if (isset($_GET['message'])): ?>
-        <div class="alert alert-success alert-dismissible show fade">
-            <?php
-            if ($_GET['message'] == 'created') echo "Data publikasi berhasil ditambahkan.";
-            elseif ($_GET['message'] == 'updated') echo "Data publikasi berhasil diperbarui.";
-            elseif ($_GET['message'] == 'deleted') echo "Data publikasi berhasil dihapus.";
-            ?>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    <?php endif; ?>
-
     <section class="section">
         <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">
@@ -112,18 +101,16 @@
 <script src="/Lab_SE_Website/admin/vendor/jquery/jquery.min.js"></script>
 <script>
     $(document).ready(function() {
-        // Cek apakah ada session 'swal_success' dari PHP?
         <?php if (isset($_SESSION['swal_success'])): ?>
 
             Swal.fire({
                 title: 'Berhasil!',
-                text: '<?= $_SESSION['swal_success']; ?>', // Ambil pesan dari PHP
+                text: '<?= $_SESSION['swal_success']; ?>', 
                 icon: 'success',
-                timer: 2000, // Otomatis tutup dalam 2 detik
+                timer: 2000,
                 showConfirmButton: false
             });
 
-            // Hapus session setelah ditampilkan agar tidak muncul lagi saat refresh
             <?php unset($_SESSION['swal_success']); ?>
 
         <?php endif; ?>
@@ -138,9 +125,8 @@
         <?php endif; ?>
 
         $('.btn-delete').on('click', function(e) {
-            e.preventDefault(); // Cegah link langsung jalan
-            var url = $(this).attr('href'); // Ambil link dari tombol
-
+            e.preventDefault(); 
+            var url = $(this).attr('href'); 
             Swal.fire({
                 title: 'Yakin hapus data ini?',
                 text: "Data yang dihapus tidak bisa dikembalikan!",
@@ -152,7 +138,7 @@
                 cancelButtonText: 'Batal'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    window.location.href = url; // Lanjut ke link penghapusan
+                    window.location.href = url; 
                 }
             });
         });

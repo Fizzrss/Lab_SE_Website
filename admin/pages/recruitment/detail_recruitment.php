@@ -246,6 +246,26 @@ $uploadPath = '/Lab_SE_Website/upload/';
 <script src="/Lab_SE_Website/admin/vendor/jquery/jquery.min.js"></script>
 
 <script>
+    <?php if (isset($_SESSION['swal_success'])): ?>
+        Swal.fire({
+            icon: 'success',
+            title: 'Berhasil!',
+            text: '<?= $_SESSION['swal_success']; ?>',
+            timer: 3000,
+            showConfirmButton: false
+        });
+        <?php unset($_SESSION['swal_success']); ?>
+    <?php endif; ?>
+
+    <?php if (isset($_SESSION['swal_error'])): ?>
+        Swal.fire({
+            icon: 'error',
+            title: 'Gagal!',
+            text: '<?= $_SESSION['swal_error']; ?>',
+        });
+        <?php unset($_SESSION['swal_error']); ?>
+    <?php endif; ?>
+    
     document.addEventListener('DOMContentLoaded', () => {
         // Logic untuk Tombol Konfirmasi (Terima/Tolak)
         const buttons = document.querySelectorAll('.btn-konfirmasi');

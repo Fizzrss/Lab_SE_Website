@@ -90,7 +90,7 @@ $uploadPath = '/Lab_SE_Website/upload/';
                                         ?>
                                         <span class="badge <?= $badgeClass ?>"><?= ucfirst($status); ?></span>
                                     </td>
-                                    <td><?= date('d/m/Y', strtotime($row['created_at'] ?? 'now')); ?></td>
+                                    <td><?= date('d/m/Y', strtotime($row['tanggal_bergabung'] ?? 'now')); ?></td>
                                     <td>
                                         <div class="d-flex gap-2">
                                             <a href="index.php?action=mahasiswa_edit&id=<?= $row['id']; ?>" class="btn btn-sm btn-warning" title="Edit">

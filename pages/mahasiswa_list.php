@@ -20,7 +20,7 @@ $db = $database->getConnection();
 $mahasiswaAktifModel = new MahasiswaAktifModel($db);
 $mahasiswa_list = $mahasiswaAktifModel->getAllPublic();
 
-$page_title = "Daftar Personil - Lab SE";
+$page_title = "Daftar Mahasiswa - Lab SE";
 require_once $root . '/includes/header.php';
 require_once $root . '/includes/navbar.php';
 

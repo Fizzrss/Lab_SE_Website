@@ -17,7 +17,6 @@ class RecruitmentController {
         }
 
         try {
-            // --- A. VALIDASI INPUT ---
             if (empty($_POST['nama']) || empty($_POST['nim']) || empty($_POST['email'])) {
                 throw new Exception("Data wajib (Nama, NIM, Email) tidak boleh kosong.");
             }
@@ -114,10 +113,20 @@ class RecruitmentController {
     }
 
     public function delete($id) {
-        if($this->model->delete($id)) {
-            return ['success' => true, 'message' => 'Data berhasil dihapus!'];
+        if (empty($id)) {
+            $_SESSION['swal_error'] = "ID Personil tidak ditemukan!";
+            header("Location: index.php?action=recruitment_list");
+            exit;
         }
-        return ['success' => false, 'message' => 'Gagal menghapus data'];
+
+        if ($this->model->delete($id)) {
+            $_SESSION['swal_success'] = "Data recruitment berhasil dihapus!";
+        } else {
+            $_SESSION['swal_error'] = "Gagal menghapus data! Cek relasi data.";
+        }
+
+        header("Location: index.php?action=recruitment_list");
+        exit;
     }
 
 

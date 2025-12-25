@@ -44,7 +44,6 @@ function pesan($key = "", $pesan = "")
     }
 }
 
-// New functions for berita system
 function setFlashMessage($type, $message)
 {
     $_SESSION['flash_message'] = [

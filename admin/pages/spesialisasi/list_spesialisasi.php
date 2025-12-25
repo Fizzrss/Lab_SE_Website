@@ -17,17 +17,6 @@
     </div>
 </div>
 
-<?php if (isset($_GET['message'])): ?>
-    <div class="alert alert-success alert-dismissible show fade">
-        <?php
-        if ($_GET['message'] == 'created') echo "Data spesialisasi berhasil ditambahkan.";
-        elseif ($_GET['message'] == 'updated') echo "Data spesialisasi berhasil diperbarui.";
-        elseif ($_GET['message'] == 'deleted') echo "Data spesialisasi berhasil dihapus.";
-        ?>
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-<?php endif; ?>
-
 <section class="section">
     <div class="card">
         <div class="card-header d-flex justify-content-between align-items-center">

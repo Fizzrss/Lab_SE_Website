@@ -8,7 +8,7 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 
 
-$page_title = "Daftar Personil - Lab SE";
+$page_title = "Daftar Mahasiswa - Lab SE";
 require_once $root . '/includes/header.php';
 require_once $root . '/includes/navbar.php';
 ?>
@@ -63,7 +63,7 @@ require_once $root . '/includes/navbar.php';
       <div class="row mb-3">
         <label class="col-sm-2 col-form-label fw-semibold">NIM</label>
         <div class="col-sm-10">
-          <input type="text" name="nim" class="form-control" placeholder="Masukkan NIM" required>
+          <input type="number" name="nim" class="form-control" placeholder="Masukkan NIM" required>
         </div>
       </div>
 
@@ -81,14 +81,14 @@ require_once $root . '/includes/navbar.php';
       <div class="row mb-3">
         <label class="col-sm-2 col-form-label fw-semibold">Angkatan</label>
         <div class="col-sm-10">
-          <input type="text" name="angkatan" class="form-control" placeholder="Masukkan tahun masuk" required>
+          <input type="number" name="angkatan" class="form-control" placeholder="Masukkan tahun masuk" required>
         </div>
       </div>
 
       <div class="row mb-3">
         <label class="col-sm-2 col-form-label fw-semibold">No. Telepon</label>
         <div class="col-sm-10">
-          <input type="text" name="no_hp" class="form-control" placeholder="Masukkan nomor telepon aktif" required>
+          <input type="number" name="no_hp" class="form-control" placeholder="Masukkan nomor telepon aktif" required>
         </div>
       </div>
 

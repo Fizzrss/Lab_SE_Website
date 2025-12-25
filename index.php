@@ -1,16 +1,13 @@
 <?php
-// Konfigurasi halaman
 $page_title = 'Beranda';
 $site_title = 'LAB Software Engineering';
 $meta_description = 'Website resmi LAB Software Engineering - Informasi kegiatan, profil, dan personil.';
 $meta_keywords = 'lab se, software engineering, universitas, teknologi';
 
-// Base URL (ubah sesuai kebutuhan)
 if (!defined('BASE_URL')) {
     define('BASE_URL', 'http://localhost/Lab_SE_Website/');
 }
 
-// Load hero settings from database
 require_once __DIR__ . '/config/config.php';
 require_once __DIR__ . '/models/ProfilSections.php';
 
@@ -27,7 +24,6 @@ try {
     $heroButtonText = $heroSettings['hero_button_text'] ?? 'Get Started';
     $heroButtonLink = $heroSettings['hero_button_link'] ?? '#profil';
 } catch (Exception $e) {
-    // Fallback values
     $heroTitle = 'Laboratorium Software Engineering';
     $heroSubtitle = 'Politeknik Negeri Malang';
     $heroDescription = 'Mengembangkan inovasi teknologi untuk masa depan yang lebih cerdas.';

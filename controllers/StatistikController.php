@@ -26,15 +26,15 @@
             $jml_publikasi = $this->publikasiModel->countAll() ?? 0;
             $jml_mahasiswa = $this->mahasiswaAktifModel->countAktif();
 
-            $jml_visitor = 0;
+            $jml_pendaftar = 0;
             try {
                 $sqlVis = "SELECT COUNT(*) FROM recruitment";
                 $stmtVis = $this->db->query($sqlVis);
-                $jml_visitor = $stmtVis->fetchColumn();
-            } catch (Exception $e) { $jml_visitor = 0; }
+                $jml_pendaftar = $stmtVis->fetchColumn();
+            } catch (Exception $e) { $jml_pendaftar = 0; }
 
             return [
-                'jml_visitor'   => $jml_visitor,
+                'jml_pendaftar' => $jml_pendaftar,
                 'jml_personil'  => $jml_personil,
                 'jml_mahasiswa' => $jml_mahasiswa,
                 'jml_publikasi' => $jml_publikasi
